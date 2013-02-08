@@ -1,0 +1,1010 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &mdash; Bencho 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Bencho 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Documentation of Bencho!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Documentation of Bencho!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Bencho 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>This is the Documentation of the Bencho Benchmark Framework. Here you will find all nescessary information for using this framework with its library and tools to create your own benchmarks as easy as possible.</p>
+<div class="section" id="what-s-bencho">
+<h2>What&#8217;s Bencho?<a class="headerlink" href="#what-s-bencho" title="Permalink to this headline">¶</a></h2>
+<p>Bencho is a C++ framework that helps you create and run benchmarks on your own computer.</p>
+<p><strong>Bencho&#8217;s features at a glance:</strong></p>
+<ul class="simple">
+<li>Create benchmarks by using the AbstractBenchmark as template</li>
+<li>Add Parameters easily</li>
+<li>Measure different Performance Counters at the same time</li>
+<li>Register different test series</li>
+<li>Supports warm-up runs, calibration runs, chache clearing, parameter versions and much more</li>
+<li>All common aggregating functions included in an Aggregator</li>
+<li>Save results in CSV formated files</li>
+<li>Plot results directly via GnuPlot</li>
+</ul>
+</div>
+<div class="section" id="prerequesites">
+<h2>Prerequesites<a class="headerlink" href="#prerequesites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Supportet Operating Systems: Linux and Mac OS</li>
+<li>The <a class="reference external" href="http://icl.cs.utk.edu/papi/software/index.html">PAPI</a> library needs to be installed in order to use the whole functionality of the Bencho Performance Counters (not available for Mac)</li>
+</ul>
+</div>
+</div>
+<div class="section" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>check out the sample project at <a class="reference external" href="mailto:git&#37;&#52;&#48;epic&#46;plan&#46;io">git<span>&#64;</span>epic<span>&#46;</span>plan<span>&#46;</span>io</a>:epic-benchosample.benchosample.git</li>
+<li>follow the instructons of the README</li>
+</ul>
+</div>
+<div class="section" id="set-up">
+<h1>Set Up<a class="headerlink" href="#set-up" title="Permalink to this headline">¶</a></h1>
+<p>This Section describes how to set up the Bencho Framework on your computer. If you are reading this documentation you probably already have the project&#8217;s source code, but in case you do not and still want to use Bencho, ask David Schwalb or one of his research assistants for further information.</p>
+<div class="section" id="config">
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
+<p>In order to provide you with a mostly error-free environment, run</p>
+<div class="highlight-python"><pre>&gt; make config</pre>
+</div>
+<p>or open the <em>settings.conf</em> file and change the flags manually.</p>
+<p><strong>Debug/Production mode</strong></p>
+<p>By default, the Bencho library gets build in Production Mode. If you are interested in developing this framework further you might want to change this to the Development or Debug Mode.</p>
+<p><strong>Use PAPI</strong></p>
+<p>If you want to use all the perfomance counters provided by the Bencho Framework the <a class="reference external" href="http://icl.cs.utk.edu/papi/software/index.html">PAPI</a> library has to be installed. However, since PAPI does not support any Mac OS yet, there is a fallback to simple time measurements implemented in the Bencho code. So if you are using Bencho on a Mac OS or do not have PAPI installed on your Linux System you will have to set the PAPI flag in the <em>settings.conf</em> file (or by using <em>make config</em>) to 0 or while compiling the library an error will be thrown.</p>
+<p><strong>Verbose build</strong></p>
+<p>If you also want to see what is going on while the Makefile is running, set the VERBOSE_BUILD flag to 1. Then all the commands executed while running the makefile will be printed to your command line.</p>
+</div>
+<div class="section" id="file-placement">
+<h2>File placement<a class="headerlink" href="#file-placement" title="Permalink to this headline">¶</a></h2>
+<p>The recommended structure of the Bencho project directory contains the following files in the working directory:</p>
+<ul class="simple">
+<li>Makefile which calls the Bencho Makefile as well as compiles and links your benchmarks</li>
+<li>benchmarks/ directory which contains your benchmarks (and GNUplot files)</li>
+<li>bencho/ directoy which contains the complete Bencho Framework</li>
+</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Structure of the Bencho project directory</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><pre>                working directory
+        /               |               \
+bencho/             Makefile            benchmarks/</pre>
+</div>
+<p>To get familiar with this check out the sample project at <a class="reference external" href="mailto:git&#37;&#52;&#48;epic&#46;plan&#46;io">git<span>&#64;</span>epic<span>&#46;</span>plan<span>&#46;</span>io</a>:epic-benchosample.benchosample.git.
+It contains exactly what is mentioned above, a sample benchmark (including GNUplot script), the Bencho framework as git-submodule and a sample Makefile.</p>
+</div>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>To compile your benchmarks (see <a class="reference internal" href="#create-a-benchmark">Create a Benchmark</a>) linked with the Bencho library type</p>
+<div class="highlight-python"><pre>&gt; make</pre>
+</div>
+<p>For execution and afterwards result printing type</p>
+<div class="highlight-python"><pre>&gt; make run</pre>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Hint</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The integrated plotting funciton of the Bencho Tool uses GNUplot. Maybe later on we will implement other plotting options.
+In order to provide you with a plot according to your benchmark results, you have to (if you want to use the included plot function) put a GNUplot script with your benchmark source files.
+The script has to lay in the <em>benchmarks/</em> directory and has to have the same name as the benchmark itself (with .gp extension), like in the sample:</p>
+<p>Benchmark: Stride.cpp</p>
+<p>gp-script: Stride.gp</p>
+<p>In the <em>benchmarks/</em> directory there also lays the <em>system.gp</em> script, which is the base script and links with the specific benchmark script automatically.</p>
+<p>For the explicit structure the GNUplot script <strong>has to</strong> have, please take a look at the section <a class="reference internal" href="#structure-of-the-gnuplot-script">Structure of the GNUplot script</a>.</p>
+<div class="section" id="create-a-benchmark">
+<h2>Create a Benchmark<a class="headerlink" href="#create-a-benchmark" title="Permalink to this headline">¶</a></h2>
+<p>This section describes how to create the actual benchmarks with the Bencho Framework. It assumes that you will use the Bencho Tool. If you are planning to not use it you still would create your benchmarks the same way, but depending on what your project setup will be then, you might have to add some more code like a main function or the include line for the bencho header in order to get executable benchmarks (see <a href="#id1"><span class="problematic" id="id2">`Independent Projects`_</span></a> for further information).</p>
+<p>Creating benchmarks with the Bencho Framework will always start with creating a subclass of the AbstractBenchmark class using <em>class YourBenchmarkName: public AbstractBenchmark</em> and then continue with implementing the benchmarks functions as you need. In the following paragraphs all the functions you can override to create your benchmark will be explained to be used as a step by step guide for creating a benchmark, with code from the Stride benchmark as example. In addition to that you will find a detailed list of helper functions you can use under <a class="reference internal" href="#benchmark-functions">Benchmark Functions</a>. For a deeper understanding please make also sure to check out the code of the example benchmark provided with the framework.</p>
+<p><em>void initialize()</em></p>
+<blockquote>
+<div><p>At first you will have to initialize your Benchmark. This means you will set a name for identification of the benchmark and you will set a Sequence Id, which has to be the name of one parameter (that varies), because this will be the values for the x axis of your graph. Then you can set all the other options like warm up runs or the maximum amount of runs. Furthermore you will add your performance counters here and set all the parameters you need for your benchmark (see <a class="reference internal" href="#parameter-class">Parameter Class</a>). As last step you will add all the test series you want to run and set the aggregating function that will be used to aggregate the singel runs. The example benchmark Stride for instance uses the following initialize() function:</p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">void</span> <span class="n">initialize</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">setName</span><span class="p">(</span><span class="s">&quot;Stride&quot;</span><span class="p">);</span>
+    <span class="n">setSequenceId</span><span class="p">(</span><span class="s">&quot;stride&quot;</span><span class="p">);</span>
+    <span class="n">setWarmUpRuns</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">setMaxRuns</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+    <span class="n">addPerformanceCounter</span><span class="p">(</span><span class="s">&quot;PAPI_TOT_CYC&quot;</span><span class="p">);</span>
+    <span class="n">addPerformanceCounter</span><span class="p">(</span><span class="s">&quot;PAPI_L1_DCM&quot;</span><span class="p">);</span>
+    <span class="n">addPerformanceCounter</span><span class="p">(</span><span class="s">&quot;PAPI_L2_DCM&quot;</span><span class="p">);</span>
+
+    <span class="n">Parameter</span> <span class="o">*</span><span class="n">stride</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&quot;stride&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">262144</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="n">Parameter</span> <span class="o">*</span><span class="n">jumps</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&quot;jumps&quot;</span><span class="p">,</span> <span class="mi">4096</span><span class="p">);</span>
+    <span class="n">addParameter</span><span class="p">(</span><span class="o">*</span><span class="n">stride</span><span class="p">);</span>
+    <span class="n">addParameter</span><span class="p">(</span><span class="o">*</span><span class="n">jumps</span><span class="p">);</span>
+
+    <span class="n">addTestSeries</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&quot;random&quot;</span><span class="p">);</span>
+    <span class="n">addTestSeries</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;sequential_forwards&quot;</span><span class="p">);</span>
+    <span class="n">addTestSeries</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">&quot;sequential_backwards&quot;</span><span class="p">);</span>
+
+    <span class="n">setAggregatingFunction</span><span class="p">(</span><span class="n">AggregationType</span><span class="o">::</span><span class="n">Average</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p><em>void prepareCombination(map&lt;string, int&gt; parameters, int combination)</em></p>
+<blockquote>
+<div><p>In prepareCombination() you will implement everything yo need to specify one combination of parameters, which then is executed with the specified options like maximum and warm up runs.</p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">void</span> <span class="n">prepareCombination</span><span class="p">(</span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">,</span> <span class="kt">int</span> <span class="n">combination</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">stride</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">&quot;stride&quot;</span><span class="p">];</span>
+    <span class="n">jumps</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">&quot;jumps&quot;</span><span class="p">];</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">size_t</span><span class="p">)</span><span class="n">parameters</span><span class="p">[</span><span class="s">&quot;stride&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">size_t</span><span class="p">)(</span><span class="n">parameters</span><span class="p">[</span><span class="s">&quot;jumps&quot;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+
+    <span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+
+    <span class="n">posix_memalign</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">array_seq_f</span><span class="p">,</span> <span class="mi">4096</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="o">*</span> <span class="n">size</span><span class="p">);</span>
+    <span class="n">posix_memalign</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">array_seq_b</span><span class="p">,</span> <span class="mi">4096</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="o">*</span> <span class="n">size</span><span class="p">);</span>
+    <span class="n">posix_memalign</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">array_ran</span><span class="p">,</span> <span class="mi">4096</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="o">*</span> <span class="n">size</span><span class="p">);</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
+    <span class="n">v</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">jumps</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">stride</span><span class="p">);</span>
+
+    <span class="c1">// random</span>
+    <span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">size_t</span> <span class="n">r</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">size_t</span> <span class="n">m</span> <span class="o">=</span> <span class="n">jumps</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">m</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">;</span> <span class="o">--</span><span class="n">m</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">do</span> <span class="p">{</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="n">m</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">==</span>  <span class="n">i</span><span class="p">);</span>
+        <span class="n">array_ran</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">array_ran</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">r</span><span class="p">]]);</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">r</span><span class="p">];</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">r</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">array_ran</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">array_ran</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]]);</span>
+    <span class="n">array_ran</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="c1">// sequential</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">k</span><span class="o">&lt;</span><span class="n">jumps</span><span class="p">;</span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">array_seq_f</span><span class="p">[</span><span class="n">k</span><span class="o">*</span><span class="n">stride</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">array_seq_f</span><span class="p">[(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">stride</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">array_seq_f</span><span class="p">[</span><span class="n">jumps</span><span class="o">*</span><span class="n">stride</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="c1">// sequential</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">k</span><span class="o">=</span><span class="n">jumps</span><span class="p">;</span> <span class="n">k</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">;</span><span class="n">k</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">array_seq_b</span><span class="p">[</span><span class="n">k</span><span class="o">*</span><span class="n">stride</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">array_seq_b</span><span class="p">[(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">stride</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">array_seq_b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p><em>void finishCombination(map&lt;string, int&gt; parameters, int combination)</em></p>
+<blockquote>
+<div><p>This function will be called after executeCombination() and so can be used to finalize a complete combination. The example benchmark Stride for instance releases its arrays used in the combination:</p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">void</span> <span class="n">finishCombination</span><span class="p">(</span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">,</span> <span class="kt">int</span> <span class="n">combination</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">delete</span> <span class="n">array_seq_f</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="n">array_seq_b</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="n">array_ran</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p><em>void prepareRun(map&lt;string, int&gt; parameters, int combination, int test_series_id, int run)</em></p>
+<blockquote>
+<div><p>Every combination usually has some warm up runs and then it will be executed several times to get significant result by aggregating the single results. To prepare every single run you can use this function. The Stride benchmark for example uses this function to differentiate between the single test series:</p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">void</span> <span class="n">prepareRun</span><span class="p">(</span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">,</span> <span class="kt">int</span> <span class="n">combination</span><span class="p">,</span> <span class="kt">int</span> <span class="n">test_series_id</span><span class="p">,</span> <span class="kt">int</span> <span class="n">run</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">clear</span><span class="p">();</span>
+    <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">switch</span> <span class="p">(</span><span class="n">test_series_id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">array_ran</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>  <span class="c1">//for random test series</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">array_seq_f</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">//for sequential forward test series</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">array_seq_b</span><span class="p">[</span><span class="n">parameters</span><span class="p">[</span><span class="s">&quot;stride&quot;</span><span class="p">]</span><span class="o">*</span><span class="n">parameters</span><span class="p">[</span><span class="s">&quot;jumps&quot;</span><span class="p">]];</span> <span class="c1">//for sequential backward test series</span>
+            <span class="k">break</span><span class="p">;</span>
+   <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p><em>void prepareRunAfterCacheCleared(map&lt;string, int&gt; parameters, int combination, int test_series_id, int run)</em></p>
+<blockquote>
+<div>Just like the prepareRun() function this gets called right before doTheTest(), so before running one test of the benchmark but unlike prepareRun() before calling prepareRumAfterCacheCleared() the cache gets cleared via clearCache().</div></blockquote>
+<p><em>void finishRun(map&lt;string, int&gt; parameters, int combination, int test_series_id, int run)</em></p>
+<blockquote>
+<div><p>This function gets called after each run of doTheTest(). Here you could print results, free objects or clear some variables. The example benchmark Stride for instance prints some intermediate results here:</p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">void</span> <span class="n">finishRun</span><span class="p">(</span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">,</span> <span class="kt">int</span> <span class="n">combination</span><span class="p">,</span> <span class="kt">int</span> <span class="n">test_series_id</span><span class="p">,</span> <span class="kt">int</span> <span class="n">run</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;sum: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="n">p</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p><em>void doTheTest(map&lt;string, int&gt; parameters, int combination, int test_series_id, int run)</em></p>
+<blockquote>
+<div><p>In this function the actual test should be implemented. It is the function in which the time is measured and can be prepared in prepareRun() and finalized in finishRun(). For the Stride benchmark, the test looks like this:</p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">void</span> <span class="n">doTheTest</span><span class="p">(</span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="p">,</span> <span class="kt">int</span> <span class="n">combination</span><span class="p">,</span> <span class="kt">int</span> <span class="n">test_series_id</span><span class="p">,</span> <span class="kt">int</span> <span class="n">run</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">jumps</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="p">((</span><span class="kt">int</span><span class="o">**</span><span class="p">)</span><span class="n">p</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p><em>Additional Functions</em></p>
+<blockquote>
+<div>Not used in the sample benchmark, but also there for usage in your benchmarks, there are the additional functions <em>void prepareStart()</em> and <em>void finalize()</em>. Both functions will be called once during the whole benchmark run, prepareStart() before the benchmark starts and finalize() after it finished all runs.</div></blockquote>
+</div>
+<div class="section" id="structure-of-the-gnuplot-script">
+<h2>Structure of the GNUplot script<a class="headerlink" href="#structure-of-the-gnuplot-script" title="Permalink to this headline">¶</a></h2>
+<p>The <em>system.gp</em> that comes with the Bencho Tool contains all standard definitions for the gp script that you don&#8217;t need to specify in every script for new benchmarks.
+What you have to do (in case you want to use the GNUplot tool) is writing a <em>[benchmark].gp</em> script that contains some information of how you would like to have the plot.</p>
+<p>For the <em>[benchmark].gp</em> itself you just have to set the important options for the specific benchmark like format, range and labeling. Therefore check the sample <em>Stride.gp</em>:</p>
+<div class="highlight-python"><pre># plot cycles
+###########################
+set log x 2
+set log x2 2
+set format x "2^{%L}"
+set xlabel "Stride in Bytes"
+set ylabel "CPU Cycles per Element"
+set xrange [1:262144]
+
+set x2tics ('[Cache Linesize]' 64, '[Pagesize]' 4096)
+set grid noxtics x2tics
+JUMPS = 4096</pre>
+</div>
+<p>Afterwards, the plot command/commands follow in a little uncommon way. To make it possible for the tool to check, which performance counters are used and which are not, you have to create a gp script with all counters included the way we did in the sample:</p>
+<div class="highlight-python"><pre>plot\
+    "DATAFILE" using (($1-1)*8):(§@random_PAPI_TOT_CYC_y@§/JUMPS) title "Random" ls 1 with linespoints,\
+    "DATAFILE" using (($1-1)*8):(§@sequential_forwards_PAPI_TOT_CYC_y@§/JUMPS) title "Sequential" ls 2 with linespoints
+
+
+# plot random cache misses
+###########################
+set output "plot2.ps"
+set ylabel "Misses per Element"
+set format y "%.1f"
+
+
+plot\
+    "DATAFILE" using (($1-1)*8):(§@random_PAPI_L3_TCM_y@§/JUMPS) ls 3 with linespoints,\
+    "DATAFILE" using (($1-1)*8):(§@random_PAPI_L1_DCM_y@§/JUMPS) ls 1 with linespoints,\
+    "DATAFILE" using (($1-1)*8):(§@random_PAPI_L2_DCM_y@§/JUMPS) ls 2 with linespoints,\
+    "DATAFILE" using (($1-1)*8):(§@random_PAPI_TLB_DM_y@§/JUMPS) ls 4 with linespoints
+
+
+# plot sequential cache misses
+###########################
+set output "plot3.ps"
+set ylabel "Misses per Element"
+set format y "%.1f"
+
+plot\
+    "DATAFILE" using (($1-1)*8):(§@sequential_forwards_PAPI_L1_DCM_y@§/JUMPS) ls 1 with linespoints,\
+    "DATAFILE" using (($1-1)*8):(§@sequential_forwards_PAPI_L2_DCM_y@§/JUMPS) ls 2 with linespoints,\
+    "DATAFILE" using (($1-1)*8):(§@sequential_forwards_PAPI_L3_TCM_y@§/JUMPS) ls 3 with linespoints,\
+    "DATAFILE" using (($1-1)*8):(§@sequential_forwards_PAPI_TLB_DM_y@§/JUMPS) ls 4 with linespoints</pre>
+</div>
+<p>The filename you just have to name <em>&#8220;DATAFILE&#8221;</em>, it will be replaced automatically. For the row/column information of the single performance counters you have to write down the explicit name of the perf.-counter (which has to be the same as shown in the result file as column names later on), included by <em>§&#64;</em> and <em>&#64;§</em> (see the above example). They will be replaced automatically with the right row/column number dependent on which perf.-counters you use/how the result file looks like.</p>
+</div>
+</div>
+<div class="section" id="reference">
+<h1>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h1>
+<p>The reference section contains the classes and functions you can or maybe have to use in order to create a benchmark with the Bencho Framework. Furthermore it includes a complete list of the <a class="reference external" href="http://icl.cs.utk.edu/papi/software/index.html">PAPI</a> performance counters you can measure during your test runs.</p>
+<div class="section" id="parameter-class">
+<h2>Parameter Class<a class="headerlink" href="#parameter-class" title="Permalink to this headline">¶</a></h2>
+<p>The Parameter Class is a helper class of the Bencho Framework, that is used to register parameters for your benchmark. This is accomlished throug the overloaded constructors, which all create a standarized Parameter Object with a name for identification and a vector of long integer values. The following contructors are available at the moment:</p>
+<p><em>Parameter::Parameter(string name, vector&lt;long long&gt; values)</em></p>
+<blockquote>
+<div>This is the standard contructor, that transfers name and values directly to the object. No calculations will be done here.</div></blockquote>
+<p><em>Parameter::Parameter(string name, long long start, long long stop, long long step, operation operation)</em></p>
+<blockquote>
+<div><p>This contructor can be used to automatically calculate a vector of integer values by setting a start value, an end value and a step. Finally you can use values of the enum operation to determine, wether the steps should be added or multiplied.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="k">enum</span> <span class="n">operation</span> <span class="p">{</span>
+    <span class="n">add</span><span class="p">,</span>
+    <span class="n">multiply</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><em>Parameter::Parameter(string name, long long value)</em></p>
+<blockquote>
+<div>Of course you can also use only a single value as a parameter. This contructor will wrap your single integer value into the vector, that will be used by the frameworks functions.</div></blockquote>
+</div>
+<div class="section" id="aggregator-class">
+<h2>Aggregator Class<a class="headerlink" href="#aggregator-class" title="Permalink to this headline">¶</a></h2>
+<p>The Aggregator Class is a helper class of the Bencho Framework, that is used to condition the test results via calculating averages, medians or deviations. To use this class, declare a new Aggregator object either with directly giving your data to the constructor or setting it afterwards via <em>void Aggregator::setData(vector&lt;long long&gt; &amp;data)</em>. Once an object it created and initialized with its data you can call the following methods:</p>
+<p><em>long long Aggregator::calculateAverage()</em></p>
+<blockquote>
+<div>This function will calculate the average of the given data and return it as a rounded integer value.</div></blockquote>
+<p><em>long long Aggregator::calculateMedian()</em></p>
+<blockquote>
+<div>This function will calculate the median of the data and return it as a rounded integer value.</div></blockquote>
+<p><em>long long Aggregator::calculateDeviation()</em></p>
+<blockquote>
+<div>This function will calculate the deviation of the given data for you and return it as a rounded integer value.</div></blockquote>
+<p><em>long long Aggregator::calculateMin()</em></p>
+<blockquote>
+<div>This function will return the minimum value of the given data.</div></blockquote>
+<p><em>long long Aggregator::calculateMax()</em></p>
+<blockquote>
+<div>This function will return the maximum value of the given data.</div></blockquote>
+<p><em>long long Aggregator::calculateFunction(AggregationType::Function)</em></p>
+<blockquote>
+<div>This function will return the result of whatever function type you pass as parameter. This can be Average, Median, Min or Max, which are all declared in the AggregationType struct coming with the Aggregator class.</div></blockquote>
+</div>
+<div class="section" id="benchmark-functions">
+<h2>Benchmark Functions<a class="headerlink" href="#benchmark-functions" title="Permalink to this headline">¶</a></h2>
+<p>In this Section all public or protected functions of the Abstract Benchmark class will be listed and explained in order to use them in your own benchmarks class. The functions are ordered alphabetically by their names.</p>
+<p><em>void addParameter(Parameter *parameter, string version = &#8220;first&#8221;)</em></p>
+<blockquote>
+<div>Each benchmark has some parameters that compose the single combinations, that will be tested. For adding these parameters this function can be used. It expects an pointer to an object of the <a class="reference internal" href="#parameter-class">Parameter Class</a>, that helps you add complex parameters simple with its overloaded contructors and a version string, that could be used for registering different versions of parameters. The version is set to &#8216;first&#8217; by default. And don&#8217;t worry about the Paramter object you used to add the Parameter to the benchmark. The addParameter() function will automatically take care of the now useless object and delete it.</div></blockquote>
+<p><em>void addPerformanceCounter(string event_name)</em></p>
+<blockquote>
+<div><p>Of course you don not only want to measure the time your benchmarks needs for a run, but you also want to measure cache misses or CPU cycles. Therefore you can add the PAPI performance counters. A complete list of these counters can be found under <a class="reference internal" href="#papi-performance-counters">PAPI Performance Counters</a>.</p>
+<p>Note: If you do not have the PAPI library installed all performance counters will fall back to simple time measurement.</p>
+</div></blockquote>
+<p><em>void addTestSeries(int id, string name)</em></p>
+<blockquote>
+<div>If you have different test series for your benchmark, like a random series and a sequenced series you can add them all to your benchmark class via the addTestSeries() function. The ids should be unique.</div></blockquote>
+<p><em>void addAllTestSeriesAsGraphs()</em></p>
+<blockquote>
+<div>If you want to have all test series registered for the printing output by printResults() then you can use this function. It is a shortcut, that can be used instead of calling the addTestSeriesAsGraph() function for every test series.</div></blockquote>
+<p><em>void addTestSeriesAsGraph(int test_series_id)</em></p>
+<blockquote>
+<div>This function will register a specific test series as graph, that then can be outputed by the printing function printResults().</div></blockquote>
+<p><em>void clearCache()</em></p>
+<blockquote>
+<div>This function can be used to clear the whole cache for an unaffected test.</div></blockquote>
+<p><em>void full(int max_runs = -1, double max_deviation = -1)</em></p>
+<blockquote>
+<div><p>This function can be ignored when using the Bencho Tool. However, if you write your own main functions for your benchmarks you will have to use the full() function to start the whole benchmark test. A standard main function for a benchmark could look like this:</p>
+<div class="highlight-c++"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">hyrise</span><span class="o">::</span><span class="n">benchmark</span><span class="o">::</span><span class="n">Stride</span> <span class="o">*</span><span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">hyrise</span><span class="o">::</span><span class="n">benchmark</span><span class="o">::</span><span class="n">Stride</span><span class="p">;</span>
+
+    <span class="n">s</span><span class="o">-&gt;</span><span class="n">full</span><span class="p">();</span>
+    <span class="k">delete</span> <span class="n">s</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+<p><em>string getCurrentVersion()</em></p>
+<blockquote>
+<div>The getCurrentVersion() function will return the current version of the parameters the run uses.</div></blockquote>
+<p><em>size_t getMaxRuns()</em></p>
+<blockquote>
+<div>This function returns the maximum runs set for the benchmark.</div></blockquote>
+<p><em>string getName()</em></p>
+<blockquote>
+<div>The getName() function will return the name of the benchmark currently running.</div></blockquote>
+<p><em>vector&lt;Parameter&gt; *getParameters()</em></p>
+<blockquote>
+<div>The getParameters() function will return the complete vector of parameters.</div></blockquote>
+<p><em>vector&lt;string&gt; &amp;getPerformanceCounters()</em></p>
+<blockquote>
+<div>The getPerformanceCounters() will return an pointer on the vector of performance counters used by this benchmark.</div></blockquote>
+<p><em>vector&lt;long long&gt; &amp;getResult_error(size_t test_series, string perf_ctr)</em></p>
+<blockquote>
+<div>This function returns an pointer on the result errors for a specific test_series and a performance counter.</div></blockquote>
+<p><em>long long getResult_incache(string test_series)</em></p>
+<blockquote>
+<div>This function returns the result of the given test_series, that is currently in the cache.</div></blockquote>
+<p><em>vector&lt;long long&gt; &amp;getResult_x(size_t test_series, string perf_ctr)</em></p>
+<blockquote>
+<div>This function returns the x result of the given test series and performance counter.</div></blockquote>
+<p><em>vector&lt;long long&gt; &amp;getResult_y(size_t test_series, string perf_ctr)</em></p>
+<blockquote>
+<div>This function returns the y result of the given test series and performance counter.</div></blockquote>
+<p><em>size_t getRowCount()</em></p>
+<blockquote>
+<div>This function returns the size of the y result of the current performance counter.</div></blockquote>
+<p><em>map&lt;int, string&gt; &amp;getTestSeries()</em></p>
+<blockquote>
+<div>This function returns a pointer to the current test series.</div></blockquote>
+<p><em>string getUnit()</em></p>
+<blockquote>
+<div>This function returns the unit of the benchmark. This determines, if it uses the performance counters or the fall back clock ticks.</div></blockquote>
+<p><em>size_t getWarmUpRuns()</em></p>
+<blockquote>
+<div>This function will return the specified warm up runs for the benchmark.</div></blockquote>
+<p><em>void printCombinations()</em></p>
+<blockquote>
+<div>This function will prin t the combiantions calculated for the current parameters.</div></blockquote>
+<p><em>void printResults()</em></p>
+<blockquote>
+<div>This function will print out the results of the benchmark test for all test series added as graphs. For adding a test series as a graph use the addTestSeriesAsGraph() function or the addAllTestSeriesAsGraphs() function, that will add all the registered test series to the printing output.</div></blockquote>
+<p><em>void setAggregatingFunction(AggregationType::Function)</em></p>
+<blockquote>
+<div>Setter for the aggregating function, that will be used to aggregate the results of the single runs. You can pass all values of the Function enum in the AggregationType struct as parameter. At the moment these are Average, Median, Min and Max.</div></blockquote>
+<p><em>void setMaxRuns(size_t max_runs)</em></p>
+<blockquote>
+<div>Setter for the maximum amount of runs used for the benchmark tests.</div></blockquote>
+<p><em>void setName(string name)</em></p>
+<blockquote>
+<div>Setter for the Benchmarks name. The name is used for identification in the Bencho Tool.</div></blockquote>
+<p><em>void setSequenceId(string id)</em></p>
+<blockquote>
+<div>Setter for the Sequence Id. This is the name of the parameter, whose values will be used for the x axis in the graph.</div></blockquote>
+<p><em>void setWarmUpRuns(size_t warmUpRuns)</em></p>
+<blockquote>
+<div>Setter for the warm up runs, executed before running the actual benchmark test runs.</div></blockquote>
+</div>
+<div class="section" id="papi-performance-counters">
+<h2>PAPI Performance Counters<a class="headerlink" href="#papi-performance-counters" title="Permalink to this headline">¶</a></h2>
+<p>This Section contains a complete table of the <a class="reference external" href="http://icl.cs.utk.edu/papi/software/index.html">PAPI</a> performance counters that can be used with the Bencho Framework. Please note, that if the PAPI library is not installed on your system, all performance counters will fall back to simple time measurement.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">PAPI_EVENT</th>
+<th class="head">Event measured</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>PAPI_L1_DCM</td>
+<td>Level 1 data cache misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L1_ICM</td>
+<td>Level 1 instruction cache misses</td>
+</tr>
+<tr class="row-even"><td>PAPI_L2_DCM</td>
+<td>Level 2 data cache misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_ICM</td>
+<td>Level 2 instruction cache misses</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_DCM</td>
+<td>Level 3 data cache misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L3_ICM</td>
+<td>Level 3 instruction cache misses</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_TCM</td>
+<td>Level 1 total cache misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_TCM</td>
+<td>Level 2 total cache misses</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_TCM</td>
+<td>Level 3 total cache misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_CA_SNP</td>
+<td>Snoops</td>
+</tr>
+<tr class="row-even"><td>PAPI_CA_SHR</td>
+<td>Request for access to shared cache line (SMP)</td>
+</tr>
+<tr class="row-odd"><td>PAPI_CA_CLN</td>
+<td>Request for access to clean cache line (SMP)</td>
+</tr>
+<tr class="row-even"><td>PAPI_CA_INV</td>
+<td>Cache Line Invalidation (SMP)</td>
+</tr>
+<tr class="row-odd"><td>PAPI_CA_ITV</td>
+<td>Cache Line Intervention (SMP)</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_LDM</td>
+<td>Level 3 load misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L3_STM</td>
+<td>Level 3 store misses</td>
+</tr>
+<tr class="row-even"><td>PAPI_BRU_IDL</td>
+<td>Cycles branch units are idle</td>
+</tr>
+<tr class="row-odd"><td>PAPI_FXU_IDL</td>
+<td>Cycles integer units are idle</td>
+</tr>
+<tr class="row-even"><td>PAPI_FPU_IDL</td>
+<td>Cycles floating point units are idle</td>
+</tr>
+<tr class="row-odd"><td>PAPI_LSU_IDL</td>
+<td>Cycles load/store units are idle</td>
+</tr>
+<tr class="row-even"><td>PAPI_TLB_DM</td>
+<td>Data translation lookaside buffer misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_TLB_IM</td>
+<td>Instruction translation lookaside buffer misses</td>
+</tr>
+<tr class="row-even"><td>PAPI_TLB_TL</td>
+<td>Total translation lookaside buffer misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L1_LDM</td>
+<td>Level 1 load misses</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_STM</td>
+<td>Level 1 store misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_LDM</td>
+<td>Level 2 load misses</td>
+</tr>
+<tr class="row-even"><td>PAPI_L2_STM</td>
+<td>Level 2 store misses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_BTAC_M</td>
+<td>BTAC miss</td>
+</tr>
+<tr class="row-even"><td>PAPI_PRF_DM</td>
+<td>Prefetch data instruction caused a miss</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L3_DCH</td>
+<td>Level 3 Data Cache Hit</td>
+</tr>
+<tr class="row-even"><td>PAPI_TLB_SD</td>
+<td>Translation lookaside buffer shootdowns (SMP)</td>
+</tr>
+<tr class="row-odd"><td>PAPI_CSR_FAL</td>
+<td>Failed store conditional instructions</td>
+</tr>
+<tr class="row-even"><td>PAPI_CSR_SUC</td>
+<td>Successful store conditional instructions</td>
+</tr>
+<tr class="row-odd"><td>PAPI_CSR_TOT</td>
+<td>Total store conditional instructions</td>
+</tr>
+<tr class="row-even"><td>PAPI_MEM_SCY</td>
+<td>Cycles Stalled Waiting for Memory Access</td>
+</tr>
+<tr class="row-odd"><td>PAPI_MEM_RCY</td>
+<td>Cycles Stalled Waiting for Memory Read</td>
+</tr>
+<tr class="row-even"><td>PAPI_MEM_WCY</td>
+<td>Cycles Stalled Waiting for Memory Write</td>
+</tr>
+<tr class="row-odd"><td>PAPI_STL_ICY</td>
+<td>Cycles with No Instruction Issue</td>
+</tr>
+<tr class="row-even"><td>PAPI_FUL_ICY</td>
+<td>Cycles with Maximum Instruction Issue</td>
+</tr>
+<tr class="row-odd"><td>PAPI_STL_CCY</td>
+<td>Cycles with No Instruction Completion</td>
+</tr>
+<tr class="row-even"><td>PAPI_FUL_CCY</td>
+<td>Cycles with Maximum Instruction Completion</td>
+</tr>
+<tr class="row-odd"><td>PAPI_HW_INT</td>
+<td>Hardware interrupts</td>
+</tr>
+<tr class="row-even"><td>PAPI_BR_UCN</td>
+<td>Unconditional branch instructions executed</td>
+</tr>
+<tr class="row-odd"><td>PAPI_BR_CN</td>
+<td>Conditional branch instructions executed</td>
+</tr>
+<tr class="row-even"><td>PAPI_BR_TKN</td>
+<td>Conditional branch instructions taken</td>
+</tr>
+<tr class="row-odd"><td>PAPI_BR_NTK</td>
+<td>Conditional branch instructions not taken</td>
+</tr>
+<tr class="row-even"><td>PAPI_BR_MSP</td>
+<td>Conditional branch instructions mispredicted</td>
+</tr>
+<tr class="row-odd"><td>PAPI_BR_PRC</td>
+<td>Conditional branch instructions correctly predicted</td>
+</tr>
+<tr class="row-even"><td>PAPI_FMA_INS</td>
+<td>FMA instructions completed</td>
+</tr>
+<tr class="row-odd"><td>PAPI_TOT_IIS</td>
+<td>Total instructions issued</td>
+</tr>
+<tr class="row-even"><td>PAPI_TOT_INS</td>
+<td>Total instructions executed</td>
+</tr>
+<tr class="row-odd"><td>PAPI_INT_INS</td>
+<td>Integer instructions executed</td>
+</tr>
+<tr class="row-even"><td>PAPI_FP_INS</td>
+<td>Floating point instructions executed</td>
+</tr>
+<tr class="row-odd"><td>PAPI_LD_INS</td>
+<td>Load instructions executed</td>
+</tr>
+<tr class="row-even"><td>PAPI_SR_INS</td>
+<td>Store instructions executed</td>
+</tr>
+<tr class="row-odd"><td>PAPI_BR_INS</td>
+<td>Total branch instructions executed</td>
+</tr>
+<tr class="row-even"><td>PAPI_VEC_INS</td>
+<td>Vector/SIMD instructions executed</td>
+</tr>
+<tr class="row-odd"><td>PAPI_FLOPS</td>
+<td>Floating Point Instructions executed per second</td>
+</tr>
+<tr class="row-even"><td>PAPI_RES_STL</td>
+<td>Cycles processor is stalled on resource</td>
+</tr>
+<tr class="row-odd"><td>PAPI_FP_STAL</td>
+<td>FP units are stalled</td>
+</tr>
+<tr class="row-even"><td>PAPI_TOT_CYC</td>
+<td>Total cycles</td>
+</tr>
+<tr class="row-odd"><td>PAPI_IPS</td>
+<td>Instructions executed per second</td>
+</tr>
+<tr class="row-even"><td>PAPI_LST_INS</td>
+<td>Total load/store instructions executed</td>
+</tr>
+<tr class="row-odd"><td>PAPI_SYC_INS</td>
+<td>Synchronization instructions executed</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_DCH</td>
+<td>L1 D Cache Hit</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_DCH</td>
+<td>L2 D Cache Hit</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_DCA</td>
+<td>L1 D Cache Access</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_DCA</td>
+<td>L2 D Cache Access</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_DCA</td>
+<td>L3 D Cache Access</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L1_DCR</td>
+<td>L1 D Cache Read</td>
+</tr>
+<tr class="row-even"><td>PAPI_L2_DCR</td>
+<td>L2 D Cache Read</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L3_DCR</td>
+<td>L3 D Cache Read</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_DCW</td>
+<td>L1 D Cache Write</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_DCW</td>
+<td>L2 D Cache Write</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_DCW</td>
+<td>L3 D Cache Write</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L1_ICH</td>
+<td>L1 instruction cache hits</td>
+</tr>
+<tr class="row-even"><td>PAPI_L2_ICH</td>
+<td>L2 instruction cache hits</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L3_ICH</td>
+<td>L3 instruction cache hits</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_ICA</td>
+<td>L1 instruction cache accesses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_ICA</td>
+<td>L2 instruction cache accesses</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_ICA</td>
+<td>L3 instruction cache accesses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L1_ICR</td>
+<td>L1 instruction cache reads</td>
+</tr>
+<tr class="row-even"><td>PAPI_L2_ICR</td>
+<td>L2 instruction cache reads</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L3_ICR</td>
+<td>L3 instruction cache reads</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_ICW</td>
+<td>L1 instruction cache writes</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_ICW</td>
+<td>L2 instruction cache writes</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_ICW</td>
+<td>L3 instruction cache writes</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L1_TCH</td>
+<td>L1 total cache hits</td>
+</tr>
+<tr class="row-even"><td>PAPI_L2_TCH</td>
+<td>L2 total cache hits</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L3_TCH</td>
+<td>L3 total cache hits</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_TCA</td>
+<td>L1 total cache accesses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_TCA</td>
+<td>L2 total cache accesses</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_TCA</td>
+<td>L3 total cache accesses</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L1_TCR</td>
+<td>L1 total cache reads</td>
+</tr>
+<tr class="row-even"><td>PAPI_L2_TCR</td>
+<td>L2 total cache reads</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L3_TCR</td>
+<td>L3 total cache reads</td>
+</tr>
+<tr class="row-even"><td>PAPI_L1_TCW</td>
+<td>L1 total cache writes</td>
+</tr>
+<tr class="row-odd"><td>PAPI_L2_TCW</td>
+<td>L2 total cache writes</td>
+</tr>
+<tr class="row-even"><td>PAPI_L3_TCW</td>
+<td>L3 total cache writes</td>
+</tr>
+<tr class="row-odd"><td>PAPI_FML_INS</td>
+<td>FM ins</td>
+</tr>
+<tr class="row-even"><td>PAPI_FAD_INS</td>
+<td>FA ins</td>
+</tr>
+<tr class="row-odd"><td>PAPI_FDV_INS</td>
+<td>FD ins</td>
+</tr>
+<tr class="row-even"><td>PAPI_FSQ_INS</td>
+<td>FSq ins</td>
+</tr>
+<tr class="row-odd"><td>PAPI_FNV_INS</td>
+<td>Finv ins</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#what-s-bencho">What&#8217;s Bencho?</a></li>
+<li><a class="reference internal" href="#prerequesites">Prerequesites</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li><a class="reference internal" href="#set-up">Set Up</a><ul>
+<li><a class="reference internal" href="#config">Config</a></li>
+<li><a class="reference internal" href="#file-placement">File placement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#create-a-benchmark">Create a Benchmark</a></li>
+<li><a class="reference internal" href="#structure-of-the-gnuplot-script">Structure of the GNUplot script</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reference">Reference</a><ul>
+<li><a class="reference internal" href="#parameter-class">Parameter Class</a></li>
+<li><a class="reference internal" href="#aggregator-class">Aggregator Class</a></li>
+<li><a class="reference internal" href="#benchmark-functions">Benchmark Functions</a></li>
+<li><a class="reference internal" href="#papi-performance-counters">PAPI Performance Counters</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Documentation of Bencho!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/doc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Documentation of Bencho!"
+             >previous</a> |</li>
+        <li><a href="index.html">Bencho 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Epic.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
