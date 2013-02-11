@@ -32,26 +32,34 @@ class PapiSingleton {
 
         if (_perfCounterName != "walltime") {
             // init for threads
-            if (PAPI_thread_init(pthread_self) != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI thread initialization failed.");
+            retval = PAPI_thread_init(pthread_self);
+            if (retval != PAPI_OK) {
+                fprintf(stderr, "Error: PAPI thread initialization failed. ");
+                papi_handle_error(retval);
                 exit(1);
             }
 
             _perfEvents = 0;
-            if (PAPI_event_name_to_code((char *) papi,
-                                        &_perfEvents) != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI PAPI_event_name_to_code failed.");
+
+            retval = PAPI_event_name_to_code((char *) papi, &_perfEvents);
+            if (retval != PAPI_OK) {
+                fprintf(stderr, "Error: PAPI PAPI_event_name_to_code failed. ");
+                papi_handle_error(retval);
                 exit(1);
             }
 
             _eventSet = PAPI_NULL;
 
-            if (PAPI_create_eventset(&_eventSet) != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI_create_eventset failed.");
+            retval = PAPI_create_eventset(&_eventSet);
+            if (retval != PAPI_OK) {
+                fprintf(stderr, "Error: PAPI_create_eventset failed. ");
+                papi_handle_error(retval);
                 exit(1);
             }
-            if (PAPI_add_event(_eventSet, _perfEvents) != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI_add_event failed.");
+            retval = PAPI_add_event(_eventSet, _perfEvents);
+            if (retval != PAPI_OK) {
+                fprintf(stderr, "Error: PAPI_add_event failed. ");
+                papi_handle_error(retval);
                 exit(1);
             }
         }
@@ -61,8 +69,11 @@ class PapiSingleton {
         if (_perfCounterName == "walltime") {
             _t1 = PAPI_get_real_usec();
         } else {
-            if (PAPI_start(_eventSet) != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI_start failed.");
+            int retval;
+            retval = PAPI_start(_eventSet);
+            if (retval != PAPI_OK) {
+                fprintf(stderr, "Error: PAPI_start failed. ");
+                papi_handle_error(retval);
                 exit(1);
             }
         }
@@ -74,8 +85,11 @@ class PapiSingleton {
             return (_t2 - _t1);  // in milliseconds
         } else {
             long long papiResult = 0;
-            if (PAPI_stop(_eventSet, &papiResult) != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI_stop failed.");
+            int retval;
+            retval = PAPI_stop(_eventSet, &papiResult);
+            if (retval != PAPI_OK) {
+                fprintf(stderr, "Error: PAPI_stop failed. ");
+                papi_handle_error(retval);
                 exit(1);
             }
             return papiResult;
@@ -87,34 +101,106 @@ class PapiSingleton {
     int _eventSet;
     unsigned long _t1, _t2;
 
+    void papi_handle_error(int errcode)
+    {
+        switch (errcode)
+        {
+            case 0:
+                break;
+            case -1:
+                fprintf(stderr, "Invalid argument.\n");
+                break;
+            case -2:
+                fprintf(stderr, "Insufficient memory.\n");
+                break;
+            case -3:
+                fprintf(stderr, "A System/C library call failed.\n");
+                break;
+            case -4:
+                fprintf(stderr, "Not supported by component.\n");
+                break;
+            case -5:
+                fprintf(stderr, "Access to the counters was lost or interrupted.\n");
+                break;
+            case -6:
+                fprintf(stderr, "Internal error, please send mail to the developers.\n");
+                break;
+            case -7:
+                fprintf(stderr, "Event does not exist.\n");
+                break;
+            case -8:
+                fprintf(stderr, "Event exists, but cannot be counted due to counter resource limitations.\n");
+                break;
+            case -9:
+                fprintf(stderr, "EventSet is currently not running.\n");
+                break;
+            case -10:
+                fprintf(stderr, "EventSet is currently counting.\n");
+                break;
+            case -11:
+                fprintf(stderr, "No such EventSet Available.\n");
+                break;
+            case -12:
+                fprintf(stderr, "Event in argument is not a valid preset.\n");
+                break;
+            case -13:
+                fprintf(stderr, "Hardware does not support performance counters.\n");
+                break;
+            case -14:
+                fprintf(stderr, "Unknown error code.\n");
+                break;
+            case -15:
+                fprintf(stderr, "Permission level does not permit operation.\n");
+                break;
+            case -16:
+                fprintf(stderr, "PAPI hasn't been initialized yet.\n");
+                break;
+            case -17:
+                fprintf(stderr, "Component Index isn't set.\n");
+                break;
+            case -18:
+                fprintf(stderr, "Not supported.\n");
+                break;
+            case -19:
+                fprintf(stderr, "Not implemented.\n");
+                break;
+            case -20:
+                fprintf(stderr, "Buffer size exceeded.\n");
+                break;
+            case -21:
+                fprintf(stderr, "EventSet domain is not supported for the operation.\n");
+                break;
+            case -22:
+                fprintf(stderr, "Invalid or missing event attributes.\n");
+                break;
+            case -23:
+                fprintf(stderr, "Too many events or attributes.\n");
+                break;
+            case -24:
+                fprintf(stderr, "Bad combination of features.\n");
+                break;
+        }
+    }
+
 #else // Measuring without PAPI available
 public:
     void init(const char *papi) {
         _perfCounterName = std::string(papi);
-        // std::cout << "No PAPI Counters to measure " << _perfCounterName << ". Measuring clock ticks instead. " << std::cout;
+        if (_perfCounterName != "walltime")
+        {
+            std::cout << "No PAPI Counters to measure " << _perfCounterName << ". Measuring clock ticks instead. " << std::cout;
+        }
     }
 
     inline void start() {
 
-        if (_perfCounterName == "walltime")
-        {
-        	gettimeofday(&_t1, NULL);
-        } else {
-        	gettimeofday(&_t1, NULL);
-        }
+    	gettimeofday(&_t1, NULL);
     }
 
     inline long long stop() {
 
-    	if (_perfCounterName == "walltime")
-        {
-        	gettimeofday(&_t2, NULL);
-       	 	return _t2.tv_sec*1000*1000 + _t2.tv_usec - _t1.tv_sec*1000*1000 - _t1.tv_usec;  // in microseconds
-        } else {
-        	gettimeofday(&_t2, NULL);
-        	return _t2.tv_sec*1000*1000 + _t2.tv_usec - _t1.tv_sec*1000*1000 - _t1.tv_usec;  // in microseconds
-        }
-        
+       	gettimeofday(&_t2, NULL);
+     	return _t2.tv_sec*1000*1000 + _t2.tv_usec - _t1.tv_sec*1000*1000 - _t1.tv_usec;  // in microseconds
     }
 
 private:
