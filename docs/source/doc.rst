@@ -108,14 +108,6 @@ For execution and afterwards result printing type
 	
 	> make run
 
-If you want to run the benchmark in a special mode you can pass them as make arguments to the benchmark. For example an execution in fast mode can be invoked by executing
-
-::
-
-	> make run fast=1
-
-This will translate into the corresponding commandline arguments for your benchmark, making it possible to change running modes without recompiling your project.
-
 
 +----------+
 | **Hint** |
@@ -358,6 +350,36 @@ Afterwards, the plot command/commands follow in a little uncommon way. To make i
 	    "DATAFILE" using (($1-1)*8):(§@sequential_forwards_PAPI_TLB_DM_y@§/JUMPS) ls 4 with linespoints
 
 The filename you just have to name *"DATAFILE"*, it will be replaced automatically. For the row/column information of the single performance counters you have to write down the explicit name of the perf.-counter (which has to be the same as shown in the result file as column names later on), included by *§@* and *@§* (see the above example). They will be replaced automatically with the right row/column number dependent on which perf.-counters you use/how the result file looks like.
+
+Execution Modes
+---------------
+
+The Bencho framework offers modes to specify how the benchmark should be run. The modes can either be set permanetly in the benchmark class with the according setMode(bool mode) function or added to the make run statement as make arguments. For example an execution in fast mode can be invoked by executing
+
+::
+
+	> make run fast=1
+
+This will translate into the corresponding commandline arguments for your benchmark, making it possible to change running modes without recompiling your project.
+
+The currently implemented modes are:
+
+*Fast Mode*
+
+	The Fast Mode executes the benchmark in the fastest possible configuration. It opresses the output, sets the maximum runs to 1 and does not use aggregation. To opress the output the Silent Mode is activated (and deactivated) automatically with the Fast Mode.
+
+	.. code-block:: c++
+
+		fastMode(true);
+
+*Silent Mode*
+
+	The Silent Mode executes the benchmark without the frameworks output (except important errors). So if you don't need its output and want to have the benchmarks output be represented clearly activate the silentMode with
+
+
+	.. code-block:: c++
+
+		silentMode(true);
 
 
 =========
