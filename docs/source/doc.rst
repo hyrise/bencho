@@ -108,6 +108,14 @@ For execution and afterwards result printing type
 	
 	> make run
 
+If you want to run the benchmark in a special mode you can pass them as make arguments to the benchmark. For example an execution in fast mode can be invoked by executing
+
+::
+
+	> make run fast=1
+
+This will translate into the corresponding commandline arguments for your benchmark, making it possible to change running modes without recompiling your project.
+
 
 +----------+
 | **Hint** |

@@ -2,7 +2,7 @@
 
 # read path of build (argument given by Makefile), debug/prod
 DIRECTORY=$1
-ARGUMENTS=$2
+ARGUMENTS=$@
 
 
 # read in available benchmarks
@@ -11,7 +11,6 @@ do
 	(( i++ ))
 	var[i]=$arg
 done
-
 
 
 while [ ! $DONE ]
@@ -56,7 +55,7 @@ do
 	do
 		if [ $SELECTION -eq $x ]
 			then
-			
+
 			echo 'Executing Benchmark:' ${var[$x]} $ARGUMENTS
 
 			# execute selected Benchmark
