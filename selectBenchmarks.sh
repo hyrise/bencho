@@ -12,6 +12,16 @@ do
 	var[i]=$arg
 done
 
+if [ ${#var[*]} -eq 1 ]
+	then
+
+	echo 'Executing Benchmark:' ${var[1]} $ARGUMENTS
+
+	# execute selected Benchmark
+	$DIRECTORY/${var[1]} $ARGUMENTS
+	DONE=1
+	#
+fi
 
 while [ ! $DONE ]
 do
