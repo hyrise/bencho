@@ -129,6 +129,10 @@ It contains exactly what is mentioned above, a sample benchmark (including GNUpl
 <p>For execution and afterwards result printing type</p>
 <div class="highlight-python"><pre>&gt; make run</pre>
 </div>
+<p>If you want to run the benchmark in a special mode you can pass them as make arguments to the benchmark. For example an execution in fast mode can be invoked by executing</p>
+<div class="highlight-python"><pre>&gt; make run fast=1</pre>
+</div>
+<p>This will translate into the corresponding commandline arguments for your benchmark, making it possible to change running modes without recompiling your project.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="100%" />
