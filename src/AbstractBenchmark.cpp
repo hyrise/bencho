@@ -175,7 +175,7 @@ void AbstractBenchmark::calibrateInCache() {
     for (it_par = _parameters[_current_version].begin(); it_par != _parameters[_current_version].end(); it_par++) {
         if (_parameters_incache.find(it_par->getName()) == _parameters_incache.end()) {
 
-            if (!_silentMode) cout << "Error: Could not find incache parameter " << it_par->getName() << endl;
+            cout << "Error: Could not find incache parameter " << it_par->getName() << endl;
             throw std::runtime_error("Incache parameter not set properly.");
         }
     }
