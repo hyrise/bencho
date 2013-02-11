@@ -13,7 +13,8 @@ AbstractBenchmark::AbstractBenchmark() :
 	_name("default"),
     _do_papi_manual(false),
     _current_perf_counter(NULL),
-    _fastMode(false)
+    _fastMode(false),
+    _silentMode(false)
 {
 
     _filewriter = new FileWriter(this);
