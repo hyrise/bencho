@@ -4,6 +4,7 @@
 DIRECTORY=$1
 ARGUMENTS=$2
 
+
 # read in available benchmarks
 for arg in `ls -1 $DIRECTORY | sed '/\(.*\)\..*/d';`
 do
@@ -55,6 +56,7 @@ do
 	do
 		if [ $SELECTION -eq $x ]
 			then
+			
 			echo 'Executing Benchmark:' ${var[$x]} $ARGUMENTS
 
 			# execute selected Benchmark
