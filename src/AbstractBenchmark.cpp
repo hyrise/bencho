@@ -135,7 +135,7 @@ void AbstractBenchmark::clearCache() {
     
     int sum;
     int cachesize_in_mb = 12;
-    if (!_fastMode) cout << "Clearing cache. " << cachesize_in_mb << "MB. ";
+    if (!_silentMode) cout << "Clearing cache. " << cachesize_in_mb << "MB. ";
     int * dummy_array = new int [1024*1024*cachesize_in_mb] ;
 
     for ( int address = 0; address < 1024*1024*cachesize_in_mb; address++) {
@@ -152,7 +152,7 @@ void AbstractBenchmark::clearCache() {
         } 
     }
 
-    if (!_fastMode) cout << sum << endl;
+    if (!_silentMode) cout << sum << endl;
     delete dummy_array ;
     delete dummy_array2 ;
     
@@ -174,7 +174,7 @@ void AbstractBenchmark::calibrateInCache() {
     for (it_par = _parameters[_current_version].begin(); it_par != _parameters[_current_version].end(); it_par++) {
         if (_parameters_incache.find(it_par->getName()) == _parameters_incache.end()) {
 
-            if (!_fastMode) cout << "Error: Could not find incache parameter " << it_par->getName() << endl;
+            if (!_silentMode) cout << "Error: Could not find incache parameter " << it_par->getName() << endl;
             throw std::runtime_error("Incache parameter not set properly.");
         }
     }
@@ -184,20 +184,20 @@ void AbstractBenchmark::calibrateInCache() {
     for (it = _test_series.begin(); it != _test_series.end(); it++) {
 
         test_series_id = it->first;
-        if (!_fastMode) cout << "Calibrating test series " << test_series_id << endl;
+        if (!_silentMode) cout << "Calibrating test series " << test_series_id << endl;
         
         results.clear();
         
         for (size_t run = 0; run<_calibration_runs; ++run) {
             // execute with incache=true
             result = executeRun(_parameters_incache, combination_incache, test_series_id, 0, perfctr, true);
-            if (!_fastMode) cout << "calibrating result = " << result << endl;
+            if (!_silentMode) cout << "calibrating result = " << result << endl;
             results.push_back(result);
         }
         
         Aggregator *myAggregator = new Aggregator(results);
         long long aggr_val = myAggregator->calculateMedian();
-        if (!_fastMode) cout << "Final Calibration result for test series " << test_series_id << ": " << aggr_val << endl;
+        if (!_silentMode) cout << "Final Calibration result for test series " << test_series_id << ": " << aggr_val << endl;
         _result_calibration[it->second] = aggr_val;
         delete myAggregator;
     }
@@ -238,22 +238,22 @@ void AbstractBenchmark::execute(int max_runs, double max_deviation) {
         sstr >> number;
         
         _current_version = choice[number-1];        
-        if (!_fastMode) cout << "Running version " << _current_version << endl;
-        if (!_fastMode) cout << "Setting sequence id to " << _current_version << endl;
+        if (!_silentMode) cout << "Running version " << _current_version << endl;
+        if (!_silentMode) cout << "Setting sequence id to " << _current_version << endl;
         _sequence_id_parameter = _current_version;
     
     } else {
         
         _current_version = "first";
-        if (!_fastMode) cout << "Running default version of benchmark." << endl;
+        if (!_silentMode) cout << "Running default version of benchmark." << endl;
     
     }
     
-    if (!_fastMode) cout << endl;
-    if (!_fastMode) cout << "###################################" << endl;
-    if (!_fastMode) cout << "Running Benchmark: " << _name << endl;
-    if (!_fastMode) cout << "###################################" << endl;
-    if (!_fastMode) cout << endl;
+    if (!_silentMode) cout << endl;
+    if (!_silentMode) cout << "###################################" << endl;
+    if (!_silentMode) cout << "Running Benchmark: " << _name << endl;
+    if (!_silentMode) cout << "###################################" << endl;
+    if (!_silentMode) cout << endl;
 
 
     // Displaying used perf.-counters and missing ones (relating to GNUplot script) //
@@ -263,7 +263,7 @@ void AbstractBenchmark::execute(int max_runs, double max_deviation) {
     //
 
 
-    if (!_fastMode) cout << "Preparing." << endl;
+    if (!_silentMode) cout << "Preparing." << endl;
     prepareStart();
 
     calcCombinations();
@@ -285,31 +285,31 @@ void AbstractBenchmark::execute(int max_runs, double max_deviation) {
 
     for (size_t i = 0; i < _combinations.size(); ++i) {
 
-        if (!_fastMode) cout << endl;
-        if (!_fastMode) cout << "###################################" << endl;
-        if (!_fastMode) cout << setprecision(2) << (float)(i * 100) / _combinations.size() << " percent done." << endl;
-        if (!_fastMode) cout << "###################################" << endl;
-        if (!_fastMode) cout << endl;
+        if (!_silentMode) cout << endl;
+        if (!_silentMode) cout << "###################################" << endl;
+        if (!_silentMode) cout << setprecision(2) << (float)(i * 100) / _combinations.size() << " percent done." << endl;
+        if (!_silentMode) cout << "###################################" << endl;
+        if (!_silentMode) cout << endl;
 
 
-        if (!_fastMode) cout << "Preparing combination " << i << "..." << endl;
+        if (!_silentMode) cout << "Preparing combination " << i << "..." << endl;
 
         prepareCombination(_combinations[i], i);
 
         executeCombination(_combinations[i], i);
 
-        if (!_fastMode) cout << endl;
-        if (!_fastMode) cout << "###################################" << endl;
-        if (!_fastMode) cout << setprecision(2) << (float)(i * 100) / _combinations.size() << " percent done." << endl;
-        if (!_fastMode) cout << "###################################" << endl;
-        if (!_fastMode) cout << endl;
+        if (!_silentMode) cout << endl;
+        if (!_silentMode) cout << "###################################" << endl;
+        if (!_silentMode) cout << setprecision(2) << (float)(i * 100) / _combinations.size() << " percent done." << endl;
+        if (!_silentMode) cout << "###################################" << endl;
+        if (!_silentMode) cout << endl;
 
 
-        if (!_fastMode) cout << "Finish combination " << i << "...";
+        if (!_silentMode) cout << "Finish combination " << i << "...";
 
         finishCombination(_combinations[i], i);
 
-        if (!_fastMode) cout << endl;
+        if (!_silentMode) cout << endl;
     }
 
     finalize();
@@ -327,7 +327,7 @@ void AbstractBenchmark::displayHeader()
     {
         fileexists.close();
     } else {
-        if (!_fastMode) cout << "No Gnuplot-Script found." << endl;
+        cout << "No Gnuplot-Script found." << endl;
         return;
     }
 
@@ -351,38 +351,47 @@ void AbstractBenchmark::displayHeader()
 
     
     int pos;
-    if (!_fastMode) cout << endl << "Using PerformanceCounters:" << endl;
-    for (int i = 0; i < counters.size(); ++i)
+    if (!_fastMode) 
     {
-        for (int j = 0; j < headers.size(); ++j)
+        cout << endl << "Using PerformanceCounters:" << endl;
+        for (int i = 0; i < counters.size(); ++i)
         {
-            if (counters.at(i) == headers.at(j))
+            for (int j = 0; j < headers.size(); ++j)
+            {
+                if (counters.at(i) == headers.at(j))
+                    cout << "   " << counters.at(i) << endl;
+            }
+        }
+    }
+
+    if (!_fastMode) 
+    {
+        cout << endl << endl << "Missing PerformanceCounters (Gnuplot):" << endl;
+        for (int i = 0; i < counters.size(); ++i)
+        {
+            bool not_found = true;
+            for (int j = 0; j < headers.size(); ++j)
+            {
+                if (counters.at(i) == headers.at(j))
+                    not_found = false;
+            }
+            if(not_found)
                 cout << "   " << counters.at(i) << endl;
         }
     }
 
-    if (!_fastMode) cout << endl << endl << "Missing PerformanceCounters (Gnuplot):" << endl;
-    for (int i = 0; i < counters.size(); ++i)
+    if (!_fastMode)
     {
-        bool not_found = true;
-        for (int j = 0; j < headers.size(); ++j)
+        cout << endl << "Do you wish to continue?" << endl << "(Press ENTER to continue, type 0 to abort)" << endl;
+        string userinput;
+        getline(cin, userinput);
+        if(!userinput.empty())
         {
-            if (counters.at(i) == headers.at(j))
-                not_found = false;
-        }
-        if(not_found)
-            cout << "   " << counters.at(i) << endl;
-    }
-
-    if (!_fastMode) cout << endl << "Do you wish to continue?" << endl << "(Press ENTER to continue, type 0 to abort)" << endl;
-    string userinput;
-    getline(cin, userinput);
-    if(!userinput.empty())
-    {
-        if(userinput == "0")
-        {
-            if (!_fastMode) cout << endl << "Process terminated." << endl;
-            exit(1);
+            if(userinput == "0")
+            {
+                cout << endl << "Process terminated." << endl;
+                exit(1);
+            }
         }
     }
 }
@@ -403,7 +412,7 @@ void AbstractBenchmark::executeCombination(map<string, int> parameters, int comb
 
         test_series_id = it->first;
 
-        if (!_fastMode) {
+        if (!_silentMode) {
             cout << endl;
             cout << "###################################" << endl;
             cout << setprecision(2) << (float)(combination * 100) / _combinations.size() << " percent done." << endl;
@@ -415,33 +424,33 @@ void AbstractBenchmark::executeCombination(map<string, int> parameters, int comb
 
             string perf = _performance_counters[perf_ctr];
             
-            if (!_fastMode) {
+            if (!_silentMode) {
                 cout << "Measuring " << perf << ". " << endl;
                 cout << "Test Series: " << it->second << ". " << endl;
             }
 
             // print parameters
-            if (!_fastMode) cout << "Parameters: " << endl;
+            if (!_silentMode) cout << "Parameters: " << endl;
             map<string, int>::iterator parameter_it;
             for (parameter_it = parameters.begin(); parameter_it != parameters.end(); parameter_it++)
-                if (!_fastMode) cout << "\t" << parameter_it->first << ": " << parameter_it->second << endl;
+                if (!_silentMode) cout << "\t" << parameter_it->first << ": " << parameter_it->second << endl;
                 
                 
-            if (!_fastMode) cout << "Warm up (" << _warm_up_runs << "): " << flush;
+            if (!_silentMode) cout << "Warm up (" << _warm_up_runs << "): " << flush;
 
             // do the warum up
             for (size_t run = 0; run < _warm_up_runs; ++run) {
 
                 executeRun(parameters, combination, test_series_id, -1, _performance_counters[0]);
-                if (!_fastMode) cout << run + 1 << "." << flush;
+                if (!_silentMode) cout << run + 1 << "." << flush;
             }
 
             if (_warm_up_runs > 0) {
 
-                if (!_fastMode) cout << " " << flush;
+                if (!_silentMode) cout << " " << flush;
             }
 
-            if (!_fastMode) cout << endl;
+            if (!_silentMode) cout << endl;
 
             size_t max_runs = _max_runs;
 
@@ -453,7 +462,7 @@ void AbstractBenchmark::executeCombination(map<string, int> parameters, int comb
             if (max_runs == 0) {
 
                 max_runs = 10;
-                if (!_fastMode) cout << "Run: " << flush;
+                cout << "Run: " << flush;
 
                 while (current_deviation >= _max_deviation) {
 
@@ -464,21 +473,21 @@ void AbstractBenchmark::executeCombination(map<string, int> parameters, int comb
                         Aggregator *resultAggregator = new Aggregator(results);
                         current_deviation = resultAggregator->calculateDeviation() / resultAggregator->calculateAverage();
                         delete resultAggregator;
-                        if (!_fastMode) cout << "+++ Run: " << run << "\tResult: " << results[run] << "\tDeviation: " << current_deviation * 100 << "%" << endl;
+                        cout << "+++ Run: " << run << "\tResult: " << results[run] << "\tDeviation: " << current_deviation * 100 << "%" << endl;
                     }
 
-                    if (!_fastMode) cout << " ";
+                    cout << " ";
 
                     if (current_deviation >= _max_deviation) {
 
                         max_runs = max_runs * 2;
-                        if (!_fastMode) cout << "Incrementing max runs to " << max_runs << endl;
+                        cout << "Incrementing max runs to " << max_runs << endl;
                         results.clear();
-                        if (!_fastMode) cout << "Cleared results, starting over..." << endl;
+                        cout << "Cleared results, starting over..." << endl;
                     
                     } else {
 
-                        if (!_fastMode) cout << "Deviation is " << current_deviation * 100 << "%. Continue." << endl;
+                        cout << "Deviation is " << current_deviation * 100 << "%. Continue." << endl;
                     }
                 }
             
@@ -500,9 +509,9 @@ void AbstractBenchmark::executeCombination(map<string, int> parameters, int comb
                 _result_y[perf][test_series_id].push_back(aggr_val);
                 _result_error[perf][test_series_id].push_back(aggr_err);
                 delete resultAggregator;
-                cout << "Final Result: " << aggr_val << endl;
-                cout << "Final Error: " << aggr_err << endl;
-                cout << "Error/Result: " << (double)aggr_err/aggr_val << endl;
+                if (!_silentMode) cout << "Final Result: " << aggr_val << endl;
+                if (!_silentMode) cout << "Final Error: " << aggr_err << endl;
+                if (!_silentMode) cout << "Error/Result: " << (double)aggr_err/aggr_val << endl;
             } else {
                 _result_y[perf][test_series_id].push_back(result);
                 _result_error[perf][test_series_id].push_back(0);
@@ -518,7 +527,7 @@ long long AbstractBenchmark::executeRun(map<string, int> parameters, int combina
     if (incache) {
 
         // execute to load everything in memory
-        if (!_fastMode) cout << "Dry run..." << endl;
+        if (!_silentMode) cout << "Dry run..." << endl;
         prepareRun(parameters, combination, test_series_id, run);
         prepareRunAfterCacheCleared(parameters, combination, test_series_id, run);
         doTheTest(parameters, combination, test_series_id, run);
@@ -536,7 +545,7 @@ long long AbstractBenchmark::executeRun(map<string, int> parameters, int combina
         }
         
         result = PapiSingleton::getInstance().stop() / 10;
-        if (!_fastMode) cout << "result: " << result << endl;
+        if (!_silentMode) cout << "result: " << result << endl;
         finishRun(parameters, combination, test_series_id, run);
     
     } else {
@@ -563,7 +572,7 @@ long long AbstractBenchmark::executeRun(map<string, int> parameters, int combina
         else
             result = _manual_papi_result;
         
-        if (!_fastMode) cout << "result: " << result << endl;
+        if (!_silentMode) cout << "result: " << result << endl;
         finishRun(parameters, combination, test_series_id, run);
     }
     
@@ -641,6 +650,11 @@ void AbstractBenchmark::setWarmUpRuns(size_t warm_up_runs) {
 
 void AbstractBenchmark::setFastMode(bool fastMode) {
     _fastMode = fastMode;
+    _silentMode = fastMode;
+}
+
+void AbstractBenchmark::setSilentMode(bool silentMode) {
+    _silentMode = silentMode;
 }
 
 void AbstractBenchmark::setAggregatingFunction(AggregationType::Function function) {
@@ -678,6 +692,10 @@ int AbstractBenchmark::getSequenceId(map<string, int> parameters, int test_serie
 
 bool AbstractBenchmark::getFastMode() {
     return _fastMode;
+}
+
+bool AbstractBenchmark::getSilentMode() {
+    return _silentMode;
 }
 
 AggregationType::Function AbstractBenchmark::getAggregatingFunction() {

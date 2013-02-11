@@ -25,7 +25,6 @@ class AbstractBenchmark {
 
 	protected:
 		size_t _max_runs;
-		size_t _max_runs_fast;
 		size_t _warm_up_runs;
 		size_t _calibration_runs;
 		bool _is_initialized;
@@ -66,8 +65,9 @@ class AbstractBenchmark {
 		DirectoryManager _directorymanager;
   		//Plotter *_plotter;		//später
 
-		//fast mode for supressing output and setting max_runs to 1
+		//modes for supressing output and running fastest possible configuration
   		bool _fastMode;
+  		bool _silentMode;
 
 		void init();
 
@@ -134,6 +134,7 @@ class AbstractBenchmark {
 		void setWarmUpRuns(size_t warm_up_runs);
 		void setMaxRuns(size_t max_runs);
 		void setFastMode(bool fastMode);
+		void setSilentMode(bool silentMode);
 		void setAggregatingFunction(AggregationType::Function function);
 
 		string getName();
@@ -142,6 +143,7 @@ class AbstractBenchmark {
 		size_t getMaxRuns();
 		virtual long long getValue(size_t graph_id, string perf_ctr, size_t pos, map<string, int> parameters);
 		bool getFastMode();
+		bool getSilentMode();
 		AggregationType::Function getAggregatingFunction();
     	vector<map<string, int> > &getCombinations();
 
