@@ -79,7 +79,7 @@ $(libbencho): $(objects) settings.conf
 	$(call echo_cmd,LIB $@) $(LIB) $@ $(objects)
  
 $(objects): $(BUILD_DIR)/%.o: $(src_dir)/%.cpp $(INCLUDE_DIR)/%.h $(BUILD_DIR)/%.d settings.conf
-	$(call echo_cmd,CC $@) $(CC) $(BUILD_FLAGS) $(CXX_DEBUG) -o"$@" -c "$<" $(INCLUDE)
+	$(call echo_cmd,CC $@) $(CC) $(BUILD_FLAGS) $(CXX_DEBUG) -o"$@" -c "$<" $(INCLUDE) -D BENCHO_DIR=$(CURDIR)
  
 $(dependencies): $(BUILD_DIR)/%.d: $(src_dir)/%.cpp
 	$(call echo_cmd,DEPEND $@) $(CC) -MM -MT $@ $(BUILD_FLAGS) $(CXX_DEBUG) $< > $@ $(INCLUDE)

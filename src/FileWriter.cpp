@@ -4,6 +4,9 @@
 #include "ConfigFile.h"
 #include <stdlib.h>
 
+#define STR_EXPAND(tok) #tok
+#define STR(tok) STR_EXPAND(tok)
+
 extern char* global_program_invocation_name;
 
 FileWriter::FileWriter(AbstractBenchmark *benchmark)
@@ -51,19 +54,23 @@ void FileWriter::saveParameters(AbstractBenchmark *benchmark)
     //file << "Executable: " << global_program_invocation_name << endl;  //ersetzten?
     
     // copy setting.conf
-    string settings_line;
-    ifstream settings_file("./settings.conf");
     file << "Settings: ";
+    ifstream settings_file(STR(BENCHO_DIR)"/settings.conf");
     if (settings_file.is_open())
     {
-        while (settings_file.good() )
+        string settings_line;
+        string settings_line_after;
+        getline(settings_file, settings_line);
+        while (settings_file.good())
         {
-            getline (settings_file,settings_line);
-            file << settings_line << ", ";
+            getline(settings_file, settings_line_after);
+            file << settings_line;
+            if (!settings_line_after.empty()) file << ", ";
+            settings_line = settings_line_after;
         }
         settings_file.close();
     }
-
+    
     file << endl;
     file.close();
 
