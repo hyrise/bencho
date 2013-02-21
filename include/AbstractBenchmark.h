@@ -14,6 +14,7 @@
 #include "FileWriter.h"			//class to write result files
 #include "DirectoryManager.h"	//class to manage directories
 #include "Gnup.h"				//class for plotting results with gnuplot
+#include "Pyp.h"				//class for plotting results with python matplotlib
 
 using namespace std;
 
@@ -127,7 +128,9 @@ class AbstractBenchmark {
 		int full(int max_runs = -1, double max_deviation = -1);
 		void printResults();
 		void printCombinations();
+		void plotResults();
 		void plotResultsWithGnuplot();
+		void plotResultsWithPyplot();
 
 		void setName(string name);
 		void setSequenceId(string id);

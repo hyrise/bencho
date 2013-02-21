@@ -37,7 +37,14 @@ ifneq ($(VERBOSE_BUILD), 1)
 else # Verbose output
 	echo_cmd =
 endif
- 
+
+ifeq ($(GNUPLOT), 1)
+	BUILD_FLAGS += -D GNUPLOT
+endif
+
+ifeq ($(PYPLOT), 1)
+	BUILD_FLAGS += -D PYPLOT
+endif
 
 
 full_build_dir := $(BUILD_DIR)

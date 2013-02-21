@@ -7,6 +7,8 @@ if [ ! -f $file ]; then
     echo "PROD=0" > $file
     echo "PAPI=0" >> $file
     echo "VERBOSE_BUILD=0" >> $file
+    echo "GNUPLOT=1" >> $file
+    echo "PYPLOT=0" >> $file
     #echo "PREFETCH=0" >> $file
     #echo "THREAD_AFFINITY=0" >> $file
     #echo "TREX_SSE=0" >> $file
