@@ -365,6 +365,8 @@ void AbstractBenchmark::displayHeader()
         }
     }
 
+    bool counters_missing = false;
+
     if (!_fastMode) 
     {
         cout << endl << endl << "Missing PerformanceCounters (Gnuplot):" << endl;
@@ -376,12 +378,14 @@ void AbstractBenchmark::displayHeader()
                 if (counters.at(i) == headers.at(j))
                     not_found = false;
             }
-            if(not_found)
+            if(not_found){
                 cout << "   " << counters.at(i) << endl;
+                counters_missing = true;
+            }
         }
     }
 
-    if (!_fastMode)
+    if (!_fastMode && counters_missing)
     {
         cout << endl << "Do you wish to continue?" << endl << "(Press ENTER to continue, type 0 to abort)" << endl;
         string userinput;
