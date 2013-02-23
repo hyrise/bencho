@@ -78,6 +78,7 @@ The recommended structure of the Bencho project directory contains the following
 - Makefile which calls the Bencho Makefile as well as compiles and links your benchmarks
 - benchmarks/ directory which contains your benchmarks (and GNUplot files)
 - bencho/ directoy which contains the complete Bencho Framework
+- include/ directory which contains eventually external include files for your benchmarks seperated in subdirectories named after the benchmarks
 
 +-----------------------------------------+
 |Structure of the Bencho project directory|
@@ -85,9 +86,9 @@ The recommended structure of the Bencho project directory contains the following
 
 ::
 	
-			working directory
-		/		|		\
-	bencho/ 	    Makefile		benchmarks/
+				working directory
+		/		|		\		\
+	bencho/ 	    Makefile		benchmarks/	  include/
 
 To get familiar with this check out the sample project at git@epic.plan.io:epic-benchosample.benchosample.git.
 It contains exactly what is mentioned above, a sample benchmark (including GNUplot script), the Bencho framework as git-submodule and a sample Makefile.
@@ -108,6 +109,8 @@ For execution and afterwards result printing type
 	
 	> make run
 
+
+To let the Makefile ignore one or more benchmarks just add the prefix '_' to it. Then it won't be compiled.
 
 +----------+
 | **Hint** |

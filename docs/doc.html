@@ -103,6 +103,7 @@
 <li>Makefile which calls the Bencho Makefile as well as compiles and links your benchmarks</li>
 <li>benchmarks/ directory which contains your benchmarks (and GNUplot files)</li>
 <li>bencho/ directoy which contains the complete Bencho Framework</li>
+<li>include/ directory which contains eventually external include files for your benchmarks seperated in subdirectories named after the benchmarks</li>
 </ul>
 <table border="1" class="docutils">
 <colgroup>
@@ -113,9 +114,9 @@
 </tr>
 </tbody>
 </table>
-<div class="highlight-python"><pre>                working directory
-        /               |               \
-bencho/             Makefile            benchmarks/</pre>
+<div class="highlight-python"><pre>                        working directory
+        /               |               \               \
+bencho/             Makefile            benchmarks/       include/</pre>
 </div>
 <p>To get familiar with this check out the sample project at <a class="reference external" href="mailto:git&#37;&#52;&#48;epic&#46;plan&#46;io">git<span>&#64;</span>epic<span>&#46;</span>plan<span>&#46;</span>io</a>:epic-benchosample.benchosample.git.
 It contains exactly what is mentioned above, a sample benchmark (including GNUplot script), the Bencho framework as git-submodule and a sample Makefile.</p>
@@ -129,10 +130,7 @@ It contains exactly what is mentioned above, a sample benchmark (including GNUpl
 <p>For execution and afterwards result printing type</p>
 <div class="highlight-python"><pre>&gt; make run</pre>
 </div>
-<p>If you want to run the benchmark in a special mode you can pass them as make arguments to the benchmark. For example an execution in fast mode can be invoked by executing</p>
-<div class="highlight-python"><pre>&gt; make run fast=1</pre>
-</div>
-<p>This will translate into the corresponding commandline arguments for your benchmark, making it possible to change running modes without recompiling your project.</p>
+<p>To let the Makefile ignore one or more benchmarks just add the prefix &#8216;_&#8217; to it. Then it won&#8217;t be compiled.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="100%" />
