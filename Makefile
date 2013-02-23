@@ -36,7 +36,7 @@ ifneq ($(VERBOSE_BUILD), 1)
 	echo_cmd = @echo "$(1)";
 else # Verbose output
 	echo_cmd =
-endifz
+endif
  
 
 
