@@ -45,3 +45,17 @@ string getParameterFile(string bench_name, string id, string result_dir)
 	string parameterFile = result_dir + "/" + bench_name + "/" + bench_name + "_" + id + ".parameter.txt";
 	return parameterFile;
 }
+
+bool fileExists(string file_name)
+{
+	ifstream filestream;
+	filestream.open(file_name.c_str());
+	if(filestream)
+	{
+		filestream.close();
+		return true;
+	} else {
+		filestream.close();
+		return false;
+	}
+}

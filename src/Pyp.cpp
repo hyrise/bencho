@@ -29,7 +29,7 @@ void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string be
 
 
 	// ToDo: Check first if file exists
-	string pyScriptExecutionCommand = "python " + pyScriptFinal;
+	string pyScriptExecutionCommand = "python " + pyScriptFinal + " -f " + resultFile + " -n " + benchName;
 	system(pyScriptExecutionCommand.c_str());
 }
 

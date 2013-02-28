@@ -14,6 +14,7 @@ string findBenchId(string bench_name, string result_dir);
 string getResultFile(string bench_name, string id, string result_dir);
 string getParameterFile(string bench_name, string id, string result_dir);
 
+bool fileExists(string file_name);
 
 
 

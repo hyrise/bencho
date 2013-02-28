@@ -111,7 +111,7 @@ int Gnup::createBaseScript(string bench_name)
 	string bench_script = _bench_script_dir + "/" + bench_name + ".gp";
 	string line;
 
-	if(Gnup::fileExists(temp_script))
+	if(fileExists(temp_script))
 	{
 		remove(temp_script.c_str());
 	}
@@ -152,12 +152,12 @@ int Gnup::createFinalScript(string bench_name, string id)
 	string result_file = getResultFile(bench_name, id, _result_dir);
 	string buffer;
 
-	if(Gnup::fileExists(final_script))
+	if(fileExists(final_script))
 	{
 		remove(final_script.c_str());
 	}
 
-	if(!(Gnup::fileExists(temp_script)))
+	if(!(fileExists(temp_script)))
 	{
 		if(Gnup::createBaseScript(bench_name))
 		{
@@ -438,19 +438,19 @@ void Gnup::bufferSearchReplace(string replace_file, string search, string replac
 	return;
 }
 
-bool Gnup::fileExists(string file_name)
-{
-	ifstream filestream;
-	filestream.open(file_name.c_str());
-	if(filestream)
-	{
-		filestream.close();
-		return true;
-	} else {
-		filestream.close();
-		return false;
-	}
-}
+// bool Gnup::fileExists(string file_name)
+// {
+// 	ifstream filestream;
+// 	filestream.open(file_name.c_str());
+// 	if(filestream)
+// 	{
+// 		filestream.close();
+// 		return true;
+// 	} else {
+// 		filestream.close();
+// 		return false;
+// 	}
+// }
 
 vector<string> Gnup::getCounters(string script)
 {
@@ -502,7 +502,7 @@ void Gnup::plot(string bench_name, string id)
 	string bench_script = bench_name + "_final.gp";
 	string system_script = "gnuplot " + bench_script;
 
-	if(!Gnup::fileExists(bench_script))
+	if(!fileExists(bench_script))
 	{
 		if(Gnup::createFinalScript(bench_name, id))
 		{
@@ -515,7 +515,7 @@ void Gnup::plot(string bench_name, string id)
 
 	string move;
 
-	if(Gnup::fileExists("plot1.ps"))
+	if(fileExists("plot1.ps"))
 	{
 		if(_terminal == "ps")
 		{
@@ -530,7 +530,7 @@ void Gnup::plot(string bench_name, string id)
 		remove("plot1.pdf");
 	}
 
-	if(Gnup::fileExists("plot2.ps"))
+	if(fileExists("plot2.ps"))
 	{
 		if(_terminal == "ps")
 		{
@@ -545,7 +545,7 @@ void Gnup::plot(string bench_name, string id)
 		remove("plot2.pdf");
 	}
 
-	if(Gnup::fileExists("plot3.ps"))
+	if(fileExists("plot3.ps"))
 	{
 		if(_terminal == "ps")
 		{
