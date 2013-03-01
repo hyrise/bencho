@@ -1,3 +1,4 @@
+#include <Python.h> // need to include this here and not in the .h file to avoid some macro overwriting warnings
 #include "Pyp.h"
 
 
@@ -29,8 +30,58 @@ void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string be
 
 
 	// ToDo: Check first if file exists
-	string pyScriptExecutionCommand = "python " + pyScriptFinal + " -f " + resultFile + " -n " + benchName;
-	system(pyScriptExecutionCommand.c_str());
+	Pyp::callPythonPlot(resultFile, pyScriptFinal);
+}
+
+void Pyp::callPythonPlot(string resultFile, string scriptFile)
+{
+	PyObject *pName, *pModule, *pFunc, *pString, *pArgs;
+
+	// Initialize the Python Interpreter
+	Py_Initialize();
+
+	// Build the name object, this case the system.py
+	pName = PyString_FromString("system");
+
+	// Load the module object
+	pModule = PyImport_Import(pName);
+
+	// pFunc is a borrowed reference, "plot" the function to call
+	pFunc = PyObject_GetAttrString(pModule, "plot");
+
+	if (PyCallable_Check(pFunc))
+	{
+		pArgs = PyTuple_New(2); // plot() should expect 2 arguments
+		pString = PyString_FromString(resultFile.c_str());
+		if (!pString)
+		{
+			PyErr_Print();
+			return;
+		}
+		PyTuple_SetItem(pArgs, 0, pString);
+		pString = PyString_FromString(scriptFile.c_str());
+		if (!pString)
+		{
+			PyErr_Print();
+			return;
+		}
+		PyTuple_SetItem(pArgs, 0, pString);
+
+		// Actual call of the function
+		PyObject_CallObject(pFunc, pArgs);
+
+		 if (pArgs != NULL)
+		 	Py_DECREF(pArgs);
+	}
+
+	// Clean up
+	Py_DECREF(pModule);
+	Py_DECREF(pName);
+	Py_DECREF(pFunc);
+	Py_DECREF(pString);
+
+	// Finish the Python Interpreter
+	Py_Finalize();
 }
 
 void Pyp::setUp(bool setDefault)

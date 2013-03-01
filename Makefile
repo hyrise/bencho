@@ -12,8 +12,9 @@ LIB = ar cr
 
 BUILD_FLAGS = -I$(SOURCE_DIR) -Wno-deprecated
 LINKER_FLAGS = -lpthread -ldl
-INCLUDE = -I$(INCLUDE_DIR)
+INCLUDE = -I$(INCLUDE_DIR) $(shell python-config --includes)
 VERSION=$(shell git describe --tags)
+
 
 
 -include settings.conf
