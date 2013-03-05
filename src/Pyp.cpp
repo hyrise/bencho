@@ -40,6 +40,10 @@ void Pyp::callPythonPlot(string resultFile, string scriptFile)
 	// Initialize the Python Interpreter
 	Py_Initialize();
 
+	// Tell Python to search also in benchmarks/ for modules
+	PyRun_SimpleString("import sys");
+	PyRun_SimpleString("sys.path.append(\"benchmarks\")");
+
 	// Build the name object, this case the system.py
 	pName = PyString_FromString("system");
 
@@ -65,20 +69,20 @@ void Pyp::callPythonPlot(string resultFile, string scriptFile)
 			PyErr_Print();
 			return;
 		}
-		PyTuple_SetItem(pArgs, 0, pString);
+		PyTuple_SetItem(pArgs, 1, pString);
 
 		// Actual call of the function
 		PyObject_CallObject(pFunc, pArgs);
 
-		 if (pArgs != NULL)
-		 	Py_DECREF(pArgs);
+		if (pArgs != NULL)
+			Py_DECREF(pArgs);
 	}
 
 	// Clean up
 	Py_DECREF(pModule);
 	Py_DECREF(pName);
 	Py_DECREF(pFunc);
-	Py_DECREF(pString);
+	// Py_DECREF(pString); // This is a borrowed reference. Calling Py_DECREF on it would cause Py_Finalize() to crash
 
 	// Finish the Python Interpreter
 	Py_Finalize();

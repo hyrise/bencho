@@ -643,10 +643,10 @@ void AbstractBenchmark::plotResultsWithGnuplot() {
 }
 
 void AbstractBenchmark::plotResultsWithPyplot() {
-    // Pyp* plotPyplot = new Pyp();
-    // plotPyplot->setUp(true); // default settings, plot last run etc.
-    // plotPyplot->plot();
-    // delete plotPyplot;
+    Pyp* plotPyplot = new Pyp();
+    plotPyplot->setUp(true); // default settings, plot last run etc.
+    plotPyplot->plot();
+    delete plotPyplot;
 }
 
 
