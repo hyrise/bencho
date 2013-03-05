@@ -59,3 +59,9 @@ bool fileExists(string file_name)
 		return false;
 	}
 }
+
+void pdfCropFile(string file_name)
+{
+	string cropCommand = "pdfcrop " + file_name + " " + file_name + " > /dev/null";
+	system(cropCommand.c_str());
+}

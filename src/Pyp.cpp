@@ -28,6 +28,7 @@ void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string be
 	string pyScript = pyScriptDir + "/" + benchName + ".py";
 	string pyScriptFinal = Pyp::createFinalPyScript(pyScript, resultFile);
 
+	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
 
 	// ToDo: Check first if file exists
 	Pyp::callPythonPlot(resultFile, pyScriptFinal);

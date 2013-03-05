@@ -180,13 +180,19 @@ int Gnup::createFinalScript(string bench_name, string id)
 	Gnup::bufferSearchReplace(final_script, "TERMINAL_X11", "# TERMINAL_X11");
 	Gnup::bufferSearchReplace(final_script, "TERMINAL_PS", "# TERMINAL_PS");
 
-	cout << "Terminal?" << endl << "(default: " << _terminal << ")" << endl;
-	string userinput;
-	getline(cin, userinput);
-	if(!userinput.empty())
-	{
-		_terminal = userinput;
-	}
+
+	// The code below caused to interrupt the flow every single benchmark execution.
+	// Therefore I commented it out.
+	// Need to solve the Terminal decision in another way.
+
+	// cout << "Terminal?" << endl << "(default: " << _terminal << ")" << endl;
+	// string userinput;
+	// getline(cin, userinput);
+	// if(!userinput.empty())
+	// {
+	// 	_terminal = userinput;
+	// }
+
 	Gnup::bufferSearchReplace(final_script, "$(TERMINAL)", _terminal);
 
 	if(_terminal == "x11")
@@ -497,7 +503,7 @@ int Gnup::getCounterPosition(string counter, string csv)
 
 void Gnup::plot(string bench_name, string id)
 {
-	cout << endl << "Plotting benchmark \"" + bench_name + "\", ID: " + id << endl;
+	cout << "Benchmark: \"" + bench_name + "\", ID: " + id << endl;
 
 	string bench_script = bench_name + "_final.gp";
 	string system_script = "gnuplot " + bench_script;
@@ -519,11 +525,11 @@ void Gnup::plot(string bench_name, string id)
 	{
 		if(_terminal == "ps")
 		{
-			move = "mv plot1.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_1.ps";
+			move = "mv plot1.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_1.ps";
 		} else if(_terminal != "x11") {
 			system("ps2pdf -dEPSCrop plot1.ps");
-			system("pdfcrop plot1.pdf plot1-crop.pdf");
-			move = "mv plot1-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_1.pdf";
+			system("pdfcrop plot1.pdf plot1-crop.pdf > /dev/null");
+			move = "mv plot1-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_1.pdf";
 		}
 		system(move.c_str());
 		remove("plot1.ps");
@@ -534,11 +540,11 @@ void Gnup::plot(string bench_name, string id)
 	{
 		if(_terminal == "ps")
 		{
-			move = "mv plot2.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_2.ps";
+			move = "mv plot2.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_2.ps";
 		} else if(_terminal != "x11") {
 			system("ps2pdf -dEPSCrop plot2.ps");
-			system("pdfcrop plot2.pdf plot2-crop.pdf");
-			move = "mv plot2-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_2.pdf";
+			system("pdfcrop plot2.pdf plot2-crop.pdf > /dev/null");
+			move = "mv plot2-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_2.pdf";
 		}
 		system(move.c_str());
 		remove("plot2.ps");
@@ -549,11 +555,11 @@ void Gnup::plot(string bench_name, string id)
 	{
 		if(_terminal == "ps")
 		{
-			move = "mv plot3.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_3.ps";
+			move = "mv plot3.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_3.ps";
 		} else if(_terminal != "x11") {
 			system("ps2pdf -dEPSCrop plot3.ps");
-			system("pdfcrop plot3.pdf plot3-crop.pdf");
-			move = "mv plot3-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_3.pdf";
+			system("pdfcrop plot3.pdf plot3-crop.pdf > /dev/null");
+			move = "mv plot3-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_3.pdf";
 		}
 		system(move.c_str());
 		remove("plot3.ps");

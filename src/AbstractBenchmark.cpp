@@ -636,6 +636,7 @@ void AbstractBenchmark::plotResults() {
 }
 
 void AbstractBenchmark::plotResultsWithGnuplot() {
+    cout << endl << "Plotting results with Gnuplot" << endl;
     Gnup* plotGnuplot = new Gnup();
     plotGnuplot->setUp(true); // default settings, plot last run etc.
     plotGnuplot->plot();
@@ -643,6 +644,7 @@ void AbstractBenchmark::plotResultsWithGnuplot() {
 }
 
 void AbstractBenchmark::plotResultsWithPyplot() {
+    cout << endl << "Plotting results with Python matplotlib" << endl;
     Pyp* plotPyplot = new Pyp();
     plotPyplot->setUp(true); // default settings, plot last run etc.
     plotPyplot->plot();

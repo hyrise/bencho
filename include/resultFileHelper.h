@@ -2,6 +2,8 @@
 #ifndef RESULTFILEHELPER_H
 #define RESULTFILEHELPER_H
 
+#include <stdlib.h>
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -16,6 +18,7 @@ string getParameterFile(string bench_name, string id, string result_dir);
 
 bool fileExists(string file_name);
 
+void pdfCropFile(string file_name);
 
 
 #endif //RESULTFILEHELPER_H
