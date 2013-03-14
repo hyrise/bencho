@@ -24,6 +24,7 @@ void Pyp::plot()
 
 void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string benchId)
 {
+	vector<string> resultPlots;
 	string resultFile = getResultFile(benchName, benchId, resultDir);
 	string pyScript = pyScriptDir + "/" + benchName + ".py";
 	string pyScriptFinal = Pyp::createFinalPyScript(pyScript, resultFile);
@@ -31,12 +32,18 @@ void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string be
 	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
 
 	// ToDo: Check first if file exists
-	Pyp::callPythonPlot(resultFile, pyScriptFinal);
+	resultPlots = Pyp::callPythonPlot(resultFile, pyScriptFinal);
+
+	for (vector<string>::iterator it = resultPlots.begin(); it != resultPlots.end(); ++it)
+	{
+		pdfCropFile(*it);
+	}
 }
 
-void Pyp::callPythonPlot(string resultFile, string scriptFile)
+vector<string> Pyp::callPythonPlot(string resultFile, string scriptFile)
 {
-	PyObject *pName, *pModule, *pFunc, *pString, *pArgs;
+	PyObject *pName, *pModule, *pFunc, *pString, *pArgs, *pList;
+	vector<string> resultPlots;
 
 	// Initialize the Python Interpreter
 	Py_Initialize();
@@ -61,32 +68,46 @@ void Pyp::callPythonPlot(string resultFile, string scriptFile)
 		if (!pString)
 		{
 			PyErr_Print();
-			return;
+			return resultPlots;
 		}
 		PyTuple_SetItem(pArgs, 0, pString);
 		pString = PyString_FromString(scriptFile.c_str());
 		if (!pString)
 		{
 			PyErr_Print();
-			return;
+			return resultPlots;
 		}
 		PyTuple_SetItem(pArgs, 1, pString);
 
 		// Actual call of the function
-		PyObject_CallObject(pFunc, pArgs);
+		pList = PyObject_CallObject(pFunc, pArgs);
 
 		if (pArgs != NULL)
 			Py_DECREF(pArgs);
+
+		if (pList != NULL)
+		{
+			for (int i = 0; i < PyList_Size(pList); ++i)
+			{
+				resultPlots.push_back(PyString_AsString(PyList_GetItem(pList, i)));
+			}
+		} else {
+			PyErr_Print();
+		}
 	}
+
 
 	// Clean up
 	Py_DECREF(pModule);
 	Py_DECREF(pName);
 	Py_DECREF(pFunc);
+	Py_DECREF(pList);
 	// Py_DECREF(pString); // This is a borrowed reference. Calling Py_DECREF on it would cause Py_Finalize() to crash
 
 	// Finish the Python Interpreter
 	Py_Finalize();
+
+	return resultPlots;
 }
 
 void Pyp::setUp(bool setDefault)

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include <string>
+#include <vector>
 
 #include "resultFileHelper.h"
 
@@ -17,7 +18,7 @@ public:
 
 	void plot();
 	void plot(string resultDir, string pyScriptDir, string benchName, string id);
-	void callPythonPlot(string resultFile, string scriptFile);
+	vector<string> callPythonPlot(string resultFile, string scriptFile);
 
 	void setUp(bool setDefault);
 
