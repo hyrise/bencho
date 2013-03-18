@@ -27,6 +27,8 @@ void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string be
 	vector<string> resultPlots;
 	string resultFile = getResultFile(benchName, benchId, resultDir);
 	string pyScript = pyScriptDir + "/" + benchName + ".py";
+
+	// check if we actually need to "work" in the script
 	string pyScriptFinal = Pyp::createFinalPyScript(pyScript, resultFile);
 
 	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
@@ -70,6 +72,7 @@ vector<string> Pyp::callPythonPlot(string resultFile, string scriptFile)
 			PyErr_Print();
 			return resultPlots;
 		}
+		// set argument 1
 		PyTuple_SetItem(pArgs, 0, pString);
 		pString = PyString_FromString(scriptFile.c_str());
 		if (!pString)
@@ -77,14 +80,16 @@ vector<string> Pyp::callPythonPlot(string resultFile, string scriptFile)
 			PyErr_Print();
 			return resultPlots;
 		}
+		// set argument 2
 		PyTuple_SetItem(pArgs, 1, pString);
 
-		// Actual call of the function
+		// Actual call of the function, return a python list
 		pList = PyObject_CallObject(pFunc, pArgs);
 
 		if (pArgs != NULL)
 			Py_DECREF(pArgs);
 
+		// convert python list into string vector
 		if (pList != NULL)
 		{
 			for (int i = 0; i < PyList_Size(pList); ++i)

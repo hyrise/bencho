@@ -508,13 +508,13 @@ void Gnup::plot(string bench_name, string id)
 	string bench_script = bench_name + "_final.gp";
 	string system_script = "gnuplot " + bench_script;
 
-	if(!fileExists(bench_script))
+	if(fileExists(bench_script))
+		remove(bench_script.c_str());
+
+	if(Gnup::createFinalScript(bench_name, id))
 	{
-		if(Gnup::createFinalScript(bench_name, id))
-		{
-			remove(bench_script.c_str());
-			return;
-		}
+		remove(bench_script.c_str());
+		return;
 	}
 	
 	system(system_script.c_str());
