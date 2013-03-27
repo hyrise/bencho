@@ -35,86 +35,24 @@ void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string be
 	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
 
 	// ToDo: Check first if file exists
-	resultPlots = Pyp::callPythonPlot(resultFile, pyScriptFinal);
+	Pyp::callPythonPlot(resultFile, pyScriptFinal);
 
-	for (vector<string>::iterator it = resultPlots.begin(); it != resultPlots.end(); ++it)
+	for(int i = 1; i <= 5; ++i)
 	{
-		pdfCropFile(*it);
+		string plotFile = resultDir + "/" + benchName + "/" + benchName + "_" + benchId + "_Py_" + convertInt(i) + ".pdf";
+		if(fileExists(plotFile))
+			pdfCropFile(plotFile);
 	}
 }
 
-vector<string> Pyp::callPythonPlot(string resultFile, string scriptFile)
+void Pyp::callPythonPlot(string resultFile, string scriptFile)
 {
-	PyObject *pName, *pModule, *pFunc, *pString, *pArgs, *pList;
 	vector<string> resultPlots;
+	string systemScript = "bencho/plotting/system.py";
 
-	// Initialize the Python Interpreter
-	Py_Initialize();
+	string command = "python " + systemScript + " -f " + resultFile + " -s " + scriptFile;
 
-	// Tell Python to search also in bencho/plotting/ for modules
-	string appendSystemScript = "sys.path.append(\"" + Pyp::getSystemScriptDir() + "\")";
-	PyRun_SimpleString("import sys");
-	PyRun_SimpleString(appendSystemScript.c_str());
-
-	// Build the name object, this case the system.py
-	pName = PyString_FromString("system");
-
-	// Load the module object
-	pModule = PyImport_Import(pName);
-
-	// pFunc is a borrowed reference, "plot" the function to call
-	pFunc = PyObject_GetAttrString(pModule, "plot");
-
-	if (PyCallable_Check(pFunc))
-	{
-		pArgs = PyTuple_New(2); // plot() should expect 2 arguments
-		pString = PyString_FromString(resultFile.c_str());
-		if (!pString)
-		{
-			PyErr_Print();
-			return resultPlots;
-		}
-		// set argument 1
-		PyTuple_SetItem(pArgs, 0, pString);
-		pString = PyString_FromString(scriptFile.c_str());
-		if (!pString)
-		{
-			PyErr_Print();
-			return resultPlots;
-		}
-		// set argument 2
-		PyTuple_SetItem(pArgs, 1, pString);
-
-		// Actual call of the function, return a python list
-		pList = PyObject_CallObject(pFunc, pArgs);
-
-		if (pArgs != NULL)
-			Py_DECREF(pArgs);
-
-		// convert python list into string vector
-		if (pList != NULL)
-		{
-			for (int i = 0; i < PyList_Size(pList); ++i)
-			{
-				resultPlots.push_back(PyString_AsString(PyList_GetItem(pList, i)));
-			}
-		} else {
-			PyErr_Print();
-		}
-	}
-
-
-	// Clean up
-	Py_DECREF(pModule);
-	Py_DECREF(pName);
-	Py_DECREF(pFunc);
-	Py_DECREF(pList);
-	// Py_DECREF(pString); // This is a borrowed reference. Calling Py_DECREF on it would cause Py_Finalize() to crash
-
-	// Finish the Python Interpreter
-	Py_Finalize();
-
-	return resultPlots;
+	system(command.c_str());
 }
 
 void Pyp::setUp(bool setDefault)

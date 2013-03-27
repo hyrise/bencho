@@ -46,6 +46,13 @@ string getParameterFile(string bench_name, string id, string result_dir)
 	return parameterFile;
 }
 
+string convertInt(int number)
+{
+   stringstream ss;//create a stringstream
+   ss << number;//add number to the stream
+   return ss.str();//return a string with the contents of the stream
+}
+
 bool fileExists(string file_name)
 {
 	ifstream filestream;
@@ -65,3 +72,4 @@ void pdfCropFile(string file_name)
 	string cropCommand = "pdfcrop " + file_name + " " + file_name + " > /dev/null";
 	system(cropCommand.c_str());
 }
+

@@ -18,7 +18,7 @@ public:
 
 	void plot();
 	void plot(string resultDir, string pyScriptDir, string benchName, string id);
-	vector<string> callPythonPlot(string resultFile, string scriptFile);
+	void callPythonPlot(string resultFile, string scriptFile);
 
 	void setUp(bool setDefault);
 

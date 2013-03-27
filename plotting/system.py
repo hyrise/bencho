@@ -5,7 +5,15 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import csv
 import string
+import sys
+from optparse import OptionParser
 from matplotlib.ticker import MaxNLocator
+
+def getOptionParser():
+    parser = OptionParser()
+    parser.add_option('-f', '--file', help="set csv file", type='string', dest='file')
+    parser.add_option('-s', '--scriptfile', help="set benchmarks script file", type='string', dest='scriptfile')
+    return parser
 
 def plot(csvFile, scriptFile):
 
@@ -92,3 +100,12 @@ def plot(csvFile, scriptFile):
 			plotNumber += 1
 			plt.close()
 	return plotList
+
+parser = getOptionParser()
+(options, args) = parser.parse_args(sys.argv, None)
+
+if options.file == None:
+	parser.print_help()
+	sys.exit(0)
+
+plot(options.file, options.scriptfile)
