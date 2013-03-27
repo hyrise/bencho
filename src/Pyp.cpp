@@ -6,6 +6,7 @@ Pyp::Pyp()
 {
 	_resultDir = "./results";
 	_pyScriptDir = "./benchmarks";
+	_systemScriptDir = "./bencho/plotting";
 
 	_benchName = "";
 	_id = "";
@@ -50,9 +51,10 @@ vector<string> Pyp::callPythonPlot(string resultFile, string scriptFile)
 	// Initialize the Python Interpreter
 	Py_Initialize();
 
-	// Tell Python to search also in benchmarks/ for modules
+	// Tell Python to search also in bencho/plotting/ for modules
+	string appendSystemScript = "sys.path.append(\"" + Pyp::getSystemScriptDir() + "\")";
 	PyRun_SimpleString("import sys");
-	PyRun_SimpleString("sys.path.append(\"benchmarks\")");
+	PyRun_SimpleString(appendSystemScript.c_str());
 
 	// Build the name object, this case the system.py
 	pName = PyString_FromString("system");
@@ -156,6 +158,11 @@ string Pyp::getPyScriptDir()
 	return _pyScriptDir;
 }
 
+string Pyp::getSystemScriptDir()
+{
+	return _systemScriptDir;
+}
+
 string Pyp::getBenchName()
 {
 	return _benchName;
@@ -174,6 +181,11 @@ void Pyp::setResultDir(string resultDir)
 void Pyp::setPyScriptDir(string pyScriptDir)
 {
 	_pyScriptDir = pyScriptDir;
+}
+
+void Pyp::setSystemScriptDir(string systemScriptDir)
+{
+	_systemScriptDir = systemScriptDir;
 }
 
 void Pyp::setBenchName(string benchName)

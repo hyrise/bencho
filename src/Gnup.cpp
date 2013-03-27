@@ -5,7 +5,7 @@ Gnup::Gnup()
 {
 	_result_dir = "./results";
 	_bench_script_dir = "./benchmarks";
-	_system_script_dir = _bench_script_dir;
+	_system_script_dir = "./bencho/plotting";
 	_bench_name = "";
 	_id = "";
 
@@ -16,7 +16,7 @@ Gnup::Gnup(string result_dir, string bench_script_dir)
 {
 	_result_dir = result_dir;
 	_bench_script_dir = bench_script_dir;
-	_system_script_dir = _bench_script_dir;
+	_system_script_dir = "./bencho/plotting";
 	_bench_name = "";
 	_id = "";
 

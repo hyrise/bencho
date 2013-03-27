@@ -26,11 +26,13 @@ public:
 
 	string getResultDir();
 	string getPyScriptDir();
+	string getSystemScriptDir();
 	string getBenchName();
 	string getBenchId();
 
 	void setResultDir(string resultDir);
 	void setPyScriptDir(string pyScriptDir);
+	void setSystemScriptDir(string systemScriptDir);
 	void setBenchName(string benchName);
 	void setBenchId(string id);
 
@@ -38,6 +40,7 @@ public:
 private:
 	string _resultDir;
 	string _pyScriptDir;
+	string _systemScriptDir;
 
 	string _benchName;
 	string _id;
