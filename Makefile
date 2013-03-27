@@ -94,7 +94,8 @@ $(dependencies): $(BUILD_DIR)/%.d: $(src_dir)/%.cpp
 
 #cleaning up
 clean:
-	$(call echo_cmd,REMOVE $(BUILD_BASE_DIR)) rm -rf $(BUILD_BASE_DIR) 
+	$(call echo_cmd,REMOVE $(BUILD_BASE_DIR)) rm -rf $(BUILD_BASE_DIR)
+	@rm -rf benchmarks/*.pyc
 
 
  
