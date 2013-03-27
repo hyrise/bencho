@@ -5,7 +5,7 @@ Gnup::Gnup()
 {
 	_result_dir = "./results";
 	_bench_script_dir = "./benchmarks";
-	_system_script_dir = _bench_script_dir;
+	_system_script_dir = "./bencho/plotting";
 	_bench_name = "";
 	_id = "";
 
@@ -16,7 +16,7 @@ Gnup::Gnup(string result_dir, string bench_script_dir)
 {
 	_result_dir = result_dir;
 	_bench_script_dir = bench_script_dir;
-	_system_script_dir = _bench_script_dir;
+	_system_script_dir = "./bencho/plotting";
 	_bench_name = "";
 	_id = "";
 
@@ -54,52 +54,52 @@ string Gnup::getBenchId()
 	return _id;
 }
 
-string Gnup::getResultFile(string bench_name, string id)
-{
-	string _resultFile = _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + ".result.csv";
-	return _resultFile;
-}
+// string Gnup::getResultFile(string bench_name, string id)
+// {
+// 	string _resultFile = _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + ".result.csv";
+// 	return _resultFile;
+// }
 
-string Gnup::getParameterFile(string bench_name, string id)
-{
-	string _parameterFile = _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + ".parameter.txt";
-	return _parameterFile;
-}
+// string Gnup::getParameterFile(string bench_name, string id)
+// {
+// 	string _parameterFile = _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + ".parameter.txt";
+// 	return _parameterFile;
+// }
 
 
 ///// Search /////
 
-string Gnup::findBenchName()
-{
-	string last_name = _bench_name;
-	string last_file = _result_dir + "/last.txt";
+// string Gnup::findBenchName()
+// {
+// 	string last_name = _bench_name;
+// 	string last_file = _result_dir + "/last.txt";
 
-	ifstream last_name_in;
-	last_name_in.open (last_file.c_str());
+// 	ifstream last_name_in;
+// 	last_name_in.open (last_file.c_str());
 
-	if(last_name_in)
-	{
-		last_name_in >> last_name;
-		last_name_in.close();
-	} else { cerr << "Couldn't open " << last_file << "." << endl; }
-	return last_name;
-}
+// 	if(last_name_in)
+// 	{
+// 		last_name_in >> last_name;
+// 		last_name_in.close();
+// 	} else { cerr << "Couldn't open " << last_file << "." << endl; }
+// 	return last_name;
+// }
 
-string Gnup::findBenchId(string bench_name)
-{
-	string actual_id = _id;
-	string id_file = _result_dir + "/" + bench_name + "/id.txt";
+// string Gnup::findBenchId(string bench_name)
+// {
+// 	string actual_id = _id;
+// 	string id_file = _result_dir + "/" + bench_name + "/id.txt";
 
-	ifstream actual_id_in;
-	actual_id_in.open(id_file.c_str());
+// 	ifstream actual_id_in;
+// 	actual_id_in.open(id_file.c_str());
 
-	if(actual_id_in)
-	{
-		actual_id_in >> actual_id;
-		actual_id_in.close();
-	} else { cerr << "Couldn't open " << id_file << "." << endl; }
-	return actual_id;
-}
+// 	if(actual_id_in)
+// 	{
+// 		actual_id_in >> actual_id;
+// 		actual_id_in.close();
+// 	} else { cerr << "Couldn't open " << id_file << "." << endl; }
+// 	return actual_id;
+// }
 
 
 ///// Script merging and finalizing /////
@@ -111,7 +111,7 @@ int Gnup::createBaseScript(string bench_name)
 	string bench_script = _bench_script_dir + "/" + bench_name + ".gp";
 	string line;
 
-	if(Gnup::fileExists(temp_script))
+	if(fileExists(temp_script))
 	{
 		remove(temp_script.c_str());
 	}
@@ -149,15 +149,15 @@ int Gnup::createFinalScript(string bench_name, string id)
 {
 	string temp_script = bench_name + "_temp.gp";
 	string final_script = bench_name + "_final.gp";
-	string result_file = Gnup::getResultFile(bench_name, id);
+	string result_file = getResultFile(bench_name, id, _result_dir);
 	string buffer;
 
-	if(Gnup::fileExists(final_script))
+	if(fileExists(final_script))
 	{
 		remove(final_script.c_str());
 	}
 
-	if(!(Gnup::fileExists(temp_script)))
+	if(!(fileExists(temp_script)))
 	{
 		if(Gnup::createBaseScript(bench_name))
 		{
@@ -180,13 +180,19 @@ int Gnup::createFinalScript(string bench_name, string id)
 	Gnup::bufferSearchReplace(final_script, "TERMINAL_X11", "# TERMINAL_X11");
 	Gnup::bufferSearchReplace(final_script, "TERMINAL_PS", "# TERMINAL_PS");
 
-	cout << "Terminal?" << endl << "(default: " << _terminal << ")" << endl;
-	string userinput;
-	getline(cin, userinput);
-	if(!userinput.empty())
-	{
-		_terminal = userinput;
-	}
+
+	// The code below caused to interrupt the flow every single benchmark execution.
+	// Therefore I commented it out.
+	// Need to solve the Terminal decision in another way.
+
+	// cout << "Terminal?" << endl << "(default: " << _terminal << ")" << endl;
+	// string userinput;
+	// getline(cin, userinput);
+	// if(!userinput.empty())
+	// {
+	// 	_terminal = userinput;
+	// }
+
 	Gnup::bufferSearchReplace(final_script, "$(TERMINAL)", _terminal);
 
 	if(_terminal == "x11")
@@ -438,19 +444,19 @@ void Gnup::bufferSearchReplace(string replace_file, string search, string replac
 	return;
 }
 
-bool Gnup::fileExists(string file_name)
-{
-	ifstream filestream;
-	filestream.open(file_name.c_str());
-	if(filestream)
-	{
-		filestream.close();
-		return true;
-	} else {
-		filestream.close();
-		return false;
-	}
-}
+// bool Gnup::fileExists(string file_name)
+// {
+// 	ifstream filestream;
+// 	filestream.open(file_name.c_str());
+// 	if(filestream)
+// 	{
+// 		filestream.close();
+// 		return true;
+// 	} else {
+// 		filestream.close();
+// 		return false;
+// 	}
+// }
 
 vector<string> Gnup::getCounters(string script)
 {
@@ -497,63 +503,63 @@ int Gnup::getCounterPosition(string counter, string csv)
 
 void Gnup::plot(string bench_name, string id)
 {
-	cout << endl << "Plotting benchmark \"" + bench_name + "\", ID: " + id << endl;
+	cout << "Benchmark: \"" + bench_name + "\", ID: " + id << endl;
 
 	string bench_script = bench_name + "_final.gp";
 	string system_script = "gnuplot " + bench_script;
 
-	if(!Gnup::fileExists(bench_script))
+	if(fileExists(bench_script))
+		remove(bench_script.c_str());
+
+	if(Gnup::createFinalScript(bench_name, id))
 	{
-		if(Gnup::createFinalScript(bench_name, id))
-		{
-			remove(bench_script.c_str());
-			return;
-		}
+		remove(bench_script.c_str());
+		return;
 	}
 	
 	system(system_script.c_str());
 
 	string move;
 
-	if(Gnup::fileExists("plot1.ps"))
+	if(fileExists("plot1.ps"))
 	{
 		if(_terminal == "ps")
 		{
-			move = "mv plot1.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_1.ps";
+			move = "mv plot1.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_1.ps";
 		} else if(_terminal != "x11") {
 			system("ps2pdf -dEPSCrop plot1.ps");
-			system("pdfcrop plot1.pdf plot1-crop.pdf");
-			move = "mv plot1-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_1.pdf";
+			system("pdfcrop plot1.pdf plot1-crop.pdf > /dev/null");
+			move = "mv plot1-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_1.pdf";
 		}
 		system(move.c_str());
 		remove("plot1.ps");
 		remove("plot1.pdf");
 	}
 
-	if(Gnup::fileExists("plot2.ps"))
+	if(fileExists("plot2.ps"))
 	{
 		if(_terminal == "ps")
 		{
-			move = "mv plot2.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_2.ps";
+			move = "mv plot2.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_2.ps";
 		} else if(_terminal != "x11") {
 			system("ps2pdf -dEPSCrop plot2.ps");
-			system("pdfcrop plot2.pdf plot2-crop.pdf");
-			move = "mv plot2-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_2.pdf";
+			system("pdfcrop plot2.pdf plot2-crop.pdf > /dev/null");
+			move = "mv plot2-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_2.pdf";
 		}
 		system(move.c_str());
 		remove("plot2.ps");
 		remove("plot2.pdf");
 	}
 
-	if(Gnup::fileExists("plot3.ps"))
+	if(fileExists("plot3.ps"))
 	{
 		if(_terminal == "ps")
 		{
-			move = "mv plot3.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_3.ps";
+			move = "mv plot3.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_3.ps";
 		} else if(_terminal != "x11") {
 			system("ps2pdf -dEPSCrop plot3.ps");
-			system("pdfcrop plot3.pdf plot3-crop.pdf");
-			move = "mv plot3-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_3.pdf";
+			system("pdfcrop plot3.pdf plot3-crop.pdf > /dev/null");
+			move = "mv plot3-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_3.pdf";
 		}
 		system(move.c_str());
 		remove("plot3.ps");
@@ -567,14 +573,13 @@ void Gnup::plot(string bench_name, string id)
 
 void Gnup::plot()
 {
-	Gnup::setUp(true);
 	Gnup::plot(Gnup::getBenchName(),Gnup::getBenchId());
 }
 
 void Gnup::setUp(bool set_default)
 {
-	Gnup::setBenchName(Gnup::findBenchName());
-	Gnup::setBenchId(Gnup::findBenchId(Gnup::getBenchName()));
+	Gnup::setBenchName(findBenchName(_result_dir));
+	Gnup::setBenchId(findBenchId(Gnup::getBenchName(), _result_dir));
 
 	if(!set_default)
 	{
@@ -584,7 +589,7 @@ void Gnup::setUp(bool set_default)
 		if(!userinput.empty())
 		{
 			Gnup::setBenchName(userinput);
-			Gnup::setBenchId(Gnup::findBenchId(Gnup::getBenchName()));
+			Gnup::setBenchId(findBenchId(Gnup::getBenchName(), _result_dir));
 		}
 		cout << "ID?" << endl << "(default: " << Gnup::getBenchId() << ")" << endl;
 		getline(cin, userinput);
@@ -598,7 +603,7 @@ void Gnup::setUp(bool set_default)
 void Gnup::setUp(string bench_name)
 {
 	Gnup::setBenchName(bench_name);
-	Gnup::setBenchId(Gnup::findBenchId(Gnup::getBenchName()));
+	Gnup::setBenchId(findBenchId(Gnup::getBenchName(), _result_dir));
 }
 
 void Gnup::setUp(string bench_name, string id)

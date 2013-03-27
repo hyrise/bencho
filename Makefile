@@ -12,8 +12,9 @@ LIB = ar cr
 
 BUILD_FLAGS = -I$(SOURCE_DIR) -Wno-deprecated
 LINKER_FLAGS = -lpthread -ldl
-INCLUDE = -I$(INCLUDE_DIR)
+INCLUDE = -I$(INCLUDE_DIR) $(shell python-config --includes)
 VERSION=$(shell git describe --tags)
+
 
 
 -include settings.conf
@@ -37,7 +38,14 @@ ifneq ($(VERBOSE_BUILD), 1)
 else # Verbose output
 	echo_cmd =
 endif
- 
+
+ifeq ($(GNUPLOT), 1)
+	BUILD_FLAGS += -D GNUPLOT
+endif
+
+ifeq ($(PYPLOT), 1)
+	BUILD_FLAGS += -D PYPLOT
+endif
 
 
 full_build_dir := $(BUILD_DIR)
@@ -86,7 +94,8 @@ $(dependencies): $(BUILD_DIR)/%.d: $(src_dir)/%.cpp
 
 #cleaning up
 clean:
-	$(call echo_cmd,REMOVE $(BUILD_BASE_DIR)) rm -rf $(BUILD_BASE_DIR) 
+	$(call echo_cmd,REMOVE $(BUILD_BASE_DIR)) rm -rf $(BUILD_BASE_DIR)
+	@rm -rf benchmarks/*.pyc
 
 
  

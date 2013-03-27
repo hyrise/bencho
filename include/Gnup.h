@@ -10,6 +10,8 @@
 #include <sstream>
 #include <vector>
 
+#include "resultFileHelper.h"
+
 using namespace std;
 
 class Gnup
@@ -32,19 +34,19 @@ public:
 	string getBenchName();
 	string getBenchId();
 	//string getTerminal();
-	string getResultFile(string bench_name, string id);
-	string getParameterFile(string bench_name, string id);
+	// string getResultFile(string bench_name, string id);
+	// string getParameterFile(string bench_name, string id);
 
 	///// Search /////
-	string findBenchName();
-	string findBenchId(string bench_name);
+	// string findBenchName();
+	// string findBenchId(string bench_name);
 
 	///// Script merging and finalizing /////
 	int createBaseScript(string bench_name);
 	int createFinalScript(string bench_name, string id);
 	void clearScript(string final_script, string result_file);
 	void bufferSearchReplace(string replace_file, string search, string replace);
-	bool fileExists(string file_name);
+	// bool fileExists(string file_name);
 	vector<string> getCounters(string script);
 	int getCounterPosition(string counter, string csv);
 

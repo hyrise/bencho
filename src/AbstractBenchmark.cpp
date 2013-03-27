@@ -591,7 +591,8 @@ int AbstractBenchmark::full(int max_runs, double max_deviation) {
     _filewriter->dumpResult(this);
     _filewriter->saveParameters(this);
 
-    plotResultsWithGnuplot();
+    // plotResultsWithGnuplot();
+    plotResults();
 
     return 0;
 }
@@ -624,10 +625,30 @@ void AbstractBenchmark::printCombinations() {
 
 }
 
+void AbstractBenchmark::plotResults() {
+    #ifdef GNUPLOT
+        plotResultsWithGnuplot();
+    #endif
+
+    #ifdef PYPLOT
+        plotResultsWithPyplot();
+    #endif
+}
+
 void AbstractBenchmark::plotResultsWithGnuplot() {
+    cout << endl << "Plotting results with Gnuplot" << endl;
     Gnup* plotGnuplot = new Gnup();
+    plotGnuplot->setUp(true); // default settings, plot last run etc.
     plotGnuplot->plot();
     delete plotGnuplot;
+}
+
+void AbstractBenchmark::plotResultsWithPyplot() {
+    cout << endl << "Plotting results with Python matplotlib" << endl;
+    Pyp* plotPyplot = new Pyp();
+    plotPyplot->setUp(true); // default settings, plot last run etc.
+    plotPyplot->plot();
+    delete plotPyplot;
 }
 
 

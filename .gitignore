@@ -13,6 +13,8 @@
 *.a
 
 
+plotting/*.pyc
+
 .DS_Store
 build/
 plot_last_bench.txt
