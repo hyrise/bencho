@@ -47,6 +47,10 @@ ifeq ($(PYPLOT), 1)
 	BUILD_FLAGS += -D PYPLOT
 endif
 
+ifeq ($(RPLOT), 1)
+	BUILD_FLAGS += -D RPLOT
+endif
+
 
 full_build_dir := $(BUILD_DIR)
 src_dir := $(SOURCE_DIR)

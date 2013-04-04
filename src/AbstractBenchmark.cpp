@@ -633,6 +633,10 @@ void AbstractBenchmark::plotResults() {
     #ifdef PYPLOT
         plotResultsWithPyplot();
     #endif
+
+    #ifdef RPLOT
+        plotResultsWithRplot();
+    #endif
 }
 
 void AbstractBenchmark::plotResultsWithGnuplot() {
@@ -649,6 +653,14 @@ void AbstractBenchmark::plotResultsWithPyplot() {
     plotPyplot->setUp(true); // default settings, plot last run etc.
     plotPyplot->plot();
     delete plotPyplot;
+}
+
+void AbstractBenchmark::plotResultsWithRplot() {
+    cout << endl << "Plotting results with R ggplot2" << endl;
+    Rp* plotRplot = new Rp();
+    plotRplot->setUp(true); // default settings, plot last run etc.
+    plotRplot->plot();
+    delete plotRplot;
 }
 
 

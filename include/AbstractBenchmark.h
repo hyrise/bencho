@@ -15,6 +15,7 @@
 #include "DirectoryManager.h"	//class to manage directories
 #include "Gnup.h"				//class for plotting results with gnuplot
 #include "Pyp.h"				//class for plotting results with python matplotlib
+#include "Rp.h"					//class for plotting results with R ggplot2
 
 using namespace std;
 
@@ -131,6 +132,7 @@ class AbstractBenchmark {
 		void plotResults();
 		void plotResultsWithGnuplot();
 		void plotResultsWithPyplot();
+		void plotResultsWithRplot();
 
 		void setName(string name);
 		void setSequenceId(string id);
