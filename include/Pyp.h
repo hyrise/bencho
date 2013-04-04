@@ -3,6 +3,7 @@
 #define PYP_H
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <string>
 #include <vector>
