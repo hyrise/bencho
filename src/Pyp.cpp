@@ -1,5 +1,6 @@
 #include <Python.h> // need to include this here and not in the .h file to avoid some macro overwriting warnings
 #include "Pyp.h"
+#include <dirent.h>
 
 
 Pyp::Pyp()
@@ -37,12 +38,18 @@ void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string be
 	// ToDo: Check first if file exists
 	Pyp::callPythonPlot(resultFile, pyScriptFinal);
 
-	for(int i = 1; i <= 5; ++i)
-	{
-		string plotFile = resultDir + "/" + benchName + "/" + benchName + "_" + benchId + "_Py_" + convertInt(i) + ".pdf";
-		if(fileExists(plotFile))
-			pdfCropFile(plotFile);
-	}
+	//get plotted files and crop them
+	struct dirent *de=NULL;
+  	DIR *d=NULL;
+	string benchmarksResultDir = resultDir + "/" + benchName;
+	string resultPrefix = benchName + "_" + benchId + "_Py_";
+	d = opendir(benchmarksResultDir.c_str());
+	while((de = readdir(d))) {
+		if (strncmp(resultPrefix.c_str(), de->d_name, resultPrefix.size()) == 0) {
+			pdfCropFile(benchmarksResultDir + "/" + de->d_name);
+		}
+    }
+    closedir(d);
 }
 
 void Pyp::callPythonPlot(string resultFile, string scriptFile)
