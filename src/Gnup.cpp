@@ -1,4 +1,5 @@
 #include "Gnup.h"
+#include <dirent.h>
 
 
 Gnup::Gnup()
@@ -521,50 +522,74 @@ void Gnup::plot(string bench_name, string id)
 
 	string move;
 
-	if(fileExists("plot1.ps"))
-	{
-		if(_terminal == "ps")
-		{
-			move = "mv plot1.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_1.ps";
-		} else if(_terminal != "x11") {
-			system("ps2pdf -dEPSCrop plot1.ps");
-			system("pdfcrop plot1.pdf plot1-crop.pdf > /dev/null");
-			move = "mv plot1-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_1.pdf";
+	//get plotted files and crop them
+	struct dirent *de=NULL;
+  	DIR *d=NULL;
+	string resultPrefix = "plot";
+	d = opendir("./");
+	while((de = readdir(d))) {
+		if (strncmp(resultPrefix.c_str(), de->d_name, resultPrefix.size()) == 0) {
+			string name = de->d_name;
+			string plotNumber = name.substr(4, 1);
+			if(_terminal == "ps")
+			{
+				move = "mv " + name + " " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_" + plotNumber + ".ps";
+			} else if(_terminal != "x11") {
+				system(("ps2pdf -dEPSCrop " + name).c_str());
+				system(("pdfcrop plot" + plotNumber + ".pdf plot" + plotNumber + "-crop.pdf > /dev/null").c_str());
+				move = "mv plot" + plotNumber + "-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_" + plotNumber + ".pdf";
+			}
+			system(move.c_str());
+			remove(("plot" + plotNumber + ".ps").c_str());
+			remove(("plot" + plotNumber + ".pdf").c_str());
 		}
-		system(move.c_str());
-		remove("plot1.ps");
-		remove("plot1.pdf");
-	}
+    }
+    closedir(d);
 
-	if(fileExists("plot2.ps"))
-	{
-		if(_terminal == "ps")
-		{
-			move = "mv plot2.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_2.ps";
-		} else if(_terminal != "x11") {
-			system("ps2pdf -dEPSCrop plot2.ps");
-			system("pdfcrop plot2.pdf plot2-crop.pdf > /dev/null");
-			move = "mv plot2-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_2.pdf";
-		}
-		system(move.c_str());
-		remove("plot2.ps");
-		remove("plot2.pdf");
-	}
+	// if(fileExists("plot1.ps"))
+	// {
+	// 	if(_terminal == "ps")
+	// 	{
+	// 		move = "mv plot1.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_1.ps";
+	// 	} else if(_terminal != "x11") {
+	// 		system("ps2pdf -dEPSCrop plot1.ps");
+	// 		system("pdfcrop plot1.pdf plot1-crop.pdf > /dev/null");
+	// 		move = "mv plot1-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_1.pdf";
+	// 	}
+	// 	system(move.c_str());
+	// 	remove("plot1.ps");
+	// 	remove("plot1.pdf");
+	// }
 
-	if(fileExists("plot3.ps"))
-	{
-		if(_terminal == "ps")
-		{
-			move = "mv plot3.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_3.ps";
-		} else if(_terminal != "x11") {
-			system("ps2pdf -dEPSCrop plot3.ps");
-			system("pdfcrop plot3.pdf plot3-crop.pdf > /dev/null");
-			move = "mv plot3-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_3.pdf";
-		}
-		system(move.c_str());
-		remove("plot3.ps");
-		remove("plot3.pdf");
-	}
+	// if(fileExists("plot2.ps"))
+	// {
+	// 	if(_terminal == "ps")
+	// 	{
+	// 		move = "mv plot2.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_2.ps";
+	// 	} else if(_terminal != "x11") {
+	// 		system("ps2pdf -dEPSCrop plot2.ps");
+	// 		system("pdfcrop plot2.pdf plot2-crop.pdf > /dev/null");
+	// 		move = "mv plot2-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_2.pdf";
+	// 	}
+	// 	system(move.c_str());
+	// 	remove("plot2.ps");
+	// 	remove("plot2.pdf");
+	// }
+
+	// if(fileExists("plot3.ps"))
+	// {
+	// 	if(_terminal == "ps")
+	// 	{
+	// 		move = "mv plot3.ps " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_3.ps";
+	// 	} else if(_terminal != "x11") {
+	// 		system("ps2pdf -dEPSCrop plot3.ps");
+	// 		system("pdfcrop plot3.pdf plot3-crop.pdf > /dev/null");
+	// 		move = "mv plot3-crop.pdf " + _result_dir + "/" + bench_name + "/" + bench_name + "_" + id + "_Gp" + "_3.pdf";
+	// 	}
+	// 	system(move.c_str());
+	// 	remove("plot3.ps");
+	// 	remove("plot3.pdf");
+	// }
 
 	remove(bench_script.c_str());
 
