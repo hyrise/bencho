@@ -47,7 +47,7 @@ void Rp::callRPlot(string resultFile, string scriptFile)
 {
 	string systemScript = Rp::getSystemScriptDir() + "/system.r";
 
-	string command = "R CMD BATCH --no-save '--args " + resultFile + " " + scriptFile + "' " + systemScript + " ./script.Rout";//+ " /dev/null"; // redirect console output to /dev/null
+	string command = "R CMD BATCH --no-save '--args " + resultFile + " " + scriptFile + "' " + systemScript + " /dev/null"; // redirect console output to /dev/null
 
 	system(command.c_str());
 }
