@@ -56,9 +56,14 @@ def plot(csvFile, scriptFile):
 		lineLabels = list()
 		for entry in lineContents:
 			for counter in settingsList['plotList']:
-				if entry == counter:
-					lineIndices.append(lineContents.index(entry))
-					lineLabels.append(entry)
+				if type(counter) is tuple: 
+					if entry == counter[0]:
+						lineIndices.append(lineContents.index(entry))
+						lineLabels.append(counter[1])
+				else:
+					if entry == counter:
+						lineIndices.append(lineContents.index(entry))
+						lineLabels.append(counter)
 
 		if len(lineIndices) > 0:
 			x = list()
