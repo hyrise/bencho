@@ -1,7 +1,7 @@
 # If not already, install ggplot2 library and load required packages
 if (!require("ggplot2"))
 {
-	install.packages("ggplot2")
+	install.packages("ggplot2", repos='http://star-www.st-andrews.ac.uk/cran/')
 	library("ggplot2")
 }
 require("reshape2")
