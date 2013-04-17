@@ -129,10 +129,10 @@ class AbstractBenchmark {
 		int full(int max_runs = -1, double max_deviation = -1);
 		void printResults();
 		void printCombinations();
-		void plotResults();
-		void plotResultsWithGnuplot();
-		void plotResultsWithPyplot();
-		void plotResultsWithRplot();
+		void plotResults(bool isDefault = true);
+		void plotResultsWithGnuplot(bool isDefault = true);
+		void plotResultsWithPython(bool isDefault = true);
+		void plotResultsWithR(bool isDefault = true);
 
 		void setName(string name);
 		void setSequenceId(string id);

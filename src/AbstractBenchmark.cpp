@@ -625,42 +625,42 @@ void AbstractBenchmark::printCombinations() {
 
 }
 
-void AbstractBenchmark::plotResults() {
+void AbstractBenchmark::plotResults(bool isDefault = true) {
     #ifdef GNUPLOT
-        plotResultsWithGnuplot();
+        plotResultsWithGnuplot(isDefault);
     #endif
 
     #ifdef PYPLOT
-        plotResultsWithPyplot();
+        plotResultsWithPython(isDefault);
     #endif
 
     #ifdef RPLOT
-        plotResultsWithRplot();
+        plotResultsWithR(isDefault);
     #endif
 }
 
-void AbstractBenchmark::plotResultsWithGnuplot() {
+void AbstractBenchmark::plotResultsWithGnuplot(bool isDefault = true) {
     cout << endl << "Plotting results with Gnuplot" << endl;
-    Gnup* plotGnuplot = new Gnup();
-    plotGnuplot->setUp(true); // default settings, plot last run etc.
-    plotGnuplot->plot();
-    delete plotGnuplot;
+    plotterGnuplot *plotter = new plotterGnuplot();
+    plotter->setUp(isDefault);
+    plotter->plot();
+    delete plotter;
 }
 
-void AbstractBenchmark::plotResultsWithPyplot() {
+void AbstractBenchmark::plotResultsWithPython(bool isDefault = true) {
     cout << endl << "Plotting results with Python matplotlib" << endl;
-    Pyp* plotPyplot = new Pyp();
-    plotPyplot->setUp(true); // default settings, plot last run etc.
-    plotPyplot->plot();
-    delete plotPyplot;
+    plotterPython *plotter = new plotterPython();
+    plotter->setUp(isDefault); // default settings, plot last run etc.
+    plotter->plot();
+    delete plotter;
 }
 
-void AbstractBenchmark::plotResultsWithRplot() {
+void AbstractBenchmark::plotResultsWithR(bool isDefault = true) {
     cout << endl << "Plotting results with R ggplot2" << endl;
-    Rp* plotRplot = new Rp();
-    plotRplot->setUp(true); // default settings, plot last run etc.
-    plotRplot->plot();
-    delete plotRplot;
+    plotterR *plotter = new plotterR();
+    plotter->setUp(isDefault); // default settings, plot last run etc.
+    plotter->plot();
+    delete plotter;
 }
 
 
