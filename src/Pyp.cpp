@@ -55,7 +55,7 @@ void Pyp::plot(string resultDir, string pyScriptDir, string benchName, string be
 void Pyp::callPythonPlot(string resultFile, string scriptFile)
 {
 	vector<string> resultPlots;
-	string systemScript = "bencho/plotting/system.py";
+	string systemScript = Pyp::getSystemScriptDir() + "/system.py";
 
 	string command = "python " + systemScript + " -f " + resultFile + " -s " + scriptFile;
 

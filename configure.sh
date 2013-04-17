@@ -2,7 +2,7 @@
  
 file="settings.conf"
  
-declare -a flags=('PROD' 'PAPI' 'VERBOSE_BUILD' 'GNUPLOT' 'PYPLOT')
+declare -a flags=('PROD' 'PAPI' 'VERBOSE_BUILD' 'GNUPLOT' 'PYPLOT' 'RPLOT')
 
 # create default settings if none exists
 if [ ! -f $file ]; then
@@ -11,6 +11,7 @@ if [ ! -f $file ]; then
     echo "VERBOSE_BUILD=0" >> $file
     echo "GNUPLOT=0" >> $file
     echo "PYPLOT=0" >> $file
+    echo "RPLOT=0" >> $file
     #echo "PREFETCH=0" >> $file
     #echo "THREAD_AFFINITY=0" >> $file
     #echo "TREX_SSE=0" >> $file
