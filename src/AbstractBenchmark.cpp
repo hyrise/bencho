@@ -625,41 +625,32 @@ void AbstractBenchmark::printCombinations() {
 
 }
 
-void AbstractBenchmark::plotResults(bool isDefault = true) {
-    #ifdef GNUPLOT
-        plotResultsWithGnuplot(isDefault);
-    #endif
+void AbstractBenchmark::plotResults(bool isDefault) {
+    AbstractPlotter *plotter = new AbstractPlotter();
+    plotter->setUp(isDefault);
+
+    // #ifdef GNUPLOT
+    // AbstractPlotter *plotterGnuplot = new PlotterGnuplot();
+    // plotterGnuplot->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
+    // plotterGnuplot->plot();
+    // delete plotterGnuplot;
+    // #endif
 
     #ifdef PYPLOT
-        plotResultsWithPython(isDefault);
+    AbstractPlotter *plotterPython = new PlotterPython();
+    plotterPython->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
+    plotterPython->plot();
+    delete plotterPython;
     #endif
+    
+    // #ifdef RPLOT
+    // AbstractPlotter *plotterR = new PlotterR();
+    // plotterR->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
+    // plotterR->plot();
+    // delete plotterR;
+    // #endif
 
-    #ifdef RPLOT
-        plotResultsWithR(isDefault);
-    #endif
-}
-
-void AbstractBenchmark::plotResultsWithGnuplot(bool isDefault = true) {
-    cout << endl << "Plotting results with Gnuplot" << endl;
-    plotterGnuplot *plotter = new plotterGnuplot();
-    plotter->setUp(isDefault);
-    plotter->plot();
-    delete plotter;
-}
-
-void AbstractBenchmark::plotResultsWithPython(bool isDefault = true) {
-    cout << endl << "Plotting results with Python matplotlib" << endl;
-    plotterPython *plotter = new plotterPython();
-    plotter->setUp(isDefault); // default settings, plot last run etc.
-    plotter->plot();
-    delete plotter;
-}
-
-void AbstractBenchmark::plotResultsWithR(bool isDefault = true) {
-    cout << endl << "Plotting results with R ggplot2" << endl;
-    plotterR *plotter = new plotterR();
-    plotter->setUp(isDefault); // default settings, plot last run etc.
-    plotter->plot();
+    plotter->pdfcropResult();
     delete plotter;
 }
 

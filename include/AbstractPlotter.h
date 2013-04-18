@@ -2,7 +2,10 @@
 #define ABSTRACTPLOTTER_H
 
 #include <string>
-#include <stdio>
+#include <iostream>
+
+#include <dirent.h>
+#include <string.h>
 
 #include "resultFileHelper.h"
 
@@ -15,19 +18,9 @@ public:
 
 	void plot();
 	void setUp(bool isDefault);
+	void setUp(string resultDir, string plotterScriptDir, string systemScriptDir, string benchName, string benchId);
 
-
-private:
-	string _resultDir;
-	string _plotterScriptDir;
-	string _systemScriptDir;
-	string _benchName;
-	string _benchId;
-
-	void plot(string resultDir, string plotterScriptDir, string benchName, string benchId);
-
-	virtual string createFinalScript(string resultFile, string baseScript);
-	virtual void callPlot(string resultFile, string scriptFile) = 0; // pure virtual method
+	void pdfcropResult();
 
 	string getResultDir();
 	string getPlotterScriptDir();
@@ -40,8 +33,18 @@ private:
 	void setSystemScriptDir(string systemScriptDir);
 	void setBenchName(string benchName);
 	void setBenchId(string benchId);
+
+private:
+	string _resultDir;
+	string _plotterScriptDir;
+	string _systemScriptDir;
+	string _benchName;
+	string _benchId;
+
+	virtual string createFinalScript(string resultFile, string baseScript);
+	virtual void callPlot(string resultDir, string plotterScriptDir, string benchName, string benchId);
 };
 
 
 
-#endif ABSTRACTPLOTTER_H
+#endif //ABSTRACTPLOTTER_H
