@@ -58,6 +58,7 @@ class AbstractBenchmark {
 		//results for output
     	map<string, map<int, vector<long long> > > _result_x; // result x -> sequence id or xdata
     	map<string, map<int, vector<long long> > > _result_y;
+    	map<string, map<int, vector<vector<long long> > > > _result_y_raw; // unaggregated data eg. for boxplots
     	// std error
     	map<string, map<int, vector<long long> > > _result_error;
     	// calibration results
@@ -70,6 +71,8 @@ class AbstractBenchmark {
 		//modes for supressing output and running fastest possible configuration
   		bool _fastMode;
   		bool _silentMode;
+
+  		bool _rawOutput;
 
 		void init();
 
@@ -140,6 +143,7 @@ class AbstractBenchmark {
 		void setMaxRuns(size_t max_runs);
 		void setFastMode(bool fastMode);
 		void setSilentMode(bool silentMode);
+		void setRawDataOutput(bool rawOutput);
 		void setAggregatingFunction(AggregationType::Function function);
 
 		string getName();
@@ -149,6 +153,7 @@ class AbstractBenchmark {
 		virtual long long getValue(size_t graph_id, string perf_ctr, size_t pos, map<string, int> parameters);
 		bool getFastMode();
 		bool getSilentMode();
+		bool getRawDataOutput();
 		AggregationType::Function getAggregatingFunction();
     	vector<map<string, int> > &getCombinations();
 
@@ -158,9 +163,10 @@ class AbstractBenchmark {
 		map<int, string> &getTestSeries();
 		vector<string> &getPerformanceCounters();
 
-		vector<long long> &getResult_x(size_t test_series, string perf_ctr);
-    	vector<long long> &getResult_y(size_t test_series, string perf_ctr);
-    	vector<long long> &getResult_error(size_t test_series, string perf_ctr);
+		vector<long long> &getResult_x(size_t test_series, string performance_counter);
+    	vector<long long> &getResult_y(size_t test_series, string performance_counter);
+    	vector<vector<long long> > &getResult_y_raw(size_t test_series, string performance_counter);
+    	vector<long long> &getResult_error(size_t test_series, string performance_counter);
     	long long getResult_incache(string test_series);
 
         void execute(int max_runs, double max_deviation);

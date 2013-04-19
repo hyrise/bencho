@@ -14,7 +14,8 @@ AbstractBenchmark::AbstractBenchmark() :
     _do_papi_manual(false),
     _current_perf_counter(NULL),
     _fastMode(false),
-    _silentMode(false)
+    _silentMode(false),
+    _rawOutput(false)
 {
 
     _filewriter = new FileWriter(this);
@@ -67,6 +68,7 @@ void AbstractBenchmark::addTestSeries(int id, string name)
     {
         _result_x[_performance_counters[i]][id] = vector<long long>();
         _result_y[_performance_counters[i]][id] = vector<long long>();
+        if (_rawOutput) _result_y_raw[_performance_counters[i]][id] = vector<vector<long long> >();
     }
 }
 
@@ -512,6 +514,7 @@ void AbstractBenchmark::executeCombination(map<string, int> parameters, int comb
                 long long aggr_val = resultAggregator->calculateFunction(getAggregatingFunction());      //same funktions as in old implementation
                 long long aggr_err = resultAggregator->calculateDeviation();
                 _result_y[perf][test_series_id].push_back(aggr_val);
+                if (_rawOutput) _result_y_raw[perf][test_series_id].push_back(results);
                 _result_error[perf][test_series_id].push_back(aggr_err);
                 delete resultAggregator;
                 if (!_silentMode) cout << "Final Result: " << aggr_val << endl;
@@ -695,6 +698,10 @@ void AbstractBenchmark::setSilentMode(bool silentMode) {
     _silentMode = silentMode;
 }
 
+void AbstractBenchmark::setRawDataOutput(bool rawOutput) {
+    _rawOutput = rawOutput;
+}
+
 void AbstractBenchmark::setAggregatingFunction(AggregationType::Function function) {
     _aggregatingFunction = function;
 }
@@ -736,6 +743,10 @@ bool AbstractBenchmark::getSilentMode() {
     return _silentMode;
 }
 
+bool AbstractBenchmark::getRawDataOutput() {
+    return _rawOutput;
+}
+
 AggregationType::Function AbstractBenchmark::getAggregatingFunction() {
 
     if (!(_aggregatingFunction < AggregationType::numTypes)) {
@@ -774,19 +785,24 @@ vector<string> &AbstractBenchmark::getPerformanceCounters()
     return _performance_counters;
 }
 
-vector<long long> &AbstractBenchmark::getResult_x(size_t test_series, string perf_ctr)
+vector<long long> &AbstractBenchmark::getResult_x(size_t test_series, string performance_counter)
 {
-    return _result_x[perf_ctr][test_series];
+    return _result_x[performance_counter][test_series];
 }
 
-vector<long long> &AbstractBenchmark::getResult_y(size_t test_series, string perf_ctr)
+vector<long long> &AbstractBenchmark::getResult_y(size_t test_series, string performance_counter)
 {
-    return _result_y[perf_ctr][test_series];
+    return _result_y[performance_counter][test_series];
 }
 
-vector<long long> &AbstractBenchmark::getResult_error(size_t test_series, string perf_ctr)
+vector<vector<long long> > &AbstractBenchmark::getResult_y_raw(size_t test_series, string performance_counter)
 {
-    return _result_error[perf_ctr][test_series];
+    return _result_y_raw[performance_counter][test_series];
+}
+
+vector<long long> &AbstractBenchmark::getResult_error(size_t test_series, string performance_counter)
+{
+    return _result_error[performance_counter][test_series];
 }
 
 long long AbstractBenchmark::getResult_incache(string test_series)

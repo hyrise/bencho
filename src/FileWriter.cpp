@@ -104,6 +104,14 @@ void FileWriter::dumpResult(AbstractBenchmark *benchmark)
         {
             file << it->second << "_" << benchmark->getPerformanceCounters()[i] << "_y ";
             file << it->second << "_" << benchmark->getPerformanceCounters()[i] << "_error ";
+
+            if (benchmark->getRawDataOutput()) 
+            {
+                for (size_t j = 0; j < benchmark->getMaxRuns(); ++j)
+                {
+                    file << it->second << "_" << benchmark->getPerformanceCounters()[i] << "_y_raw_" << j << " ";
+                }
+            }
         }
     }
 
@@ -129,6 +137,14 @@ void FileWriter::dumpResult(AbstractBenchmark *benchmark)
             {
                 file << benchmark->getResult_y(it->first, benchmark->getPerformanceCounters()[i]).at(line) << " ";
                 file << benchmark->getResult_error(it->first, benchmark->getPerformanceCounters()[i]).at(line) << " ";
+
+                if (benchmark->getRawDataOutput()) 
+                {
+                    for (size_t j = 0; j < benchmark->getMaxRuns(); ++j)
+                    {
+                        file << benchmark->getResult_y_raw(it->first, benchmark->getPerformanceCounters()[i]).at(line).at(j) << " ";
+                    }
+                }
             }
         }
 
