@@ -130,6 +130,7 @@ class AbstractBenchmark {
 		 */
     	virtual ~AbstractBenchmark();
  
+<<<<<<< HEAD
 		/**
 		 * @brief Add parameters to the benchmark. 
 		 *
@@ -165,6 +166,14 @@ class AbstractBenchmark {
 		 */
 		void addTestSeries(int id, std::string name);
 		void addGraph(int id, std::string name);
+=======
+		//add a parameter for execution
+		void addParameter(unique_ptr<Parameter> parameter, string version = "first");
+
+		void addPerformanceCounter(string event_name);
+		void addTestSeries(int id, string name);
+		void addGraph(int id, string name);
+>>>>>>> Parameters with unique pointers
     	void addAllTestSeriesAsGraphs();
     	void addTestSeriesAsGraph(int test_series_id);
 

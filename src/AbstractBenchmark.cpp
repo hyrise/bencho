@@ -74,9 +74,10 @@ std::vector<std::map<std::string, int> > &AbstractBenchmark::getCombinations() {
     return _combinations;
 }
 
-void AbstractBenchmark::addParameter(Parameter *parameter, std::string version) {
+
+void AbstractBenchmark::addParameter(unique_ptr<Parameter> parameter, string version) {
     _parameters[version].push_back(*parameter);
-    delete parameter;
+    parameter.reset();
 }
 
 void AbstractBenchmark::addPerformanceCounter(std::string event_name) {
