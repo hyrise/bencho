@@ -15,6 +15,7 @@
 #include "DirectoryManager.h"	//class to manage directories
 #include "AbstractPlotter.h"
 #include "PlotterPython.h"
+#include "PlotterR.h"
 
 #include "Gnup.h"				//class for plotting results with gnuplot
 #include "Pyp.h"				//class for plotting results with python matplotlib

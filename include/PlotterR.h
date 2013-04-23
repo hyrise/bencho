@@ -1,14 +1,14 @@
-#ifndef PLOTTERPYTHON_H
-#define PLOTTERPYTHON_H
+#ifndef PLOTTERR_H
+#define PLOTTERR_H
 
 
 #include "AbstractPlotter.h"
 
-class PlotterPython : public AbstractPlotter
+class PlotterR : public AbstractPlotter
 {
 public:
 	void callPlot(string resultDir, string plotterScriptDir, string benchName, string benchId);
 };
 
 
-#endif //PLOTTERPYTHON_H
+#endif //PLOTTERR_H

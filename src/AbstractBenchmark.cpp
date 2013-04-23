@@ -630,6 +630,7 @@ void AbstractBenchmark::plotResults(bool isDefault) {
     plotter->setUp(isDefault);
 
     // #ifdef GNUPLOT
+    // cout << endl << "Plotting results with Gnuplot" << endl;
     // AbstractPlotter *plotterGnuplot = new PlotterGnuplot();
     // plotterGnuplot->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
     // plotterGnuplot->plot();
@@ -637,18 +638,20 @@ void AbstractBenchmark::plotResults(bool isDefault) {
     // #endif
 
     #ifdef PYPLOT
+    cout << endl << "Plotting results with python matplotlib" << endl;
     AbstractPlotter *plotterPython = new PlotterPython();
     plotterPython->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
     plotterPython->plot();
     delete plotterPython;
     #endif
     
-    // #ifdef RPLOT
-    // AbstractPlotter *plotterR = new PlotterR();
-    // plotterR->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
-    // plotterR->plot();
-    // delete plotterR;
-    // #endif
+    #ifdef RPLOT
+    cout << endl << "Plotting results with R ggplot2" << endl;
+    AbstractPlotter *plotterR = new PlotterR();
+    plotterR->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
+    plotterR->plot();
+    delete plotterR;
+    #endif
 
     plotter->pdfcropResult();
     delete plotter;
