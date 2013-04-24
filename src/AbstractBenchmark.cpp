@@ -629,13 +629,13 @@ void AbstractBenchmark::plotResults(bool isDefault) {
     AbstractPlotter *plotter = new AbstractPlotter();
     plotter->setUp(isDefault);
 
-    // #ifdef GNUPLOT
-    // cout << endl << "Plotting results with Gnuplot" << endl;
-    // AbstractPlotter *plotterGnuplot = new PlotterGnuplot();
-    // plotterGnuplot->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
-    // plotterGnuplot->plot();
-    // delete plotterGnuplot;
-    // #endif
+    #ifdef GNUPLOT
+    cout << endl << "Plotting results with Gnuplot" << endl;
+    AbstractPlotter *plotterGnuplot = new PlotterGnuplot();
+    plotterGnuplot->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
+    plotterGnuplot->plot();
+    delete plotterGnuplot;
+    #endif
 
     #ifdef PYPLOT
     cout << endl << "Plotting results with python matplotlib" << endl;

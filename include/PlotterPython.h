@@ -6,7 +6,7 @@
 
 class PlotterPython : public AbstractPlotter
 {
-public:
+private:
 	void callPlot(string resultDir, string plotterScriptDir, string benchName, string benchId);
 };
 
