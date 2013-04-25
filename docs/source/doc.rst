@@ -154,10 +154,10 @@ Creating benchmarks with the Bencho Framework will always start with creating a 
 	            addPerformanceCounter("PAPI_L1_DCM");
 	            addPerformanceCounter("PAPI_L2_DCM");
 
-	            Parameter *stride = new Parameter("stride", 1, 262144+1, 4, true);
-	            Parameter *jumps = new Parameter("jumps", 4096);
-	            addParameter(*stride);
-	            addParameter(*jumps);
+	            unique_ptr<Parameter> stride(new Parameter("stride", 1, 262144+1, 4, ParameterType::Multiply));
+		        unique_ptr<Parameter> jumps(new Parameter("jumps", 4096));
+		        addParameter(move(stride));
+		        addParameter(move(jumps));
 	            
 	            addTestSeries(0, "random");
 	            addTestSeries(1, "sequential_forwards");
@@ -451,7 +451,7 @@ Benchmark Functions
 
 In this Section all public or protected functions of the Abstract Benchmark class will be listed and explained in order to use them in your own benchmarks class. The functions are ordered alphabetically by their names.
 
-*void addParameter(Parameter *parameter, string version = "first")*
+*void addParameter(unique_ptr<Parameter> parameter, string version = "first");*
 
 	Each benchmark has some parameters that compose the single combinations, that will be tested. For adding these parameters this function can be used. It expects an pointer to an object of the `Parameter Class`_, that helps you add complex parameters simple with its overloaded contructors and a version string, that could be used for registering different versions of parameters. The version is set to 'first' by default. And don't worry about the Paramter object you used to add the Parameter to the benchmark. The addParameter() function will automatically take care of the now useless object and delete it.
 
@@ -512,7 +512,7 @@ In this Section all public or protected functions of the Abstract Benchmark clas
 
 *vector<Parameter> \*getParameters()*
 
-	The getParameters() function will return the complete vector of parameters.
+	The getParameters() function will return a pointer to the complete vector of parameters, however since all the functions that are usually overwritten in the specific benchmark, it is not recommended and ususally not nescessary to use this function.
 
 *vector<string> &getPerformanceCounters()*
 

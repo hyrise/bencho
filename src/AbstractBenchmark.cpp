@@ -195,18 +195,20 @@ void AbstractBenchmark::calibrateInCache() {
     long long result;
     std::vector<long long> results;
     std::map<int, std::string>::iterator it;
-    std::vector<Parameter> ::iterator it_par;
+    std::vector<Parameter> ::iterator it_parameters;
     std::string perfctr = "PAPI_TOT_CYC";
+    std::vector<Parameter> *parameters = &(_parameters[_current_version]);
+    string perfctr = "PAPI_TOT_CYC";
     
     if (_test_series.size() < 1) {
         throw std::runtime_error("No test series.");
     }
     
     // make sure in cache parameters are set
-    for (it_par = _parameters[_current_version].begin(); it_par != _parameters[_current_version].end(); it_par++) {
-        if (_parameters_incache.find(it_par->getName()) == _parameters_incache.end()) {
+    for (it_parameters = parameters->begin(); it_parameters != parameters->end(); it_parameters++) {
+        if (_parameters_incache.find(it_parameters->getName()) == _parameters_incache.end()) {
 
-            std::cout << "Error: Could not find incache parameter " << it_par->getName() << std::endl;
+            std::cout << "Error: Could not find incache parameter " << it_parameters->getName() << std::endl;
             throw std::runtime_error("Incache parameter not set properly.");
         }
     }
@@ -252,14 +254,14 @@ void AbstractBenchmark::execute(int max_runs, double max_deviation) {
     // ask which version of benchark should be run
     if (_parameters.size() > 1) {
        
-        std::map<std::string, std::vector<Parameter> >::iterator it_par;   //iterator for Parameter-Map
+        std::map<std::string, std::vector<Parameter> >::iterator it_parameters;   //iterator for Parameter-Map
         std::cout << "Multiple versions of benchmark available:" << std::endl;
         size_t i = 1;
         std::vector<std::string> choice;
-        for (it_par = _parameters.begin(); it_par != _parameters.end(); it_par++)
+        for (it_par = _parameters.begin(); it_par != _parameters.end(); it_parameters++)
         {
-            std::cout << "\t" << i++ << ": " << it_par->first << std::endl; //print out versions and save options in vector
-            choice.push_back(it_par->first);
+            std::cout << "\t" << i++ << ": " << it_parameters->first << std::endl; //print out versions and save options in vector
+            choice.push_back(it_parameters->first);
         }
         
         std::string input;       //user selects version
@@ -633,7 +635,6 @@ void AbstractBenchmark::plotOnly() {
 
 
 ////////////////////////////////////// Methods for result output //////////////////////////////////////
-
 
 FileWriter *AbstractBenchmark::getFileWriter() {
     return _filewriter;
