@@ -76,9 +76,6 @@ void PlotterGnuplot::replaceTerminals(string baseScript, string resultFile)
 	bufferSearchReplace(baseScript, "TERMINAL_PS", "# TERMINAL_PS");
 	bufferSearchReplace(baseScript, "TERMINAL_TEST", "# TERMINAL_TEST");
 
-	bufferSearchReplace(baseScript, "OUTPUT", outputString);
-	bufferSearchReplace(baseScript, "$(TERMINAL)", _terminal);
-
 	if(_terminal == "x11")
 		{ bufferSearchReplace(baseScript, "# TERMINAL_X11: ", ""); }
 	else if(_terminal == "pdf")
@@ -87,18 +84,23 @@ void PlotterGnuplot::replaceTerminals(string baseScript, string resultFile)
 		{ bufferSearchReplace(baseScript, "# TERMINAL_PS: ", ""); }
 	else if(_terminal == "xps")
 		{ bufferSearchReplace(baseScript, "# TERMINAL_PS: ", ""); }
-	else if(_terminal == "test")
-		{ bufferSearchReplace(baseScript, "# TERMINAL_TEST: ", ""); }
 	else
 		{ cerr << "Unknown Terminal." << endl; }
+
+	if (PS2PDF)
+	{
+		bufferSearchReplace(baseScript, "OUTPUT", "| ps2pdf - OUTPUT");
+		_terminal = "pdf";
+	}
+
+	bufferSearchReplace(baseScript, "OUTPUT", outputString);
+	bufferSearchReplace(baseScript, "$(TERMINAL)", _terminal);
 }
 
 void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
 {
 	vector<string> counters;
-	vector<string> lines;
-	string buffer, next;
-	string tmp_file = baseScript + ".tmp";
+	string buffer;
 
 	counters = getCounters(baseScript);
 	for (int i = 0; i < counters.size(); i++)
@@ -148,14 +150,21 @@ void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
 			remove(tmp_file.c_str());
 		}
 	}
+}
 
-	fstream stream_in2(baseScript.c_str(), ios::in);
-	fstream stream_out_tmp2(tmp_file.c_str(), ios::out | ios::app);
+void PlotterGnuplot::setPlotCommands(string baseScript)
+{
+	vector<string> lines;
+	string buffer, next;
+	string tmp_file = baseScript + ".tmp";
+
+	fstream stream_in(baseScript.c_str(), ios::in);
+	fstream stream_out_tmp(tmp_file.c_str(), ios::out | ios::app);
 
 	bool foundplot = false;
 	bool needplot = false;
 	vector<bool> needed_plots;
-	while(getline(stream_in2, buffer))
+	while(getline(stream_in, buffer))
 	{
 		if(foundplot)
 		{
@@ -177,14 +186,14 @@ void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
 				lines.push_back(buffer);
 				if(!needplot)
 				{
-					stream_out_tmp2 << "#";
+					stream_out_tmp << "#";
 					needed_plots.push_back(false);
 				} else {
 					needed_plots.push_back(true);
 				}
 				for(int i = 0; i < lines.size(); i++)
 				{
-					stream_out_tmp2 << lines.at(i) << endl;
+					stream_out_tmp << lines.at(i) << endl;
 				}
 				lines.clear();
 				needplot = false;
@@ -197,10 +206,45 @@ void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
 				foundplot = true;
 				lines.push_back(buffer);
 			} else {
-				stream_out_tmp2 << buffer << endl;
+				stream_out_tmp << buffer << endl;
 			}
 		}
 	}
+	stream_out_tmp.close();
+	stream_in.close();
+
+	remove(baseScript.c_str());
+	fstream stream_in_tmp(tmp_file.c_str(), ios::in);
+	fstream stream_out(baseScript.c_str(), ios::out | ios::app);
+	while(!stream_in_tmp.eof())
+	{
+		getline(stream_in_tmp, buffer);
+		stream_out << buffer << endl;
+	}
+	stream_out.close();
+	stream_in_tmp.close();
+	remove(tmp_file.c_str());
+
+	fstream stream_in2(baseScript.c_str(), ios::in);
+	fstream stream_out_tmp2(tmp_file.c_str(), ios::out | ios::app);
+	while(getline(stream_in2, next))
+	{
+		bool is_empty = true;
+		for(int i = 0; i < next.length(); i++)
+		{
+			if(!isspace(next.at(i)))
+				is_empty = false;
+		}
+		if(is_empty)
+		{
+			int spot = buffer.find(",\\");
+			if(spot == buffer.length()-2)
+				buffer = buffer.substr(0,spot);
+		}
+		stream_out_tmp2 << buffer << endl;
+		buffer = next;
+	}
+	stream_out_tmp2 << buffer << endl;
 	stream_out_tmp2.close();
 	stream_in2.close();
 
@@ -216,47 +260,12 @@ void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
 	stream_in_tmp2.close();
 	remove(tmp_file.c_str());
 
-	fstream stream_in3(baseScript.c_str(), ios::in);
-	fstream stream_out_tmp3(tmp_file.c_str(), ios::out | ios::app);
-	while(getline(stream_in3, next))
-	{
-		bool is_empty = true;
-		for(int i = 0; i < next.length(); i++)
-		{
-			if(!isspace(next.at(i)))
-				is_empty = false;
-		}
-		if(is_empty)
-		{
-			int spot = buffer.find(",\\");
-			if(spot == buffer.length()-2)
-				buffer = buffer.substr(0,spot);
-		}
-		stream_out_tmp3 << buffer << endl;
-		buffer = next;
-	}
-	stream_out_tmp3 << buffer << endl;
-	stream_out_tmp3.close();
-	stream_in3.close();
-
-	remove(baseScript.c_str());
-	fstream stream_in_tmp3(tmp_file.c_str(), ios::in);
-	fstream stream_out3(baseScript.c_str(), ios::out | ios::app);
-	while(!stream_in_tmp3.eof())
-	{
-		getline(stream_in_tmp3, buffer);
-		stream_out3 << buffer << endl;
-	}
-	stream_out3.close();
-	stream_in_tmp3.close();
-	remove(tmp_file.c_str());
-
 	fstream stream_in4(baseScript.c_str(), ios::in);
 	fstream stream_out_tmp4(tmp_file.c_str(), ios::out | ios::app);
 	int i = 0;
 	while(getline(stream_in4, buffer))
 	{
-		int spot = buffer.find("set output \"plot");
+		int spot = buffer.find("set output \"");
 		if(spot == 0)
 		{
 			if(!needed_plots.at(i))
@@ -281,11 +290,6 @@ void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
 	stream_out4.close();
 	stream_in_tmp4.close();
 	remove(tmp_file.c_str());
-}
-
-void PlotterGnuplot::setPlotCommands(string baseScript)
-{
-
 }
 
 void PlotterGnuplot::bufferSearchReplace(string replaceFile, string search, string replace)

@@ -1,7 +1,8 @@
 #ifndef PLOTTERGNUPLOT_H
 #define PLOTTERGNUPLOT_H
 
-#define TERMINAL "test"
+#define TERMINAL "ps"
+#define PS2PDF true
 
 #include <stdio.h>
 
