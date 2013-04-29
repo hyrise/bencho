@@ -28,7 +28,7 @@ def plot(csvFile, scriptFile):
 	settings['yDivider'] = 1
 	settings['xDivider'] = 1
 	settings['grid'] = 'none'
-	settings['plotList'] = [('random_PAPI_TOT_CYC_y', 'Random'), ('sequential_forwards_PAPI_TOT_CYC_y', 'Sequential')]  #[]
+	settings['plotList'] = [('random_PAPI_TOT_CYC_y', 'Random')]  #[]
 	settings['figureSize'] = (6.5, 6)
 	settings['numberOfYTicks'] = False
 
@@ -66,7 +66,7 @@ def plot(csvFile, scriptFile):
 
 		if settingsList['type'] == 'boxplot':
 			for i in range(0,len(data[1])):
-				ax.boxplot(data[1][i])
+				ax.boxplot(data[1][i], positions=data[0])
 		else:
 			for i in range(0,len(data[1])):
 				ax.plot(data[0], data[1][i], label=data[2][i])

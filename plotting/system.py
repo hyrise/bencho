@@ -20,6 +20,7 @@ def plot(csvFile, scriptFile):
 	#defining default settings
 	settings = {}
 	settings['title'] = scriptFile[:scriptFile.find('.')]
+	settings['type'] ='line'
 	settings['xScale'] = 'linear'
 	settings['xScaleBase'] = 10
 	settings['xLabel'] = 'par_stride'
@@ -49,43 +50,28 @@ def plot(csvFile, scriptFile):
 	plotList = list()
 
 	for settingsList in plots:
-		csvReader = csv.reader(open(csvFile))
-		line = csvReader.next()
-		lineContents = line[0].split(' ')
-		lineIndices = list()
-		lineLabels = list()
-		for entry in lineContents:
-			for counter in settingsList['plotList']:
-				if type(counter) is tuple: 
-					if entry == counter[0]:
-						lineIndices.append(lineContents.index(entry))
-						lineLabels.append(counter[1])
-				else:
-					if entry == counter:
-						lineIndices.append(lineContents.index(entry))
-						lineLabels.append(counter)
 
-		if len(lineIndices) > 0:
-			x = list()
-			y = list()
-			for index in lineIndices:
-				z = list()
-				y.append(z)
+		data = list()
+		if settingsList['type'] == 'boxplot':
+			data = getDataForBoxplot(csvFile, settingsList)
+		else:
+			data = getDataForNormalPlot(csvFile, settingsList)
 
-			for line in csvReader:
-				lineContents = line[0].split(' ')
-				x.append(float(lineContents[0]) / settingsList['xDivider'])
-				for i in range(0,len(lineIndices)):
-					y[i].append(float(lineContents[lineIndices[i]]) / settingsList['yDivider'])
-
+		if data:
 
 			mpl.rc('lines', linewidth=2)
 
 			fig = plt.figure(1, figsize=settingsList['figureSize'])
 			mpl.rcParams['axes.color_cycle'] = ['r', 'g', 'b', 'c']
 			ax = fig.add_subplot(2,1,1)
-			for i in range(0,len(lineIndices)):
-				ax.plot(x, y[i], label=lineLabels[i])
+
+			if settingsList['type'] == 'boxplot':
+				for i in range(0,len(data[1])):
+					ax.boxplot(data[1][i], positions=data[0])
+			else:
+				for i in range(0,len(data[1])):
+					ax.plot(data[0], data[1][i], label=data[2][i])
+
 			ax.set_title(settingsList['title'])
 			ax.set_xlabel(settingsList['xLabel'])
 			ax.set_ylabel(settingsList['yLabel'])
@@ -104,7 +90,89 @@ def plot(csvFile, scriptFile):
 			plt.savefig(resultPlot)
 			plotNumber += 1
 			plt.close()
+
 	return plotList
+
+def getDataForNormalPlot(csvFile, settingsList):
+
+	csvReader = csv.reader(open(csvFile))
+	line = csvReader.next()
+	lineContents = line[0].split(' ')
+	lineIndices = list()
+	lineLabels = list()
+	for counter in settingsList['plotList']:
+		for entry in lineContents:
+			if type(counter) is tuple: 
+				if entry == counter[0]:
+					lineIndices.append(lineContents.index(entry))
+					lineLabels.append(counter[1])
+			else:
+				if entry == counter:
+					lineIndices.append(lineContents.index(entry))
+					lineLabels.append(counter)
+
+	if len(lineIndices) > 0:
+		x = list()
+		y = list()
+		for index in lineIndices:
+			z = list()
+			y.append(z)
+
+		for line in csvReader:
+			lineContents = line[0].split(' ')
+			x.append(float(lineContents[0]) / settingsList['xDivider'])
+			for i in range(0,len(lineIndices)):
+				y[i].append(float(lineContents[lineIndices[i]]) / settingsList['yDivider'])
+		
+		return [x, y, lineLabels]
+	return []
+
+def getDataForBoxplot(csvFile, settingsList):
+
+	csvReader = csv.reader(open(csvFile))
+	line = csvReader.next()
+	lineContents = line[0].split(' ')
+	plotLabels = list()
+	plotIndices = list()
+	for counter in settingsList['plotList']:
+		if type(counter) is tuple: 
+
+			valueNumber = 0
+			indices = list()
+			while counter[0] + '_raw_' + str(valueNumber) in lineContents:
+				indices.append(lineContents.index(counter[0] + '_raw_' + str(valueNumber)))
+				valueNumber += 1
+			plotIndices.append(indices)
+			plotLabels.append(counter[1])
+
+		else:
+			valueNumber = 0
+			indices = list()
+			while counter + '_raw_' + str(valueNumber) in lineContents:
+				indices.append(lineContents.index(counter + '_raw_' + str(valueNumber)))
+				valueNumber += 1
+			plotIndices.append(indices)
+			plotLabels.append(counter)
+
+	if len(plotIndices) > 0:
+		x = list()
+		y = list()
+		for indexList in plotIndices:
+			z = list()
+			y.append(z)
+
+		lineCount = 0
+		for line in csvReader:
+			lineContents = line[0].split(' ')
+			x.append(float(lineContents[0]) / settingsList['xDivider'])
+			for i in range(0,len(plotIndices)):
+				y[i].append(list())
+				for j in range(0,len(plotIndices[i])):
+					y[i][lineCount].append(float(lineContents[plotIndices[i][j]]) / settingsList['yDivider'])
+			lineCount += 1
+			
+		return [x, y]
+	return []
 
 parser = getOptionParser()
 (options, args) = parser.parse_args(sys.argv, None)
@@ -114,3 +182,4 @@ if options.file == None:
 	sys.exit(0)
 
 plot(options.file, options.scriptfile)
+
