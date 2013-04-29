@@ -135,6 +135,8 @@ class AbstractBenchmark {
 		void printResults();
 		void printCombinations();
 		void plotResults(bool isDefault = true);
+		void callEveryPlotter(AbstractPlotter *settingsPlotter);
+		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter);
 
 		void setName(string name);
 		void setSequenceId(string id);

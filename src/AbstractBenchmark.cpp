@@ -626,35 +626,43 @@ void AbstractBenchmark::printCombinations() {
 }
 
 void AbstractBenchmark::plotResults(bool isDefault) {
-    AbstractPlotter *plotter = new AbstractPlotter();
-    plotter->setUp(isDefault);
+    AbstractPlotter *settingsPlotter = new AbstractPlotter();
+    settingsPlotter->setUp(isDefault);
 
+    callEveryPlotter(settingsPlotter);
+
+    settingsPlotter->pdfcropResult();
+    delete settingsPlotter;
+}
+
+void AbstractBenchmark::callEveryPlotter(AbstractPlotter *settingsPlotter)
+{
     #ifdef GNUPLOT
     cout << endl << "Plotting results with Gnuplot" << endl;
     AbstractPlotter *plotterGnuplot = new PlotterGnuplot();
-    plotterGnuplot->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
-    plotterGnuplot->plot();
+    callSpecificPlotter(plotterGnuplot, settingsPlotter);
     delete plotterGnuplot;
     #endif
 
     #ifdef PYPLOT
     cout << endl << "Plotting results with python matplotlib" << endl;
     AbstractPlotter *plotterPython = new PlotterPython();
-    plotterPython->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
-    plotterPython->plot();
+    callSpecificPlotter(plotterPython, settingsPlotter);
     delete plotterPython;
     #endif
     
     #ifdef RPLOT
     cout << endl << "Plotting results with R ggplot2" << endl;
     AbstractPlotter *plotterR = new PlotterR();
-    plotterR->setUp(plotter->getResultDir(), plotter->getPlotterScriptDir(), plotter->getSystemScriptDir(), plotter->getBenchName(), plotter->getBenchId());
-    plotterR->plot();
+    callSpecificPlotter(plotterR, settingsPlotter);
     delete plotterR;
     #endif
+}
 
-    plotter->pdfcropResult();
-    delete plotter;
+void AbstractBenchmark::callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter)
+{
+    specificPlotter->setUp(settingsPlotter->getResultDir(), settingsPlotter->getPlotterScriptDir(), settingsPlotter->getSystemScriptDir(), settingsPlotter->getBenchName(), settingsPlotter->getBenchId());
+    specificPlotter->plot();
 }
 
 
