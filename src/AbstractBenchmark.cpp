@@ -511,11 +511,11 @@ void AbstractBenchmark::executeCombination(map<string, int> parameters, int comb
             
             if (!_fastMode) {
                 Aggregator *resultAggregator = new Aggregator(results);
-                long long aggr_val = resultAggregator->calculateFunction(getAggregatingFunction());      //same funktions as in old implementation
+                long long aggr_val = resultAggregator->calculateFunction(getAggregatingFunction());
                 long long aggr_err = resultAggregator->calculateDeviation();
                 _result_y[perf][test_series_id].push_back(aggr_val);
-                if (_rawOutput) _result_y_raw[perf][test_series_id].push_back(results);
                 _result_error[perf][test_series_id].push_back(aggr_err);
+                if (_rawOutput) _result_y_raw[perf][test_series_id].push_back(results);
                 delete resultAggregator;
                 if (!_silentMode) cout << "Final Result: " << aggr_val << endl;
                 if (!_silentMode) cout << "Final Error: " << aggr_err << endl;
