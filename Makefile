@@ -88,7 +88,7 @@ dirs:
 	@mkdir -p $(BUILD_DIR)/test
  
 $(libbencho): $(objects) settings.conf
-	make echo_config
+	$(MAKE) echo_config
 	$(call echo_cmd,LIB $@) $(LIB) $@ $(objects)
  
 $(objects): $(BUILD_DIR)/%.o: $(src_dir)/%.cpp $(INCLUDE_DIR)/%.h $(BUILD_DIR)/%.d settings.conf

@@ -629,13 +629,13 @@ void AbstractBenchmark::plotResults(bool isDefault) {
     AbstractPlotter *settingsPlotter = new AbstractPlotter();
     settingsPlotter->setUp(isDefault);
 
-    callEveryPlotter(settingsPlotter);
+    callPlotterWithSettings(settingsPlotter);
 
     settingsPlotter->pdfcropResult();
     delete settingsPlotter;
 }
 
-void AbstractBenchmark::callEveryPlotter(AbstractPlotter *settingsPlotter)
+void AbstractBenchmark::callPlotterWithSettings(AbstractPlotter *settingsPlotter)
 {
     #ifdef GNUPLOT
     cout << endl << "Plotting results with Gnuplot" << endl;

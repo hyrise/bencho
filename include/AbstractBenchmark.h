@@ -13,14 +13,11 @@
 #include "Aggregator.h" 		//class for aggregator-functions
 #include "FileWriter.h"			//class to write result files
 #include "DirectoryManager.h"	//class to manage directories
-#include "AbstractPlotter.h"
-#include "PlotterPython.h"
-#include "PlotterR.h"
-#include "PlotterGnuplot.h"
+#include "AbstractPlotter.h"	//abstract plotter class
+#include "PlotterGnuplot.h"		//class for plotting results with gnuplot
+#include "PlotterPython.h"		//class for plotting results with python matplotlib
+#include "PlotterR.h"			//class for plotting results with R ggplot2
 
-#include "Gnup.h"				//class for plotting results with gnuplot
-#include "Pyp.h"				//class for plotting results with python matplotlib
-#include "Rp.h"					//class for plotting results with R ggplot2
 
 using namespace std;
 
@@ -135,7 +132,7 @@ class AbstractBenchmark {
 		void printResults();
 		void printCombinations();
 		void plotResults(bool isDefault = true);
-		void callEveryPlotter(AbstractPlotter *settingsPlotter);
+		void callPlotterWithSettings(AbstractPlotter *settingsPlotter);
 		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter);
 
 		void setName(string name);
