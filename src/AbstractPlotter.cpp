@@ -7,6 +7,9 @@ AbstractPlotter::AbstractPlotter()
 	_plotterScriptDir = "./benchmarks";
 	_systemScriptDir = "./bencho/plotting";
 
+	_plotterScript = "";
+	_systemScript = "";
+
 	_benchName = "";
 	_benchId = "";
 }
@@ -19,7 +22,13 @@ AbstractPlotter::~AbstractPlotter()
 
 void AbstractPlotter::plot()
 {
-	callPlot(getResultDir(), getPlotterScriptDir(), getBenchName(), getBenchId());
+	string resultFile = getResultFile(getBenchName(), getBenchId(), getResultDir());
+	if (fileExists(resultFile))
+	{
+		callPlot(getResultDir(), getPlotterScript(), getSystemScript(), getBenchName(), getBenchId());
+	} else {
+		cerr << "No result file of benchmark: " << getBenchName() << ", Id: " << getBenchId() << " available." << endl;
+	}
 }
 
 void AbstractPlotter::setUp(bool isDefault)
@@ -46,11 +55,13 @@ void AbstractPlotter::setUp(bool isDefault)
 	}
 }
 
-void AbstractPlotter::setUp(string resultDir, string plotterScriptDir, string systemScriptDir, string benchName, string benchId)
+void AbstractPlotter::setUp(string resultDir, string plotterScriptDir, string systemScriptDir, string plotterScript, string systemScript, string benchName, string benchId)
 {
 	setResultDir(resultDir);
 	setPlotterScriptDir(plotterScriptDir);
 	setSystemScriptDir(systemScriptDir);
+	setPlotterScript(plotterScript);
+	setSystemScript(systemScript);
 	setBenchName(benchName);
 	setBenchId(benchId);
 }
@@ -81,7 +92,7 @@ string AbstractPlotter::createFinalScript(string resultFile, string baseScript)
 	return baseScript;
 }
 
-void AbstractPlotter::callPlot(string resultDir, string plotterScriptDir, string benchName, string benchId)
+void AbstractPlotter::callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId)
 {
 	// overwrite this in actual plotter
 }
@@ -100,6 +111,16 @@ string AbstractPlotter::getPlotterScriptDir()
 string AbstractPlotter::getSystemScriptDir()
 {
 	return _systemScriptDir;
+}
+
+string AbstractPlotter::getPlotterScript()
+{
+	return _plotterScript;
+}
+
+string AbstractPlotter::getSystemScript()
+{
+	return _systemScript;
 }
 
 string AbstractPlotter::getBenchName()
@@ -125,6 +146,16 @@ void AbstractPlotter::setPlotterScriptDir(string plotterScriptDir)
 void AbstractPlotter::setSystemScriptDir(string systemScriptDir)
 {
 	_systemScriptDir = systemScriptDir;
+}
+
+void AbstractPlotter::setPlotterScript(string plotterScript)
+{
+	_plotterScript = plotterScript;
+}
+
+void AbstractPlotter::setSystemScript(string systemScript)
+{
+	_systemScript = systemScript;
 }
 
 void AbstractPlotter::setBenchName(string benchName)

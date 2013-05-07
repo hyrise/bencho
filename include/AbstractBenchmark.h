@@ -133,7 +133,7 @@ class AbstractBenchmark {
 		void printCombinations();
 		void plotResults(bool isDefault = true);
 		void callPlotterWithSettings(AbstractPlotter *settingsPlotter);
-		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter);
+		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter, string fileEnding);
 
 		void setName(string name);
 		void setSequenceId(string id);

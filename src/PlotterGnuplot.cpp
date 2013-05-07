@@ -1,12 +1,12 @@
 #include "PlotterGnuplot.h"
 
 
-void PlotterGnuplot::callPlot(string resultDir, string plotterScriptDir, string benchName, string benchId)
+void PlotterGnuplot::callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId)
 {
 	_terminal = TERMINAL;
 	string resultFile = getResultFile(benchName, benchId, resultDir);
-	string plotterScript = plotterScriptDir + "/" + benchName + ".gp";
-	string systemScript = getSystemScriptDir() + "/system.gp";
+	// string plotterScript = plotterScriptDir + "/" + benchName + ".gp";
+	// string systemScript = getSystemScriptDir() + "/system.gp";
 
 	string finalPlotterScript = createFinalScript(resultFile, plotterScript, systemScript);
 
