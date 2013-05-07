@@ -628,42 +628,58 @@ void AbstractBenchmark::printCombinations() {
 
 }
 
-void AbstractBenchmark::plotResults() {
+void AbstractBenchmark::plotResults(bool isDefault) {
+    AbstractPlotter *settingsPlotter = new AbstractPlotter();
+    settingsPlotter->setUp(isDefault);
+
+    callPlotterWithSettings(settingsPlotter);
+
+    settingsPlotter->pdfcropResult();
+    delete settingsPlotter;
+}
+
+void AbstractBenchmark::callPlotterWithSettings(AbstractPlotter *settingsPlotter)
+{
     #ifdef GNUPLOT
-        plotResultsWithGnuplot();
+    cout << endl << "Plotting results with Gnuplot" << endl;
+    AbstractPlotter *plotterGnuplot = new PlotterGnuplot();
+    callSpecificPlotter(plotterGnuplot, settingsPlotter, ".gp");
+    delete plotterGnuplot;
     #endif
 
     #ifdef PYPLOT
-        plotResultsWithPyplot();
+    cout << endl << "Plotting results with python matplotlib" << endl;
+    AbstractPlotter *plotterPython = new PlotterPython();
+    callSpecificPlotter(plotterPython, settingsPlotter, ".py");
+    delete plotterPython;
     #endif
-
+    
     #ifdef RPLOT
-        plotResultsWithRplot();
+    cout << endl << "Plotting results with R ggplot2" << endl;
+    AbstractPlotter *plotterR = new PlotterR();
+    callSpecificPlotter(plotterR, settingsPlotter, ".r");
+    delete plotterR;
     #endif
 }
 
-void AbstractBenchmark::plotResultsWithGnuplot() {
-    cout << endl << "Plotting results with Gnuplot" << endl;
-    Gnup* plotGnuplot = new Gnup();
-    plotGnuplot->setUp(true); // default settings, plot last run etc.
-    plotGnuplot->plot();
-    delete plotGnuplot;
-}
+void AbstractBenchmark::callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter, string fileEnding)
+{
+    string systemScript = settingsPlotter->getSystemScriptDir() + "/system" + fileEnding;
+    string plotterScript = settingsPlotter->getPlotterScriptDir() + "/" + settingsPlotter->getBenchName() + fileEnding;
 
-void AbstractBenchmark::plotResultsWithPyplot() {
-    cout << endl << "Plotting results with Python matplotlib" << endl;
-    Pyp* plotPyplot = new Pyp();
-    plotPyplot->setUp(true); // default settings, plot last run etc.
-    plotPyplot->plot();
-    delete plotPyplot;
-}
+    if (!fileExists(systemScript))
+    {
+        cerr << "No plotter base script found (in " << settingsPlotter->getSystemScriptDir() << "). Plotting cancelled!" << endl;
+        return;
+    }
+    if (!fileExists(plotterScript))
+    {
+        cerr << "No plotter script found (in " << settingsPlotter->getPlotterScriptDir() << "). Plotting cancelled!" << endl;
+        return;
+    }
 
-void AbstractBenchmark::plotResultsWithRplot() {
-    cout << endl << "Plotting results with R ggplot2" << endl;
-    Rp* plotRplot = new Rp();
-    plotRplot->setUp(true); // default settings, plot last run etc.
-    plotRplot->plot();
-    delete plotRplot;
+    specificPlotter->setUp(settingsPlotter->getResultDir(), settingsPlotter->getPlotterScriptDir(), settingsPlotter->getSystemScriptDir(), plotterScript, systemScript, settingsPlotter->getBenchName(), settingsPlotter->getBenchId());
+    specificPlotter->plot();
 }
 
 

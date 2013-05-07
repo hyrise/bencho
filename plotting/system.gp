@@ -29,7 +29,7 @@ XTIC_FACTOR = 1
 TERMINAL_PDF: set terminal $(TERMINAL) font "Times,8pt" size 12.1716cm,8.1144cm dashed
 TERMINAL_X11: set term x11 persist
 TERMINAL_PS: set terminal postscript eps enhanced "Times" 24
-TERMINAL_PS: set output "plot1.ps"
+TERMINAL_TEST: set terminal pdf enhanced font "Times,8pt" dashed
 
 TITLE_UNCOMPR = "Uncompr."
 TITLE_SORTED = "S.Dict."
@@ -42,3 +42,5 @@ set grid
 set key samplen 2
 set key width 0
 set key autotitle columnheader
+
+set output "OUTPUT1.$(TERMINAL)"

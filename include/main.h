@@ -9,6 +9,11 @@
 								std::string argument = std::string(argv[i]); \
 								if (argument == "-fast") b.setFastMode(true); \
 								if (argument == "-silent") b.setSilentMode(true); \
+								if (argument == "-plotonly") \
+								{ \
+									b.plotResults(false); \
+									return 0; \
+								} \
 							} \
 							b.full(); \
 							return 0; \
