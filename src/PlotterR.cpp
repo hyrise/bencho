@@ -4,8 +4,6 @@
 void PlotterR::callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId)
 {
 	string resultFile = getResultFile(benchName, benchId, resultDir);
-	// string plotterScript = plotterScriptDir + "/" + benchName + ".r";
-	// string systemScript = getSystemScriptDir() + "/system.r";
 
 	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
 

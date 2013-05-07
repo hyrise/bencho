@@ -4,8 +4,6 @@
 void PlotterPython::callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId)
 {
 	string resultFile = getResultFile(benchName, benchId, resultDir);
-	// string plotterScript = plotterScriptDir + "/" + benchName + ".py";
-	// string systemScript = getSystemScriptDir() + "/system.py";
 
 	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
 

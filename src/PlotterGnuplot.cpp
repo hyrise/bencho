@@ -5,8 +5,6 @@ void PlotterGnuplot::callPlot(string resultDir, string plotterScript, string sys
 {
 	_terminal = TERMINAL;
 	string resultFile = getResultFile(benchName, benchId, resultDir);
-	// string plotterScript = plotterScriptDir + "/" + benchName + ".gp";
-	// string systemScript = getSystemScriptDir() + "/system.gp";
 
 	string finalPlotterScript = createFinalScript(resultFile, plotterScript, systemScript);
 
