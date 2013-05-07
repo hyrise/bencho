@@ -77,12 +77,15 @@ void AbstractPlotter::pdfcropResult()
 	string benchmarksResultDir = resultDir + "/" + benchName;
 	string resultPrefix = benchName + "_" + benchId + "_";
 	d = opendir(benchmarksResultDir.c_str());
-	while((de = readdir(d))) {
+	if (d)
+	{
+		while((de = readdir(d))) {
 		if (strncmp(resultPrefix.c_str(), de->d_name, resultPrefix.size()) == 0) {
 			pdfCropFile(benchmarksResultDir + "/" + de->d_name);
 		}
     }
     closedir(d);
+	} else { perror(benchmarksResultDir.c_str()); }
 }
 
 
