@@ -1,8 +1,7 @@
-
-
 #include "FileWriter.h"
 #include "ConfigFile.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 #define STR_EXPAND(tok) #tok
 #define STR(tok) STR_EXPAND(tok)
