@@ -9,6 +9,8 @@ BENCHO_LIB_DIR = $(BUILD_DIR)/lib
 CC = clang++
 LIB = ar cr
 
+DOXYFILE = ./Doxyfile
+
 
 BUILD_FLAGS = -I$(BENCHO_SOURCE_DIR) -Wno-deprecated
 LINKER_FLAGS = -lpthread -ldl
@@ -63,7 +65,7 @@ objects := $(subst $(src_dir),$(BUILD_DIR),$(subst .cpp,.o,$(sources)))
 dependencies := $(subst .o,.d,$(objects))
  
  
-.PHONY: dirs help clean config echo_config
+.PHONY: dirs help clean config echo_config doxygen
  
 all: libbencho
  
@@ -75,6 +77,8 @@ echo_config:
  
 settings.conf:
 	@./configure.sh
+
+docs: doxygen
  
 # Bencho-library
 libbencho: $(libbencho) settings.conf
@@ -97,9 +101,14 @@ $(objects): $(BUILD_DIR)/%.o: $(src_dir)/%.cpp $(BENCHO_INCLUDE_DIR)/%.h $(BUILD
 $(dependencies): $(BUILD_DIR)/%.d: $(src_dir)/%.cpp
 	$(call echo_cmd,DEPEND $@) $(CC) -MM -MT $@ $(BUILD_FLAGS) $(CXX_DEBUG) $< > $@ $(INCLUDE)
 
+# Doxygen
+doxygen:
+	$(call echo_cmd,DOC $@) doxygen $(DOXYFILE)
+
 #cleaning up
 clean:
 	$(call echo_cmd,REMOVE $(BENCHO_BUILD_BASE_DIR)) rm -rf $(BENCHO_BUILD_BASE_DIR)
+	$(call echo_cmd,REMOVE ./doxygen) rm -rf ./doxygen
 	@rm -rf benchmarks/*.pyc
 
 
