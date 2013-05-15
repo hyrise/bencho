@@ -1,6 +1,6 @@
 #include "Aggregator.h"
 
-Aggregator::Aggregator(vector<long long> &data):
+Aggregator::Aggregator(vector<long long> data):
     _data(data)
 {
 
@@ -10,7 +10,7 @@ Aggregator::~Aggregator() {
 
 }
 
-void Aggregator::setData(vector<long long> &data) {
+void Aggregator::setData(vector<long long> data) {
     _data = data;
 }
 
