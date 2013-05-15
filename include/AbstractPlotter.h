@@ -110,7 +110,7 @@ private:
 	 *
 	 * @return Exact (but relative) path to the final script that can be used for plotting
 	 */
-	virtual string createFinalScript(string resultFile, string baseScript);
+	virtual string createFinalScript(string resultFile, string baseScript, string systemScript);
 
 	/**
 	 * Function that calls the individual plotter, has to be overwritten.

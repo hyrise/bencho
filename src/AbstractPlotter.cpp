@@ -89,7 +89,7 @@ void AbstractPlotter::pdfcropResult()
 }
 
 
-string AbstractPlotter::createFinalScript(string resultFile, string baseScript)
+string AbstractPlotter::createFinalScript(string resultFile, string baseScript, string systemScript)
 {
 	// overwrite this in actual plotter
 	return baseScript;
