@@ -1,5 +1,4 @@
-/**
- * @file AbstractPlotter.h
+/** @file AbstractPlotter.h
  *
  * Contains the class definition of AbstractPlotter
  *

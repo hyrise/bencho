@@ -24,7 +24,7 @@ class PlotterPython : public AbstractPlotter
 private:
 
 	/**
-	 * Calls the command for executing the plotting with Gnuplot.
+	 * Calls the command for executing the plotting with Python.
 	 *
 	 * @param resultDir Directory where result files of the benchmark are stored.
 	 * @param plotterScript Relative path to the individual plotting script for the benchmark.

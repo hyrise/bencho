@@ -1,7 +1,8 @@
-/**
- * @file PlotterGnuplot.h
+/** @file PlotterGnuplot.h
  *
  * Contains the class definition of PlotterGnuplot
+ * For any undocumented method see AbstractPlotter.
+ * @see AbstractPlotter
  *
  */
 
