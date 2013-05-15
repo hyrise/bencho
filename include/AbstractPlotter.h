@@ -107,13 +107,20 @@ private:
 	 * 
 	 * @param resultFile Exact (but relative) path to the resultFile.
 	 * @param baseScript Exact (but relative) path to the plotter script that has to be modified.
+	 * @param systemScript Exact (but relative) path to the general plotting script for the plotter.
 	 *
-	 * @return Exact (but relative) path to the final script that can be used for plotting
+	 * @return Exact (but relative) path to the final script that can be used for plotting.
 	 */
 	virtual string createFinalScript(string resultFile, string baseScript, string systemScript);
 
 	/**
 	 * Function that calls the individual plotter, has to be overwritten.
+	 * 
+	 * @param resultDir Directory where result files of the benchmark are stored.
+	 * @param plotterScript Exact (but relative) path to the individual plotting script for the benchmark.
+	 * @param systemScript Exact (but relative) path to the general plotting script for the plotter.
+	 * @param benchName Name of the benchmark that will be plotted.
+	 * @param benchId Id of the benchmark that will be plotted.
 	 */
 	virtual void callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId);
 };
