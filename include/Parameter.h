@@ -31,9 +31,9 @@ struct ParameterType{
  *
  * The Parameter class is the class used to provide parameters to your 
  * benchmark. They always consist of a name as identifier and a vector of values
- * used as input parameters for in your benchmark, in wich the test will be executed 
+ * used as input parameters for in your benchmark, in which the test will be executed 
  * for every combination of the values provided. The constructors can take a 
- * vector of values, a single value or a start, stop and step value, with wich it will 
+ * vector of values, a single value or a start, stop and step value, with which it will 
  * calculate the vector of input parameters itself.
  */
 class Parameter {
