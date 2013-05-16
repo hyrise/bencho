@@ -18,7 +18,7 @@ using namespace std;
  * 
  * Usually the Bencho Framework will provide you with a lot of output concerning
  * the status and the results of your running benchmark. However, if you want to get
- * some extra output or the standard output is deactivated (because you run in silent mode)
+ * some extra output or the standard output is deactivated (e.g. because you run in Silent Mode)
  * you can use this Printer. Therefore it should be sufficient to use the printResults()
  * and printCombinatinations() methods of the AbstractBenchmark class.
  */
