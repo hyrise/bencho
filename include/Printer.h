@@ -1,3 +1,8 @@
+/** @file Printer.h
+ *
+ * Contains the class definiton of Printer.
+ */
+
 #ifndef PRINTER_H
 #define PRINTER_H
 
@@ -8,6 +13,15 @@
 
 using namespace std;
 
+/**
+ * @brief Class for printing final and intermediate results.
+ * 
+ * Usually the Bencho Framework will provide you with a lot of output concerning
+ * the status and the results of your running benchmark. However, if you want to get
+ * some extra output or the standard output is deactivated (because you run in silent mode)
+ * you can use this Printer. Therefore it should be sufficient to use the printResults()
+ * and printCombinatinations() methods of the AbstractBenchmark class.
+ */
 class Printer {
 	
 	private:

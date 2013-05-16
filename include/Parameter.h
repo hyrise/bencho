@@ -1,5 +1,4 @@
-/**
- * @file Parameter.h
+/** @file Parameter.h
  *
  * Contains the class definition of Parameter.
  */
@@ -14,9 +13,7 @@
 
 using namespace std;
 
-/**
- * Struct to define the parameter type and thereby the operator used to calculate the steps.
- */
+/// Struct to define the parameter type and thereby the operator used to calculate the steps.
 struct ParameterType{
 
 	enum Operation {

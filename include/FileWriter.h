@@ -1,5 +1,4 @@
-/**
- * @file FileWriter.h
+/** @file FileWriter.h
  *
  * Contains the class definition of FileWriter.
  */

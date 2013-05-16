@@ -1,7 +1,6 @@
-/**
- * @file Aggregator.h
+/** @file Aggregator.h
  * 
- * Contains the class definition of the Aggregator.
+ * Contains the class definition of Aggregator.
  */
 
 #ifndef AGGREGATOR_H
@@ -16,9 +15,7 @@
 using namespace std;
 
 
-/**
- * Struct to define the available aggregation functions.
- */
+/// Struct to define the available aggregation functions.
 struct AggregationType
 {
 	enum Function {
