@@ -125,7 +125,7 @@ def getDataForNormalPlot(csvFile, settingsList):
 				y[i].append(float(lineContents[lineIndices[i]]) / settingsList['yDivider'])
 		
 		return [x, y, lineLabels]
-	return []
+	return False
 
 def getDataForBoxplot(csvFile, settingsList):
 
@@ -142,8 +142,9 @@ def getDataForBoxplot(csvFile, settingsList):
 			while counter[0] + '_raw_' + str(valueNumber) in lineContents:
 				indices.append(lineContents.index(counter[0] + '_raw_' + str(valueNumber)))
 				valueNumber += 1
-			plotIndices.append(indices)
-			plotLabels.append(counter[1])
+			if indices:
+				plotIndices.append(indices)
+				plotLabels.append(counter[1])
 
 		else:
 			valueNumber = 0
@@ -151,8 +152,9 @@ def getDataForBoxplot(csvFile, settingsList):
 			while counter + '_raw_' + str(valueNumber) in lineContents:
 				indices.append(lineContents.index(counter + '_raw_' + str(valueNumber)))
 				valueNumber += 1
-			plotIndices.append(indices)
-			plotLabels.append(counter)
+			if indices:
+				plotIndices.append(indices)
+				plotLabels.append(counter)
 
 	if len(plotIndices) > 0:
 		x = list()
@@ -171,8 +173,8 @@ def getDataForBoxplot(csvFile, settingsList):
 					y[i][lineCount].append(float(lineContents[plotIndices[i][j]]) / settingsList['yDivider'])
 			lineCount += 1
 			
-		return [x, y]
-	return []
+		return [x, y, plotLabels]
+	return False
 
 parser = getOptionParser()
 (options, args) = parser.parse_args(sys.argv, None)
