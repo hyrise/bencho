@@ -1,8 +1,7 @@
-
-
 #include "FileWriter.h"
 #include "ConfigFile.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 #define STR_EXPAND(tok) #tok
 #define STR(tok) STR_EXPAND(tok)
@@ -105,7 +104,7 @@ void FileWriter::dumpResult(AbstractBenchmark *benchmark)
             file << it->second << "_" << benchmark->getPerformanceCounters()[i] << "_y ";
             file << it->second << "_" << benchmark->getPerformanceCounters()[i] << "_error ";
 
-            if (benchmark->getRawDataOutput()) 
+            if (benchmark->getRawDataOutput() && !benchmark->getFastMode())
             {
                 for (size_t j = 0; j < benchmark->getMaxRuns(); ++j)
                 {
@@ -138,7 +137,7 @@ void FileWriter::dumpResult(AbstractBenchmark *benchmark)
                 file << benchmark->getResult_y(it->first, benchmark->getPerformanceCounters()[i]).at(line) << " ";
                 file << benchmark->getResult_error(it->first, benchmark->getPerformanceCounters()[i]).at(line) << " ";
 
-                if (benchmark->getRawDataOutput()) 
+                if (benchmark->getRawDataOutput() && !benchmark->getFastMode()) 
                 {
                     for (size_t j = 0; j < benchmark->getMaxRuns(); ++j)
                     {

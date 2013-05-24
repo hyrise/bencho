@@ -2,7 +2,7 @@
 
 # read path of build (argument given by Makefile), debug/prod
 DIRECTORY=$1
-ARGUMENTS=$@
+ARGUMENTS=${@:2}
 
 
 # read in available benchmarks

@@ -1,18 +1,18 @@
-SOURCE_DIR = ./src
-INCLUDE_DIR = ./include
-BUILD_BASE_DIR = ./build
+BENCHO_SOURCE_DIR = ./src
+BENCHO_INCLUDE_DIR = ./include
+BENCHO_BUILD_BASE_DIR = ./build
 
-LIB_NAME = bencho
-LIB_FULL_NAME = lib$(LIB_NAME).a
-LIB_DIR = $(BUILD_DIR)/lib
+BENCHO_LIB_NAME = bencho
+BENCHO_LIB_FULL_NAME = lib$(BENCHO_LIB_NAME).a
+BENCHO_LIB_DIR = $(BUILD_DIR)/lib
 
 CC = clang++
 LIB = ar cr
 
 
-BUILD_FLAGS = -I$(SOURCE_DIR) -Wno-deprecated
+BUILD_FLAGS = -I$(BENCHO_SOURCE_DIR) -Wno-deprecated
 LINKER_FLAGS = -lpthread -ldl
-INCLUDE = -I$(INCLUDE_DIR) $(shell python-config --includes)
+INCLUDE = -I$(BENCHO_INCLUDE_DIR) $(shell python-config --includes)
 VERSION=$(shell git describe --tags)
 
 
@@ -21,11 +21,11 @@ VERSION=$(shell git describe --tags)
  
 ifeq ($(PROD), 1)
 	BUILD_FLAGS += -O3 -finline-functions -DNDEBUG -D USE_TRACE -g -pipe
-	BUILD_DIR = $(BUILD_BASE_DIR)/prod
+	BUILD_DIR = $(BENCHO_BUILD_BASE_DIR)/prod
 else
 	BUILD_FLAGS += -O0 -g2 -pipe
 	CXX_DEBUG += -Wno-long-long #-Wall -pedantic
-	BUILD_DIR = $(BUILD_BASE_DIR)/debug
+	BUILD_DIR = $(BENCHO_BUILD_BASE_DIR)/debug
 endif
  
 ifeq ($(PAPI), 1)
@@ -53,8 +53,8 @@ endif
 
 
 full_build_dir := $(BUILD_DIR)
-src_dir := $(SOURCE_DIR)
-libbencho := $(LIB_DIR)/$(LIB_FULL_NAME)
+src_dir := $(BENCHO_SOURCE_DIR)
+libbencho := $(BENCHO_LIB_DIR)/$(BENCHO_LIB_FULL_NAME)
 
  
 # Objects and dependencies
@@ -88,10 +88,10 @@ dirs:
 	@mkdir -p $(BUILD_DIR)/test
  
 $(libbencho): $(objects) settings.conf
-	make echo_config
+	$(MAKE) echo_config
 	$(call echo_cmd,LIB $@) $(LIB) $@ $(objects)
  
-$(objects): $(BUILD_DIR)/%.o: $(src_dir)/%.cpp $(INCLUDE_DIR)/%.h $(BUILD_DIR)/%.d settings.conf
+$(objects): $(BUILD_DIR)/%.o: $(src_dir)/%.cpp $(BENCHO_INCLUDE_DIR)/%.h $(BUILD_DIR)/%.d settings.conf
 	$(call echo_cmd,CC $@) $(CC) $(BUILD_FLAGS) $(CXX_DEBUG) -o"$@" -c "$<" $(INCLUDE) -D BENCHO_DIR=$(CURDIR)
  
 $(dependencies): $(BUILD_DIR)/%.d: $(src_dir)/%.cpp
@@ -99,7 +99,7 @@ $(dependencies): $(BUILD_DIR)/%.d: $(src_dir)/%.cpp
 
 #cleaning up
 clean:
-	$(call echo_cmd,REMOVE $(BUILD_BASE_DIR)) rm -rf $(BUILD_BASE_DIR)
+	$(call echo_cmd,REMOVE $(BENCHO_BUILD_BASE_DIR)) rm -rf $(BENCHO_BUILD_BASE_DIR)
 	@rm -rf benchmarks/*.pyc
 
 
