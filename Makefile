@@ -108,7 +108,6 @@ doxygen:
 #cleaning up
 clean:
 	$(call echo_cmd,REMOVE $(BENCHO_BUILD_BASE_DIR)) rm -rf $(BENCHO_BUILD_BASE_DIR)
-	$(call echo_cmd,REMOVE ./doxygen) rm -rf ./doxygen
 	@rm -rf benchmarks/*.pyc
 
 
