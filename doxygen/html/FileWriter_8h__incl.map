@@ -1,0 +1,13 @@
+<map id="include/FileWriter.h" name="include/FileWriter.h">
+<area shape="rect" id="node13" href="$AbstractBenchmark_8h_source.html" title="AbstractBenchmark.h" alt="" coords="699,83,845,112"/>
+<area shape="rect" id="node21" href="$PapiSingleton_8h_source.html" title="PapiSingleton.h" alt="" coords="256,160,368,189"/>
+<area shape="rect" id="node32" href="$Parameter_8h.html" title="Parameter.h" alt="" coords="725,160,819,189"/>
+<area shape="rect" id="node38" href="$Printer_8h.html" title="Printer.h" alt="" coords="392,160,461,189"/>
+<area shape="rect" id="node44" href="$Aggregator_8h.html" title="Aggregator.h" alt="" coords="843,160,939,189"/>
+<area shape="rect" id="node55" href="$DirectoryManager_8h.html" title="DirectoryManager.h" alt="" coords="1333,160,1469,189"/>
+<area shape="rect" id="node70" href="$AbstractPlotter_8h.html" title="AbstractPlotter.h" alt="" coords="1067,237,1187,267"/>
+<area shape="rect" id="node84" href="$PlotterGnuplot_8h.html" title="PlotterGnuplot.h" alt="" coords="536,160,651,189"/>
+<area shape="rect" id="node90" href="$PlotterPython_8h.html" title="PlotterPython.h" alt="" coords="1117,160,1229,189"/>
+<area shape="rect" id="node93" href="$PlotterR_8h.html" title="PlotterR.h" alt="" coords="963,160,1043,189"/>
+<area shape="rect" id="node77" href="$resultFileHelper_8h_source.html" title="resultFileHelper.h" alt="" coords="1344,315,1467,344"/>
+</map>

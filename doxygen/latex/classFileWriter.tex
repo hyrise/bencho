@@ -1,0 +1,63 @@
+\hypertarget{classFileWriter}{\section{File\-Writer Class Reference}
+\label{classFileWriter}\index{File\-Writer@{File\-Writer}}
+}
+
+
+Class for saving results in a csv file.  
+
+
+
+
+{\ttfamily \#include $<$File\-Writer.\-h$>$}
+
+
+
+Collaboration diagram for File\-Writer\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classFileWriter__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classFileWriter_a15803cc3ab2d71ca13860979b6abe908}{{\bfseries File\-Writer} (\hyperlink{classAbstractBenchmark}{Abstract\-Benchmark} $\ast$benchmark)}\label{classFileWriter_a15803cc3ab2d71ca13860979b6abe908}
+
+\item 
+\hypertarget{classFileWriter_aec5359749aa8b2e3eea8da13de243993}{void {\bfseries add\-Diagram} (string ps\-\_\-path, map$<$ string, vector$<$ int $>$ $>$ parameters)}\label{classFileWriter_aec5359749aa8b2e3eea8da13de243993}
+
+\item 
+\hypertarget{classFileWriter_a52e3b4973201b3cea18b87679e2b08bb}{void {\bfseries save} ()}\label{classFileWriter_a52e3b4973201b3cea18b87679e2b08bb}
+
+\item 
+\hypertarget{classFileWriter_a028010d50bdd0448530cb30c80a63880}{void {\bfseries dump\-Result} (\hyperlink{classAbstractBenchmark}{Abstract\-Benchmark} $\ast$benchmark)}\label{classFileWriter_a028010d50bdd0448530cb30c80a63880}
+
+\item 
+\hypertarget{classFileWriter_ac1c2d9f75ff7bde36ee32fa4569d52f4}{void {\bfseries ps\-To\-Pdf} (string filename)}\label{classFileWriter_ac1c2d9f75ff7bde36ee32fa4569d52f4}
+
+\item 
+\hypertarget{classFileWriter_a806895d2d02267bf01cc547ec4f62f41}{void {\bfseries save\-Parameters} (\hyperlink{classAbstractBenchmark}{Abstract\-Benchmark} $\ast$benchmark)}\label{classFileWriter_a806895d2d02267bf01cc547ec4f62f41}
+
+\item 
+\hypertarget{classFileWriter_a3bdc99c8091b956d0eb4623fcd9206a3}{vector$<$ string $>$ {\bfseries get\-Headers} (\hyperlink{classAbstractBenchmark}{Abstract\-Benchmark} $\ast$benchmark)}\label{classFileWriter_a3bdc99c8091b956d0eb4623fcd9206a3}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classFileWriter_aec4dde08eafd3be33c3f386765f7826a}{\hyperlink{classAbstractBenchmark}{Abstract\-Benchmark} $\ast$ {\bfseries \-\_\-benchmark}}\label{classFileWriter_aec4dde08eafd3be33c3f386765f7826a}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class for saving results in a csv file. 
+
+This class incapsulates the functionality to save the results in a csv file, which then, for example, can be used for plotting. All of this should be initiated automatically by the Bencho Framework. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{FileWriter_8h}{File\-Writer.\-h}\item 
+src/File\-Writer.\-cpp\end{DoxyCompactItemize}

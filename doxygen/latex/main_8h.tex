@@ -1,0 +1,48 @@
+\hypertarget{main_8h}{\section{include/main.h File Reference}
+\label{main_8h}\index{include/main.\-h@{include/main.\-h}}
+}
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=170pt]{main_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries M\-A\-I\-N}(B\-E\-N\-C\-H\-M\-A\-R\-K)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains the makro for the main() function used in own benchmarks. 
+
+\subsection{Macro Definition Documentation}
+\hypertarget{main_8h_a30904d3a3441cfbe5ca13d16de8dcd5f}{\index{main.\-h@{main.\-h}!M\-A\-I\-N@{M\-A\-I\-N}}
+\index{M\-A\-I\-N@{M\-A\-I\-N}!main.h@{main.\-h}}
+\subsubsection[{M\-A\-I\-N}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\-A\-I\-N(
+\begin{DoxyParamCaption}
+\item[{}]{B\-E\-N\-C\-H\-M\-A\-R\-K}
+\end{DoxyParamCaption}
+)}}\label{main_8h_a30904d3a3441cfbe5ca13d16de8dcd5f}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\textcolor{keywordtype}{int} main(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}* argv[]) \(\backslash\)
+                        \{ \(\backslash\)
+                            BENCHMARK b; \(\backslash\)
+                            for (\textcolor{keywordtype}{int} i = 1; i < argc; ++i) \(\backslash\)
+                            \{ \(\backslash\)
+                                std::string argument = std::string(argv[i]); \(\backslash\)
+                                if (argument == \textcolor{stringliteral}{"-fast"}) b.setFastMode(true); \(\backslash\)
+                                if (argument == "-silent") b.setSilentMode(true); \(\backslash\)
+                                if (argument == "-plotonly") \(\backslash\)
+                                \{ \(\backslash\)
+                                    b.plotResults(\textcolor{keyword}{false}); \(\backslash\)
+                                    return 0; \(\backslash\)
+                                \} \(\backslash\)
+                            \} \(\backslash\)
+                            b.full(); \(\backslash\)
+                            return 0; \(\backslash\)
+                        \}
+\end{DoxyCode}

@@ -1,0 +1,80 @@
+\hypertarget{classPlotterPython}{\section{Plotter\-Python Class Reference}
+\label{classPlotterPython}\index{Plotter\-Python@{Plotter\-Python}}
+}
+
+
+Class for plotting results with Python matplotlib.  
+
+
+
+
+{\ttfamily \#include $<$Plotter\-Python.\-h$>$}
+
+
+
+Inheritance diagram for Plotter\-Python\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=162pt]{classPlotterPython__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Plotter\-Python\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=197pt]{classPlotterPython__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classPlotterPython_a3f9a49139e11187803ce9b7011a6d570}{call\-Plot} (string result\-Dir, string plotter\-Script, string system\-Script, string bench\-Name, string bench\-Id)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Class for plotting results with Python matplotlib. 
+
+\hyperlink{classPlotterPython}{Plotter\-Python} is derived from \hyperlink{classAbstractPlotter}{Abstract\-Plotter} and serves as a plotter class for plotting results with Pyhton matplotlib. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classPlotterPython_a3f9a49139e11187803ce9b7011a6d570}{\index{Plotter\-Python@{Plotter\-Python}!call\-Plot@{call\-Plot}}
+\index{call\-Plot@{call\-Plot}!PlotterPython@{Plotter\-Python}}
+\subsubsection[{call\-Plot}]{\setlength{\rightskip}{0pt plus 5cm}void Plotter\-Python\-::call\-Plot (
+\begin{DoxyParamCaption}
+\item[{string}]{result\-Dir, }
+\item[{string}]{plotter\-Script, }
+\item[{string}]{system\-Script, }
+\item[{string}]{bench\-Name, }
+\item[{string}]{bench\-Id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}, {\ttfamily [virtual]}}}\label{classPlotterPython_a3f9a49139e11187803ce9b7011a6d570}
+Calls the command for executing the plotting with Python.
+
+
+\begin{DoxyParams}{Parameters}
+{\em result\-Dir} & Directory where result files of the benchmark are stored. \\
+\hline
+{\em plotter\-Script} & Relative path to the individual plotting script for the benchmark. \\
+\hline
+{\em system\-Script} & Relative path to the general plotting script for the plotter. \\
+\hline
+{\em bench\-Name} & Name of the benchmark that will be plotted. \\
+\hline
+{\em bench\-Id} & Id of the benchmark that will be plotted. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classAbstractPlotter_aba080703874b001edccae14d94acbce4}{Abstract\-Plotter}.
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{PlotterPython_8h}{Plotter\-Python.\-h}\item 
+src/Plotter\-Python.\-cpp\end{DoxyCompactItemize}
