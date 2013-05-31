@@ -81,7 +81,6 @@ class AbstractBenchmark {
 
 		FileWriter *_filewriter;
 		DirectoryManager _directorymanager;
-  		//Plotter *_plotter;		//später
 
 		//modes for supressing output and running fastest possible configuration
   		bool _fastMode;
