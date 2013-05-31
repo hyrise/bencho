@@ -1,3 +1,9 @@
+/** @file AbstractPlotter.h
+ *
+ * Contains the class definition of AbstractPlotter
+ *
+ */
+
 #ifndef ABSTRACTBENCHMARK_H
 #define ABSTRACTBENCHMARK_H
 
@@ -25,6 +31,13 @@ const int combination_incache = -1;
 
 class FileWriter;
 
+
+/**
+ * @brief Base benchmark class.
+ *
+ * AbstractBenchmark is the base class for creating your benchmarks.
+ * Detailed description coming soon.
+ */
 class AbstractBenchmark {
 
 	protected:
