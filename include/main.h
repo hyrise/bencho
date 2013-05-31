@@ -1,3 +1,9 @@
+/**
+ * @file main.h
+ *
+ * Contains the makro for the main() function used in own benchmarks.
+ */
+
 #ifndef MAIN_H
 #define MAIN_H
 

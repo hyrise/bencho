@@ -15,7 +15,7 @@ The following features are currently implemented:
   * Supports warm-up runs, calibration runs, chache clearing, parameter versions
   * All common aggregating functions included in an Aggregator
   * Save results in CSV formated files
-  * Plot results directly via GnuPlot
+  * Plot results directly via Gnuplot, Python matplotlib or R ggplot2
   
 ## Building
 
@@ -33,7 +33,7 @@ The Bencho framework is now ready to use. On how to include this framework in yo
 
 ## Documentation
 
-The Bencho project provides a detailed documentation on how to use and set up the framework. The ready build documentation can be found in the docs directory.
+The Bencho project provides a doxygen documentation of all classes that you find in the doxygen folder.
 
 ## License
 

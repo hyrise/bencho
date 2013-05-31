@@ -1,0 +1,5 @@
+<map id="AbstractPlotter" name="AbstractPlotter">
+<area shape="rect" id="node3" href="$classPlotterGnuplot.html" title="Class for plotting results with Gnuplot." alt="" coords="5,83,109,112"/>
+<area shape="rect" id="node5" href="$classPlotterPython.html" title="Class for plotting results with Python matplotlib." alt="" coords="133,83,235,112"/>
+<area shape="rect" id="node7" href="$classPlotterR.html" title="Class for plotting results with R ggplot2." alt="" coords="259,83,328,112"/>
+</map>

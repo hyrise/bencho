@@ -1,3 +1,8 @@
+/** @file FileWriter.h
+ *
+ * Contains the class definition of FileWriter.
+ */
+
 #ifndef PDFCREATOR_H
 #define PDFCREATOR_H
 
@@ -13,6 +18,13 @@ using namespace std;
 
 class AbstractBenchmark;
 
+/**
+ * @brief Class for saving results in a csv file.
+ * 
+ * This class incapsulates the functionality to save the results in a csv
+ * file, which then, for example, can be used for plotting. All of this should 
+ * be initiated automatically by the Bencho Framework. 
+ */
 class FileWriter
 {
 

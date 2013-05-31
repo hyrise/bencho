@@ -1,0 +1,80 @@
+\hypertarget{classPlotterR}{\section{Plotter\-R Class Reference}
+\label{classPlotterR}\index{Plotter\-R@{Plotter\-R}}
+}
+
+
+Class for plotting results with R ggplot2.  
+
+
+
+
+{\ttfamily \#include $<$Plotter\-R.\-h$>$}
+
+
+
+Inheritance diagram for Plotter\-R\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=162pt]{classPlotterR__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Plotter\-R\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=197pt]{classPlotterR__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classPlotterR_a7bd63fe36ad80ed3cfe1578d46f7a296}{call\-Plot} (string result\-Dir, string plotter\-Script, string system\-Script, string bench\-Name, string bench\-Id)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Class for plotting results with R ggplot2. 
+
+\hyperlink{classPlotterR}{Plotter\-R} is derived from \hyperlink{classAbstractPlotter}{Abstract\-Plotter} and serves as a plotter class for plotting results with R ggplot2. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classPlotterR_a7bd63fe36ad80ed3cfe1578d46f7a296}{\index{Plotter\-R@{Plotter\-R}!call\-Plot@{call\-Plot}}
+\index{call\-Plot@{call\-Plot}!PlotterR@{Plotter\-R}}
+\subsubsection[{call\-Plot}]{\setlength{\rightskip}{0pt plus 5cm}void Plotter\-R\-::call\-Plot (
+\begin{DoxyParamCaption}
+\item[{string}]{result\-Dir, }
+\item[{string}]{plotter\-Script, }
+\item[{string}]{system\-Script, }
+\item[{string}]{bench\-Name, }
+\item[{string}]{bench\-Id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}, {\ttfamily [virtual]}}}\label{classPlotterR_a7bd63fe36ad80ed3cfe1578d46f7a296}
+Calls the command for executing the plotting with R.
+
+
+\begin{DoxyParams}{Parameters}
+{\em result\-Dir} & Directory where result files of the benchmark are stored. \\
+\hline
+{\em plotter\-Script} & Relative path to the individual plotting script for the benchmark. \\
+\hline
+{\em system\-Script} & Relative path to the general plotting script for the plotter. \\
+\hline
+{\em bench\-Name} & Name of the benchmark that will be plotted. \\
+\hline
+{\em bench\-Id} & Id of the benchmark that will be plotted. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classAbstractPlotter_aba080703874b001edccae14d94acbce4}{Abstract\-Plotter}.
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{PlotterR_8h}{Plotter\-R.\-h}\item 
+src/Plotter\-R.\-cpp\end{DoxyCompactItemize}
