@@ -7,6 +7,8 @@ void PlotterPython::callPlot(string resultDir, string plotterScript, string syst
 
 	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
 
-	string command = "python " + systemScript + " -f " + resultFile + " -s " + plotterScript;
-	system(command.c_str());
+    string command1 = "export PYTHONPATH=$PYTHONPATH: " + getSystemScriptDir();
+	string command2 = "python " + plotterScript + " -f " + resultFile + " -s " + plotterScript;
+    system(command1.c_str());
+	system(command2.c_str());
 }
