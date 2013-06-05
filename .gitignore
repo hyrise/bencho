@@ -20,4 +20,7 @@ build/
 plot_last_bench.txt
 plot_last_run.txt
 settings.conf
+
+# Documentation
+doxygen/
 docs/source/_build/
