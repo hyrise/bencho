@@ -13,17 +13,18 @@ from matplotlib.ticker import MaxNLocator
 class Pyplot:
 
 	def __init__(self):
-		parser = getOptionParser()
+		parser = self.getOptionParser()
 		(options, args) = parser.parse_args(sys.argv, None)
 
 		if options.file == None:
 			parser.print_help()
 			sys.exit(0)
 
-		plots=list()
+		self.plots=list()
+		self.settings = {}
 
-		setUp()
-		plot(options.file, options.scriptfile)
+		self.setUp()
+		self.plot(options.file, options.scriptfile)
 
 	def getOptionParser(self):
 	    parser = OptionParser()
@@ -31,24 +32,23 @@ class Pyplot:
 	    parser.add_option('-s', '--scriptfile', help="set benchmarks script file", type='string', dest='scriptfile')
 	    return parser
 
-	def setUp(this):
+	def setUp(self):
 
 		#defining default settings
-		settings = {}
-		settings['title'] = scriptFile[:scriptFile.find('.')]
-		settings['type'] ='line'
-		settings['xScale'] = 'linear'
-		settings['xScaleBase'] = 10
-		settings['xLabel'] = 'par_stride'
-		settings['yLabel'] = 'CPU Cycles'
-		settings['yDivider'] = 1
-		settings['xDivider'] = 1
-		settings['grid'] = 'none'
-		settings['plotList'] = []
-		settings['figureSize'] = (6.5, 6)
-		settings['numberOfYTicks'] = False
+		self.settings['title'] = scriptFile[:scriptFile.find('.')]
+		self.settings['type'] ='line'
+		self.settings['xScale'] = 'linear'
+		self.settings['xScaleBase'] = 10
+		self.settings['xLabel'] = 'par_stride'
+		self.settings['yLabel'] = 'CPU Cycles'
+		self.settings['yDivider'] = 1
+		self.settings['xDivider'] = 1
+		self.settings['grid'] = 'none'
+		self.settings['plotList'] = []
+		self.settings['figureSize'] = (6.5, 6)
+		self.settings['numberOfYTicks'] = False
 
-		this.plots.append(dict(settings))
+		self.plots.append(dict(self.settings))
 
 	def plot(self, csvFile, scriptFile):
 
@@ -59,13 +59,13 @@ class Pyplot:
 
 		plotList = list()
 
-		for settingsList in plots:
+		for settingsList in self.plots:
 
 			data = list()
 			if settingsList['type'] == 'boxplot':
-				data = getDataForBoxplot(csvFile, settingsList)
+				data = self.getDataForBoxplot(csvFile, settingsList)
 			else:
-				data = getDataForNormalPlot(csvFile, settingsList)
+				data = self.getDataForNormalPlot(csvFile, settingsList)
 
 			if data:
 
