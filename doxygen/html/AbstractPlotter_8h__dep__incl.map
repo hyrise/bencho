@@ -1,8 +1,0 @@
-<map id="include/AbstractPlotter.h" name="include/AbstractPlotter.h">
-<area shape="rect" id="node3" href="$AbstractBenchmark_8h_source.html" title="include/AbstractBenchmark.h" alt="" coords="181,160,373,189"/>
-<area shape="rect" id="node14" href="$PlotterGnuplot_8h.html" title="include/PlotterGnuplot.h" alt="" coords="80,83,240,112"/>
-<area shape="rect" id="node19" href="$PlotterPython_8h.html" title="include/PlotterPython.h" alt="" coords="315,83,472,112"/>
-<area shape="rect" id="node24" href="$PlotterR_8h.html" title="include/PlotterR.h" alt="" coords="496,83,621,112"/>
-<area shape="rect" id="node5" href="$FileWriter_8h.html" title="include/FileWriter.h" alt="" coords="135,237,268,267"/>
-<area shape="rect" id="node10" href="$bencho_8h_source.html" title="include/bencho.h" alt="" coords="292,237,412,267"/>
-</map>
