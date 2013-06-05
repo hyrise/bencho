@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# a line plot with errorbars
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -10,37 +10,51 @@ from optparse import OptionParser
 from matplotlib.ticker import MaxNLocator
 
 
+## Base class to plot with Python matplotlib.
+#
+#  Pyplot is the base class that people can derive from in your [benchmark].py,
+#  to alter/add settings or plot methods to plot their data with python matplotlib.
 class Pyplot:
 
+	## @brief The constructor
+	#
+	#  Parses the given arguments to get csv file and benchmark name using OptionParser.
+	#  Then initializes plotting by reading default settings and user given settings.
+	#  Finalizes with plotting the data.
 	def __init__(self):
 		parser = self.getOptionParser()
-		(options, args) = parser.parse_args(sys.argv, None)
+		(self.options, args) = parser.parse_args(sys.argv, None)
 
-		if options.file == None:
+		if self.options.file == None:
 			parser.print_help()
 			sys.exit(0)
 
 		self.plots=list()
 		self.settings = {}
 
+		self.setDefaultSettings()
 		self.setUp()
-		self.plot(options.file, options.scriptfile)
+		self.plot(self.options.file)
 
+	## Parses the given arguments
+	#
+	#  @return a parser that can be used to extract the arguments.
 	def getOptionParser(self):
 	    parser = OptionParser()
 	    parser.add_option('-f', '--file', help="set csv file", type='string', dest='file')
-	    parser.add_option('-s', '--scriptfile', help="set benchmarks script file", type='string', dest='scriptfile')
+	    parser.add_option('-n', '--name', help="set benchmarks name", type='string', dest='benchname')
 	    return parser
 
-	def setUp(self):
+	## Sets default settings that are needed by the script (but probably will be overwritten)
+	def setDefaultSettings(self):
 
 		#defining default settings
-		self.settings['title'] = scriptFile[:scriptFile.find('.')]
+		self.settings['title'] = self.options.benchname
 		self.settings['type'] ='line'
 		self.settings['xScale'] = 'linear'
 		self.settings['xScaleBase'] = 10
-		self.settings['xLabel'] = 'par_stride'
-		self.settings['yLabel'] = 'CPU Cycles'
+		self.settings['xLabel'] = ''
+		self.settings['yLabel'] = ''
 		self.settings['yDivider'] = 1
 		self.settings['xDivider'] = 1
 		self.settings['grid'] = 'none'
@@ -50,7 +64,23 @@ class Pyplot:
 
 		self.plots.append(dict(self.settings))
 
-	def plot(self, csvFile, scriptFile):
+	## @brief Overwrite this to set default settings.
+	#
+	#  Function that allows to alter/add (in derived class) just few settings
+	#  without having to overwrite the complete list of default settings.
+	#  Will be automatically called in constructor after setDefaultSettings()
+	def setUp(self):
+		#overwrite in derived class
+		return
+
+	## @brief Invokes plotting.
+	#
+	#  Function that provides a default and general plotting method for normal plots
+	#  as well as boxplots using custom settings that you specify in setUp().
+	#  Should be overwritten for having completely different types of plots.
+	#
+	#  @param csvFile Path to the csv file that contains the data to be plotted.
+	def plot(self, csvFile):
 
 		plotNumber = 1
 		plotDir = csvFile[:csvFile.rfind('/') + 1]
@@ -103,6 +133,12 @@ class Pyplot:
 
 		return plotList
 
+	## The data grabbing function for normal plots.
+	#
+	#  @param csvFile Path to the csv file that contains the data.
+	#  @param settingsList The actual used settings specified in setDefaultSetting() and/or setUp().
+	#
+	#  @return A list containing the ready-to-plot data.
 	def getDataForNormalPlot(self, csvFile, settingsList):
 
 		csvReader = csv.reader(open(csvFile))
@@ -137,6 +173,12 @@ class Pyplot:
 			return [x, y, lineLabels]
 		return False
 
+	## The data grabbing function for boxplots.
+	#
+	#  @param csvFile Path to the csv file that contains the data.
+	#  @param settingsList The actual used settings specified in setDefaultSetting() and/or setUp().
+	#
+	#  @return A list containing the ready-to-plot data.
 	def getDataForBoxplot(self, csvFile, settingsList):
 
 		csvReader = csv.reader(open(csvFile))
@@ -185,3 +227,6 @@ class Pyplot:
 				
 			return [x, y, plotLabels]
 		return False
+
+	## @var plots
+	#  List that will be filled with the settings for each plot.
