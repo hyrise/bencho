@@ -240,7 +240,7 @@ class AbstractBenchmark {
 		 *
 		 * @params max_deviation The maximum deviation.
 		 */
-		void setMaxDeviation(size_t max_deviation);
+		void setMaxDeviation(double max_deviation);
 
 		/**
 		 * @brief Activate the fast mode.

@@ -4,12 +4,12 @@
 ////////////////////////////////////// Contructor and Destructor //////////////////////////////////////
 
 AbstractBenchmark::AbstractBenchmark() :
-    _max_runs(0),
+    _max_runs(1),
     _warm_up_runs(2),
     _calibration_runs(5),
     _is_initialized(false),
     _do_incache_calibration(false),
-    _max_deviation(0.05),
+    _max_deviation(0),
 	_name("default"),
     _do_papi_manual(false),
     _current_perf_counter(NULL),
@@ -271,7 +271,7 @@ void AbstractBenchmark::execute(int max_runs, double max_deviation) {
 
     calcCombinations();
 
-    if (max_runs >= 0) {
+    if (max_runs >= 1) {
 
         _max_runs = max_runs;
     }
@@ -466,9 +466,8 @@ void AbstractBenchmark::executeCombination(map<string, int> parameters, int comb
             double current_deviation = _max_deviation;
             results.clear();
 
-            if (max_runs == 0) {
+            if (_max_deviation > 0) {
 
-                max_runs = 10;
                 cout << "Run: " << flush;
 
                 while (current_deviation >= _max_deviation) {
@@ -701,7 +700,7 @@ void AbstractBenchmark::setMaxRuns(size_t max_runs) {
     _max_runs = max_runs;
 }
 
-void AbstractBenchmark::setMaxDeviation(size_t max_deviation) {
+void AbstractBenchmark::setMaxDeviation(double max_deviation) {
     _max_deviation = max_deviation;
 }
 
