@@ -701,6 +701,10 @@ void AbstractBenchmark::setMaxRuns(size_t max_runs) {
     _max_runs = max_runs;
 }
 
+void AbstractBenchmark::setMaxDeviation(size_t max_deviation) {
+    _max_deviation = max_deviation;
+}
+
 void AbstractBenchmark::setWarmUpRuns(size_t warm_up_runs) {
     _warm_up_runs = warm_up_runs;
 }

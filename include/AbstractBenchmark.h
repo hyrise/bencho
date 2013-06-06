@@ -1,7 +1,6 @@
-/** @file AbstractPlotter.h
- *
- * Contains the class definition of AbstractPlotter
- *
+/** @file AbstractBenchmark.h
+ * 
+ * Contains the class definition of AbstractBenchmark.
  */
 
 #ifndef ABSTRACTBENCHMARK_H
@@ -31,12 +30,13 @@ const int combination_incache = -1;
 
 class FileWriter;
 
-
 /**
- * @brief Base benchmark class.
+ * @brief Abstract class for to be subclassed by benchmarks. 
  *
- * AbstractBenchmark is the base class for creating your benchmarks.
- * Detailed description coming soon.
+ * The AbstractBenchmark class is the main class of the Bencho Framework, since it is
+ * used as the super class for all benchmarks. With it's helper classes it organizes
+ * everything from the input parameters via the calculation and execution of the combinations
+ * through to the creation of the result files.
  */
 class AbstractBenchmark {
 
@@ -81,6 +81,7 @@ class AbstractBenchmark {
 
 		FileWriter *_filewriter;
 		DirectoryManager _directorymanager;
+  		//Plotter *_plotter;		//später
 
 		//modes for supressing output and running fastest possible configuration
   		bool _fastMode;
@@ -101,27 +102,27 @@ class AbstractBenchmark {
 
 		// Methods to implement in specialized class
 	    
-	    // does the actual test run. execution time is measured. should be overwritten and implemented by specialized class.
+	    /// This does the actual test run. execution time is measured. should be overwritten and implemented by specialized class.
 	    virtual void doTheTest(map<string, int> parameters, int combination, int test_series_id, int run) = 0;
 	    
 	    virtual int getSequenceId(map<string, int> parameters, int test_series_id) const;
 
-	    // prepare one run (executed before do_the_test)
+	    /// Prepare one run (executed before do_the_test)
 	    virtual void prepareRun(map<string, int> parameters, int combination, int test_series_id, int run);
 	    
-	    // prepare one run (executed before do_the_test, but after cache cleared)
+	    /// Prepare one run (executed before do_the_test, but after cache cleared)
 	    virtual void prepareRunAfterCacheCleared(map<string, int> parameters, int combination, int test_series_id, int run);
 
-	    // prepare one combination (executed once before execute_combination)
+	    /// Prepare one combination (executed once before execute_combination)
 	    virtual void prepareCombination(map<string, int> parameters, int combination);
 
-	    // finish one run (executed after do_the_test)
+	    /// Finish one run (executed after do_the_test)
 	    virtual void finishRun(map<string, int> parameters, int combination, int test_series_id, int run);
 	    
-	    // finish one combination (executed after execute_combination)
+	    /// Finish one combination (executed after execute_combination)
 	    virtual void finishCombination(map<string, int> parameters, int combination);
 	    
-	    // prepare start (executed once)
+	    /// Prepare start (executed once)
 	    virtual void prepareStart() { };
 
 	    void calibrateInCache();
@@ -130,10 +131,39 @@ class AbstractBenchmark {
 		AbstractBenchmark();
     	virtual ~AbstractBenchmark();
  
-		//add a parameter for execution
+		/**
+		 * @brief Add parameters to the benchmark. 
+		 *
+		 * Please note, that this function expects a Parameter object of
+		 * Bencho's Parameter class. @see Parameter
+		 *
+		 * @param parameter A Pointer to a Parameter object.
+		 * @param version A String specifying the benchmark version this Parameter belongs to.
+		 */
 		void addParameter(Parameter *parameter, string version = "first");
 
+		/**
+		 * @brief Add counters for perfomance measurement. 
+		 *
+		 * This function takes PAPI perfomance counters and adds them to 
+		 * the benchmark to be measured. For a complete list of performance counters
+		 * take a look at <a href="md_PAPI-Counter.html">PAPI Performance Counters</a>.
+		 *
+		 * Note: If you do not have the PAPI library installed all performance counters will fall back to simple time measurement.
+		 *
+		 * @param event_name The name of a PAPI performance counter.
+		 */
 		void addPerformanceCounter(string event_name);
+
+		/**
+		 * @brief Register the different Test Series.
+		 * 
+		 * If you have different test series for your benchmark, like a random series and a sequenced series 
+		 * you can add them all to your benchmark class via the addTestSeries() function. The ids should be unique.
+		 *
+		 * @param id A unique id for your test series.
+		 * @param name The name of your test series.
+		 */
 		void addTestSeries(int id, string name);
 		void addGraph(int id, string name);
     	void addAllTestSeriesAsGraphs();
@@ -143,6 +173,19 @@ class AbstractBenchmark {
 		FileWriter *getFileWriter();
 		DirectoryManager *getDirectoryManager();
 
+		/**
+		 * @brief Run the complete benchmark.
+		 *
+		 * This funktion gets called in the main function of each benchmark and 
+		 * starts the whole execution process. The function takes a number of runs 
+		 * each combination should be executed at maximum or a maximum deviation. If a 
+		 * maximum deviation is specified each combination gets executed again and again until this
+		 * deviation is reached. However, usually these values get passed via setMaxRuns() and 
+		 * setMaxDeviation() in your benchmarks initialize() method, were thay will have the same effects.
+		 * 
+		 * @params max_runs The maximum times one combination should be executed.
+		 * @params max_deviation The maximum deviation of teh results of each combination.
+		 */
 		int full(int max_runs = -1, double max_deviation = -1);
 		void printResults();
 		void printCombinations();
@@ -150,30 +193,141 @@ class AbstractBenchmark {
 		void callPlotterWithSettings(AbstractPlotter *settingsPlotter);
 		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter, string fileEnding);
 
+		/**
+		 * @brief Set the benchmark name.
+		 *
+		 * Use this function to set the benchmark name. This name is used for identification throughout the 
+		 * the Bencho framework.
+		 *
+		 * @params name Name of the specific benchmark.
+		 */
 		void setName(string name);
+
+		/**
+		 * @brief Set an input parameter to provide the values on the x-axis.
+		 *
+		 * This function takes a name of one of the parameters you add to the benchmark,
+		 * which will then be used as x values in all plotted graphs.
+		 *
+		 * @params id Name of a parameter.
+		 */
 		void setSequenceId(string id);
+
+		/**
+		 * @brief Set the number of warm up runs.
+		 *
+		 * Use this function to specify warm up runs for your benchmark. These will be executed
+		 * before every combination.
+		 *
+		 * @params warm_up_runs Number of warm up runs.
+		 */
 		void setWarmUpRuns(size_t warm_up_runs);
+
+		/**
+		 * @brief Set maximum of runs.
+		 *
+		 * Use this function to set the maximum amount of runs each benchmark should be executed.
+		 *
+		 * @params max_runs Maximum amount of runs.
+		 */
 		void setMaxRuns(size_t max_runs);
+
+		/**
+		 * @brief Set maximum deviation.
+		 *
+		 * Use this function to specify a maximum deviation the results of each 
+		 * combination of your benchmarks should have.
+		 *
+		 * @params max_deviation The maximum deviation.
+		 */
+		void setMaxDeviation(size_t max_deviation);
+
+		/**
+		 * @brief Activate the fast mode.
+		 *
+		 * In the fast mode the benchmark will be executed as fast as possible. Therefore
+		 * all framework output is muted and each combination will run only once. This mode can also 
+		 * be activated after compilation by running the benchmark via 
+		 * \code
+		 * 		> make run fast=1
+		 * \endcode
+		 *
+		 * @params fastMode Flag for fast mode.
+		 */
 		void setFastMode(bool fastMode);
+
+		/**
+		 * @brief Activate the silent mode.
+		 *
+		 * The silent mode deactivates all output by the framework. Own output of your benchmark and
+		 * and some errors will still be displayed. This mode can also be activated after
+		 * compilation by running the benchmark via 
+		 * \code
+		 * 		> make run silent=1
+		 * \endcode
+		 *
+		 * @params silentMode Flag for silent mode.
+		 */
 		void setSilentMode(bool silentMode);
+
+		/**
+		 * @brief Activate raw data outpu to csv.
+		 *
+		 * This flags enables the saving of all results of all runs for your benchmark,
+		 * which then for example can be used for plotting.
+		 *
+		 * @params rawOutput Flag for the raw data output.
+		 */
 		void setRawDataOutput(bool rawOutput);
+
+		/**
+		 * @brief Set the aggregating function
+		 *
+		 * This should be used to set the function used to aggreagate the results 
+		 * of each combination. Available are Average, Median, Min and Max.
+		 * @see AggregationType
+		 *
+		 * @params function The aggregating function. 
+		 */
 		void setAggregatingFunction(AggregationType::Function function);
 
+		/// Returns the benchmarks name.
 		string getName();
 		string getUnit();
+
+		/// Returns the number of warm up runs.
 		size_t getWarmUpRuns();
+
+		/// Returns the maximum number of runs.
 		size_t getMaxRuns();
 		virtual long long getValue(size_t graph_id, string perf_ctr, size_t pos, map<string, int> parameters);
+		
+		/// Returns the fast mode flag.
 		bool getFastMode();
+
+		/// Returns the silent mode flag.
 		bool getSilentMode();
+
+		/// Returns the raw data output flag.
 		bool getRawDataOutput();
+
+		/// Returns the aggregating function.
 		AggregationType::Function getAggregatingFunction();
+
+		/// Returns all combinations.
     	vector<map<string, int> > &getCombinations();
 
+    	/// Returns the current version of your Parameters.
 		string getCurrentVersion();
+
+		/// Returns the parameters.
 		vector<Parameter> *getParameters();
 		size_t getRowCount();
+
+		/// Returns the current test series.
 		map<int, string> &getTestSeries();
+
+		/// Returns all specified performance counters.
 		vector<string> &getPerformanceCounters();
 
 		vector<long long> &getResult_x(size_t test_series, string performance_counter);
@@ -182,9 +336,12 @@ class AbstractBenchmark {
     	vector<long long> &getResult_error(size_t test_series, string performance_counter);
     	long long getResult_incache(string test_series);
 
+    	/// Executes the benchmark.
         void execute(int max_runs, double max_deviation);
 
         void displayHeader();
+
+        /// Helper function to clear the cache before benchmark execution.
         void clearCache();
 };
 
