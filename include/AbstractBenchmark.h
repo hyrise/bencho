@@ -189,8 +189,31 @@ class AbstractBenchmark {
 		int full(int max_runs = -1, double max_deviation = -1);
 		void printResults();
 		void printCombinations();
+
+		/**
+		 * @brief Plots the results a benchmark run.
+		 *
+		 * Call this function to invoke plotting, either after running a benchmark
+		 * or if you want to plot something independently.
+		 *
+		 * @param isDefault true if you want the framework to automatically check the last used benchmark + id, false if you want to set it yourself.
+		 */
 		void plotResults(bool isDefault = true);
+
+		/**
+		 * @brief Calls every defined plotter with specific settings.
+		 *
+		 * @param settingsPlotter Pointer to an AbstractPlotter which holds the settings for the other plotters.
+		 */
 		void callPlotterWithSettings(AbstractPlotter *settingsPlotter);
+
+		/**
+		 * @brief Calls one specific plotter.
+		 *
+		 * @param specificPlotter The plotter you want to plot the results.
+		 * @param settingsPlotter The plotter that holds the settings.
+		 * @param fileEnding The ending with which the plotting script file ends, e.g. ".gp", ".py", ".r".
+		 */
 		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter, string fileEnding);
 
 		/**
@@ -339,6 +362,7 @@ class AbstractBenchmark {
     	/// Executes the benchmark.
         void execute(int max_runs, double max_deviation);
 
+        /// Displays used/missing perf.counters according to the [benchmark].gp - script.
         void displayHeader();
 
         /// Helper function to clear the cache before benchmark execution.
