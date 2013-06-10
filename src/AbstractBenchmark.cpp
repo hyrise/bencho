@@ -593,7 +593,6 @@ int AbstractBenchmark::full(int max_runs, double max_deviation) {
     _filewriter->dumpResult(this);
     _filewriter->saveParameters(this);
 
-    // plotResultsWithGnuplot();
     plotResults();
 
     return 0;
