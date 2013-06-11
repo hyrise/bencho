@@ -4,19 +4,19 @@
 ////////////////////////////////////// Contructor and Destructor //////////////////////////////////////
 
 AbstractBenchmark::AbstractBenchmark() :
-    _max_runs(1),
-    _warm_up_runs(2),
-    _calibration_runs(5),
-    _is_initialized(false),
-    _do_incache_calibration(false),
-    _max_deviation(0),
-	_name("default"),
-    _do_papi_manual(false),
-    _current_perf_counter(NULL),
-    _fastMode(false),
-    _silentMode(false),
-    _rawOutput(false),
-    _filewriter(new FileWriter(this))
+    _max_runs(1)
+,   _warm_up_runs(2)
+,   _calibration_runs(5)
+,   _is_initialized(false)
+,   _do_incache_calibration(false)
+,   _max_deviation(0)
+,   _name("default")
+,   _do_papi_manual(false)
+,   _current_perf_counter(NULL)
+,   _fastMode(false)
+,   _silentMode(false)
+,   _rawOutput(false)
+,   _filewriter(new FileWriter(this))
 {
 
     cout.setf(ios::fixed, ios::floatfield);
