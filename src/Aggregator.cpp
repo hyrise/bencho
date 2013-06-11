@@ -1,6 +1,13 @@
 #include "Aggregator.h"
 
-Aggregator::Aggregator(vector<long long> data):
+#include <vector>
+#include <numeric>
+#include <math.h>
+#include <algorithm>
+#include <iostream>
+
+
+Aggregator::Aggregator(std::vector<long long> data):
     _data(data)
 {
 
@@ -10,7 +17,7 @@ Aggregator::~Aggregator() {
 
 }
 
-void Aggregator::setData(vector<long long> data) {
+void Aggregator::setData(std::vector<long long> data) {
     _data = data;
 }
 
@@ -29,7 +36,7 @@ long long Aggregator::calculateAverage() {
 
 long long Aggregator::calculateMedian() {
 
-    vector<long long> vector_temp(_data.size());
+    std::vector<long long> vector_temp(_data.size());
     copy(_data.begin(), _data.end(), vector_temp.begin());
     sort(vector_temp.begin(), vector_temp.end());
 

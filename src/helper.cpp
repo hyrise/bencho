@@ -1,5 +1,6 @@
-
 #include "helper.h"
+
+#include <stdio.h>
 
 #define CACHESIZE_IN_MB 15
 

@@ -32,7 +32,7 @@ private:
 	 * @param benchName Name of the benchmark that will be plotted.
 	 * @param benchId Id of the benchmark that will be plotted.
 	 */
-	void callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId);
+	void callPlot(std::string resultDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId);
 };
 
 

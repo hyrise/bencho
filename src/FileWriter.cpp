@@ -1,7 +1,16 @@
 #include "FileWriter.h"
-#include "ConfigFile.h"
+
+#include <string>
+#include <map>
+#include <vector>
+#include <iostream>
+#include <fstream>
 #include <stdlib.h>
 #include <unistd.h>
+
+#include "DirectoryManager.h"
+#include "Parameter.h"
+#include "ConfigFile.h"
 
 #define STR_EXPAND(tok) #tok
 #define STR(tok) STR_EXPAND(tok)
@@ -18,43 +27,43 @@ void FileWriter::psToPdf(string filename)
     string command = ConfigFile::getExecutable("ps2pdf") + " " + filename + ".ps " + filename + ".pdf";
     int ret = system(command.c_str());
     _benchmark->getDirectoryManager()->removeFile(filename + ".ps");
-    cout << "Chart written to " << filename << ".pdf" << endl;
+    std::cout << "Chart written to " << filename << ".pdf" << std::endl;
 }
 
 void FileWriter::saveParameters(AbstractBenchmark *benchmark)
 {
-    ofstream file;
-    vector<Parameter>::iterator p;
+    std::ofstream file;
+    std::vector<Parameter>::iterator p;
 
 
     file.open (benchmark->getDirectoryManager()->getFilename(benchmark->getName(), ".parameter.txt").c_str());
     
-    file << benchmark->getCurrentVersion() << endl;
-    file << endl << benchmark->getName() << endl;
-    file << "################################" << endl;
+    file << benchmark->getCurrentVersion() << std::endl;
+    file << std::endl << benchmark->getName() << std::endl;
+    file << "################################" << std::endl;
 
     for (p = benchmark->getParameters()->begin(); p != benchmark->getParameters()->end(); p++)
     {
 
         if (p->getValues().size() == 1)
         {
-            file << p->getName() << ": " << p->getValues().at(0) << endl;
+            file << p->getName() << ": " << p->getValues().at(0) << std::endl;
         }
         else if (p->getValues().size() > 1)
         {
-            file << p->getName() << ": from " << p->getValues().front() << " to " << p->getValues().back() << " in " << p->getValues().size() << " steps." << endl;
+            file << p->getName() << ": from " << p->getValues().front() << " to " << p->getValues().back() << " in " << p->getValues().size() << " steps." << std::endl;
         }
     }
     
     char hostname[512];
     gethostname(hostname, 512);
     
-    file << "Computer: " << hostname << endl;
-    //file << "Executable: " << global_program_invocation_name << endl;  //ersetzten?
+    file << "Computer: " << hostname << std::endl;
+    //file << "Executable: " << global_program_invocation_name << std::endl;  //ersetzten?
     
     // copy setting.conf
     file << "Settings: ";
-    ifstream settings_file(STR(BENCHO_DIR)"/settings.conf");
+    std::ifstream settings_file(STR(BENCHO_DIR)"/settings.conf");
     if (settings_file.is_open())
     {
         string settings_line;
@@ -70,16 +79,16 @@ void FileWriter::saveParameters(AbstractBenchmark *benchmark)
         settings_file.close();
     }
     
-    file << endl;
+    file << std::endl;
     file.close();
 
-    cout << "Parameters written to " << benchmark->getDirectoryManager()->getFilename(benchmark->getName(), ".parameter.txt") << endl;
+    std::cout << "Parameters written to " << benchmark->getDirectoryManager()->getFilename(benchmark->getName(), ".parameter.txt") << std::endl;
 }
 
 void FileWriter::dumpResult(AbstractBenchmark *benchmark)
 {
-    ofstream file;
-    map<int, string>::iterator p;
+    std::ofstream file;
+    std::map<int, string>::iterator p;
     size_t lines = benchmark->getRowCount();
     file.open (benchmark->getDirectoryManager()->getFilename(benchmark->getName(), ".result.csv").c_str());
 
@@ -89,13 +98,13 @@ void FileWriter::dumpResult(AbstractBenchmark *benchmark)
 
     file << "x ";
 
-    vector<map<string, int> > &combinations = benchmark->getCombinations();
+    std::vector<std::map<string, int> > &combinations = benchmark->getCombinations();
 
-    map<string, int>::iterator it2;
+    std::map<string, int>::iterator it2;
     for (it2 = combinations[0].begin(); it2 != combinations[0].end(); it2++)
         file << "par_" << it2->first << " ";
 
-    map<int, string>::iterator it;
+    std::map<int, string>::iterator it;
     for (it = benchmark->getTestSeries().begin(); it != benchmark->getTestSeries().end(); it++)
     {
         file << it->second << "_incache ";
@@ -114,7 +123,7 @@ void FileWriter::dumpResult(AbstractBenchmark *benchmark)
         }
     }
 
-    file << endl;
+    file << std::endl;
 
     // write data
 
@@ -147,20 +156,20 @@ void FileWriter::dumpResult(AbstractBenchmark *benchmark)
             }
         }
 
-        file << endl;
+        file << std::endl;
     }
 
     file.close();
 
-    cout << "CSV written to " << benchmark->getDirectoryManager()->getFilename(benchmark->getName(), ".result.csv") << endl;
+    std::cout << "CSV written to " << benchmark->getDirectoryManager()->getFilename(benchmark->getName(), ".result.csv") << std::endl;
 }
 
-vector<string> FileWriter::getHeaders(AbstractBenchmark *benchmark)
+std::vector<string> FileWriter::getHeaders(AbstractBenchmark *benchmark)
 {
-    vector<string> headers;
+    std::vector<string> headers;
     size_t lines = benchmark->getRowCount();
 
-    map<int, string>::iterator it;
+    std::map<int, string>::iterator it;
     for (it = benchmark->getTestSeries().begin(); it != benchmark->getTestSeries().end(); it++)
     {
         headers.push_back(it->second + "_incache ");

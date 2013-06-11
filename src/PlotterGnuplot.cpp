@@ -1,16 +1,26 @@
 #include "PlotterGnuplot.h"
 
+#include <stdio.h>
+#include <cstdlib>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
-void PlotterGnuplot::callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId)
+#include "resultFileHelper.h"
+
+
+void PlotterGnuplot::callPlot(std::string resultDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId)
 {
 	_terminal = TERMINAL;
-	string resultFile = getResultFile(benchName, benchId, resultDir);
+	std::string resultFile = getResultFile(benchName, benchId, resultDir);
 
-	string finalPlotterScript = createFinalScript(resultFile, plotterScript, systemScript);
+	std::string finalPlotterScript = createFinalScript(resultFile, plotterScript, systemScript);
 
-	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
+	std::cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << std::endl;
 
-	string command = "gnuplot " + finalPlotterScript;
+	std::string command = "gnuplot " + finalPlotterScript;
 	system(command.c_str());
 
 	// Clean up
@@ -20,9 +30,9 @@ void PlotterGnuplot::callPlot(string resultDir, string plotterScript, string sys
 	}
 }
 
-string PlotterGnuplot::createFinalScript(string resultFile, string baseScript, string systemScript)
+std::string PlotterGnuplot::createFinalScript(std::string resultFile, std::string baseScript, std::string systemScript)
 {
-	string finalPlotterScript = baseScript;
+	std::string finalPlotterScript = baseScript;
 	finalPlotterScript = finalPlotterScript.erase(finalPlotterScript.find(".gp")) + "_final.gp";
 
 	mergeSystemScript(baseScript, systemScript, finalPlotterScript);
@@ -33,39 +43,39 @@ string PlotterGnuplot::createFinalScript(string resultFile, string baseScript, s
 	return finalPlotterScript;
 }
 
-void PlotterGnuplot::mergeSystemScript(string baseScript, string systemScript, string mergedScript)
+void PlotterGnuplot::mergeSystemScript(std::string baseScript, std::string systemScript, std::string mergedScript)
 {
-	string line;
-	ofstream mergeStream;
-	mergeStream.open(mergedScript.c_str(), ios::out | ios::app);
-	mergeStream << "#!/usr/bin/gnuplot" << endl << endl;
+	std::string line;
+	std::ofstream mergeStream;
+	mergeStream.open(mergedScript.c_str(), std::ios::out | std::ios::app);
+	mergeStream << "#!/usr/bin/gnuplot" << std::endl << std::endl;
 
-	ifstream systemStream(systemScript.c_str());
+	std::ifstream systemStream(systemScript.c_str());
 	if (systemStream.is_open())
 	{
 		while(getline(systemStream, line))
 		{
-			mergeStream << line << endl;
+			mergeStream << line << std::endl;
 		}
 		systemStream.close();
-	} else { cerr << "Couldn't open " << systemScript << endl; }
+	} else { std::cerr << "Couldn't open " << systemScript << std::endl; }
 
-	ifstream baseStream(baseScript.c_str());
+	std::ifstream baseStream(baseScript.c_str());
 	if (baseStream.is_open())
 	{
 		while(getline(baseStream, line))
 		{
-			mergeStream << line << endl;
+			mergeStream << line << std::endl;
 		}
 		baseStream.close();
-	} else { cerr << "Couldn't open " << baseScript << endl; }
+	} else { std::cerr << "Couldn't open " << baseScript << std::endl; }
 
 	mergeStream.close();
 }
 
-void PlotterGnuplot::replaceTerminals(string baseScript, string resultFile)
+void PlotterGnuplot::replaceTerminals(std::string baseScript, std::string resultFile)
 {
-	string outputString = resultFile;
+	std::string outputString = resultFile;
 	outputString = outputString.erase(outputString.find(".result.csv")) + "_Gp_";
 
 	bufferSearchReplace(baseScript, "DATAFILE", resultFile);
@@ -83,7 +93,7 @@ void PlotterGnuplot::replaceTerminals(string baseScript, string resultFile)
 	else if(_terminal == "xps")
 		{ bufferSearchReplace(baseScript, "# TERMINAL_PS: ", ""); }
 	else
-		{ cerr << "Unknown Terminal." << endl; }
+		{ std::cerr << "Unknown Terminal." << std::endl; }
 
 	if (PS2PDF)
 	{
@@ -95,10 +105,10 @@ void PlotterGnuplot::replaceTerminals(string baseScript, string resultFile)
 	bufferSearchReplace(baseScript, "$(TERMINAL)", _terminal);
 }
 
-void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
+void PlotterGnuplot::setPerfCounters(std::string baseScript, std::string resultFile)
 {
-	vector<string> counters;
-	string buffer;
+	std::vector<std::string> counters;
+	std::string buffer;
 
 	counters = getCounters(baseScript);
 	for (int i = 0; i < counters.size(); i++)
@@ -106,42 +116,42 @@ void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
 		int pos = getCounterPosition(counters.at(i), resultFile);
 		if (pos != 0)
 		{
-			stringstream ss;
+			std::stringstream ss;
 			ss << pos;
-			string position = ss.str();
-			string search = "§@" + counters.at(i) + "@§";
-			string replace = "$" + position;
+			std::string position = ss.str();
+			std::string search = "§@" + counters.at(i) + "@§";
+			std::string replace = "$" + position;
 			bufferSearchReplace(baseScript, search, replace);
 		} else {
-			stringstream ss;
+			std::stringstream ss;
 			ss << pos;
-			string position = ss.str();
-			string search = "§@" + counters.at(i) + "@§";
+			std::string position = ss.str();
+			std::string search = "§@" + counters.at(i) + "@§";
 
-			//cout << "Missing Counter: " << counters.at(i) << endl;
+			//std::cout << "Missing Counter: " << counters.at(i) << std::endl;
 
-			string tmp_file = baseScript + ".tmp";
-			fstream stream_in(baseScript.c_str(), ios::in);
-			fstream stream_out_tmp(tmp_file.c_str(), ios::out | ios::app);
-			string buffer;
+			std::string tmp_file = baseScript + ".tmp";
+			std::fstream stream_in(baseScript.c_str(), std::ios::in);
+			std::fstream stream_out_tmp(tmp_file.c_str(), std::ios::out | std::ios::app);
+			std::string buffer;
 			while(getline(stream_in, buffer))
 			{
 				if(buffer.find(search) != -1)
 				{
 					buffer = "#" + buffer;
 				}
-				stream_out_tmp << buffer << endl;
+				stream_out_tmp << buffer << std::endl;
 			}
 			stream_out_tmp.close();
 			stream_in.close();
 
 			remove(baseScript.c_str());
-			fstream stream_in_tmp(tmp_file.c_str(), ios::in);
-			fstream stream_out(baseScript.c_str(), ios::out | ios::app);
+			std::fstream stream_in_tmp(tmp_file.c_str(), std::ios::in);
+			std::fstream stream_out(baseScript.c_str(), std::ios::out | std::ios::app);
 			while(!stream_in_tmp.eof())
 			{
 				getline(stream_in_tmp, buffer);
-				stream_out << buffer << endl;
+				stream_out << buffer << std::endl;
 			}
 			stream_out.close();
 			stream_in_tmp.close();
@@ -150,18 +160,18 @@ void PlotterGnuplot::setPerfCounters(string baseScript, string resultFile)
 	}
 }
 
-void PlotterGnuplot::setPlotCommands(string baseScript)
+void PlotterGnuplot::setPlotCommands(std::string baseScript)
 {
-	vector<string> lines;
-	string buffer, next;
-	string tmp_file = baseScript + ".tmp";
+	std::vector<std::string> lines;
+	std::string buffer, next;
+	std::string tmp_file = baseScript + ".tmp";
 
-	fstream stream_in(baseScript.c_str(), ios::in);
-	fstream stream_out_tmp(tmp_file.c_str(), ios::out | ios::app);
+	std::fstream stream_in(baseScript.c_str(), std::ios::in);
+	std::fstream stream_out_tmp(tmp_file.c_str(), std::ios::out | std::ios::app);
 
 	bool foundplot = false;
 	bool needplot = false;
-	vector<bool> needed_plots;
+	std::vector<bool> needed_plots;
 	while(getline(stream_in, buffer))
 	{
 		if(foundplot)
@@ -191,7 +201,7 @@ void PlotterGnuplot::setPlotCommands(string baseScript)
 				}
 				for(int i = 0; i < lines.size(); i++)
 				{
-					stream_out_tmp << lines.at(i) << endl;
+					stream_out_tmp << lines.at(i) << std::endl;
 				}
 				lines.clear();
 				needplot = false;
@@ -204,7 +214,7 @@ void PlotterGnuplot::setPlotCommands(string baseScript)
 				foundplot = true;
 				lines.push_back(buffer);
 			} else {
-				stream_out_tmp << buffer << endl;
+				stream_out_tmp << buffer << std::endl;
 			}
 		}
 	}
@@ -212,19 +222,19 @@ void PlotterGnuplot::setPlotCommands(string baseScript)
 	stream_in.close();
 
 	remove(baseScript.c_str());
-	fstream stream_in_tmp(tmp_file.c_str(), ios::in);
-	fstream stream_out(baseScript.c_str(), ios::out | ios::app);
+	std::fstream stream_in_tmp(tmp_file.c_str(), std::ios::in);
+	std::fstream stream_out(baseScript.c_str(), std::ios::out | std::ios::app);
 	while(!stream_in_tmp.eof())
 	{
 		getline(stream_in_tmp, buffer);
-		stream_out << buffer << endl;
+		stream_out << buffer << std::endl;
 	}
 	stream_out.close();
 	stream_in_tmp.close();
 	remove(tmp_file.c_str());
 
-	fstream stream_in2(baseScript.c_str(), ios::in);
-	fstream stream_out_tmp2(tmp_file.c_str(), ios::out | ios::app);
+	std::fstream stream_in2(baseScript.c_str(), std::ios::in);
+	std::fstream stream_out_tmp2(tmp_file.c_str(), std::ios::out | std::ios::app);
 	while(getline(stream_in2, next))
 	{
 		bool is_empty = true;
@@ -239,27 +249,27 @@ void PlotterGnuplot::setPlotCommands(string baseScript)
 			if(spot == buffer.length()-2)
 				buffer = buffer.substr(0,spot);
 		}
-		stream_out_tmp2 << buffer << endl;
+		stream_out_tmp2 << buffer << std::endl;
 		buffer = next;
 	}
-	stream_out_tmp2 << buffer << endl;
+	stream_out_tmp2 << buffer << std::endl;
 	stream_out_tmp2.close();
 	stream_in2.close();
 
 	remove(baseScript.c_str());
-	fstream stream_in_tmp2(tmp_file.c_str(), ios::in);
-	fstream stream_out2(baseScript.c_str(), ios::out | ios::app);
+	std::fstream stream_in_tmp2(tmp_file.c_str(), std::ios::in);
+	std::fstream stream_out2(baseScript.c_str(), std::ios::out | std::ios::app);
 	while(!stream_in_tmp2.eof())
 	{
 		getline(stream_in_tmp2, buffer);
-		stream_out2 << buffer << endl;
+		stream_out2 << buffer << std::endl;
 	}
 	stream_out2.close();
 	stream_in_tmp2.close();
 	remove(tmp_file.c_str());
 
-	fstream stream_in4(baseScript.c_str(), ios::in);
-	fstream stream_out_tmp4(tmp_file.c_str(), ios::out | ios::app);
+	std::fstream stream_in4(baseScript.c_str(), std::ios::in);
+	std::fstream stream_out_tmp4(tmp_file.c_str(), std::ios::out | std::ios::app);
 	int i = 0;
 	while(getline(stream_in4, buffer))
 	{
@@ -272,53 +282,53 @@ void PlotterGnuplot::setPlotCommands(string baseScript)
 			}
 			i++;
 		}
-		stream_out_tmp4 << buffer << endl;
+		stream_out_tmp4 << buffer << std::endl;
 	}
 	stream_out_tmp4.close();
 	stream_in4.close();
 
 	remove(baseScript.c_str());
-	fstream stream_in_tmp4(tmp_file.c_str(), ios::in);
-	fstream stream_out4(baseScript.c_str(), ios::out | ios::app);
+	std::fstream stream_in_tmp4(tmp_file.c_str(), std::ios::in);
+	std::fstream stream_out4(baseScript.c_str(), std::ios::out | std::ios::app);
 	while(!stream_in_tmp4.eof())
 	{
 		getline(stream_in_tmp4, buffer);
-		stream_out4 << buffer << endl;
+		stream_out4 << buffer << std::endl;
 	}
 	stream_out4.close();
 	stream_in_tmp4.close();
 	remove(tmp_file.c_str());
 }
 
-void PlotterGnuplot::bufferSearchReplace(string replaceFile, string search, string replace)
+void PlotterGnuplot::bufferSearchReplace(std::string replaceFile, std::string search, std::string replace)
 {
-	string buffer;
-	string tmpFile = replaceFile + ".tmp";
-	fstream stream_in(replaceFile.c_str(), ios::in);
-	fstream stream_out_tmp(tmpFile.c_str(), ios::out | ios::app);
+	std::string buffer;
+	std::string tmpFile = replaceFile + ".tmp";
+	std::fstream stream_in(replaceFile.c_str(), std::ios::in);
+	std::fstream stream_out_tmp(tmpFile.c_str(), std::ios::out | std::ios::app);
 	while(!stream_in.eof())
 	{
 		getline(stream_in, buffer);
 		int spot = buffer.find(search);
 		if(spot >= 0)
 		{
-			string tmpString = buffer.substr(0,spot);
+			std::string tmpString = buffer.substr(0,spot);
 			tmpString += replace;
 			tmpString += buffer.substr(spot+search.length(), buffer.length());
 			buffer = tmpString;
 		}
-		stream_out_tmp << buffer << endl;
+		stream_out_tmp << buffer << std::endl;
 	}
 	stream_out_tmp.close();
 	stream_in.close();
 
 	remove(replaceFile.c_str());
-	fstream stream_in_tmp(tmpFile.c_str(), ios::in);
-	fstream stream_out(replaceFile.c_str(), ios::out | ios::app);
+	std::fstream stream_in_tmp(tmpFile.c_str(), std::ios::in);
+	std::fstream stream_out(replaceFile.c_str(), std::ios::out | std::ios::app);
 	while(!stream_in_tmp.eof())
 	{
 		getline(stream_in_tmp, buffer);
-		stream_out << buffer << endl;
+		stream_out << buffer << std::endl;
 	}
 	stream_out.close();
 	stream_in_tmp.close();
@@ -326,13 +336,13 @@ void PlotterGnuplot::bufferSearchReplace(string replaceFile, string search, stri
 	return;
 }
 
-vector<string> PlotterGnuplot::getCounters(string baseScript)
+std::vector<std::string> PlotterGnuplot::getCounters(std::string baseScript)
 {
-	vector<string> counters;
-	string linebuffer;
-	string begin = "§@";
-	string end = "@§";
-	fstream stream_in(baseScript.c_str(), ios::in);
+	std::vector<std::string> counters;
+	std::string linebuffer;
+	std::string begin = "§@";
+	std::string end = "@§";
+	std::fstream stream_in(baseScript.c_str(), std::ios::in);
 	while(!stream_in.eof())
 	{
 		getline(stream_in, linebuffer);
@@ -340,7 +350,7 @@ vector<string> PlotterGnuplot::getCounters(string baseScript)
 		int spot_end = linebuffer.find(end);
 		if(spot_begin >= 0 && spot_end >= 0)
 		{
-			string tmpstring = linebuffer.substr(spot_begin+begin.length(),spot_end-(spot_begin+begin.length()));
+			std::string tmpstring = linebuffer.substr(spot_begin+begin.length(),spot_end-(spot_begin+begin.length()));
 			counters.push_back(tmpstring);
 		}
 	}
@@ -348,16 +358,16 @@ vector<string> PlotterGnuplot::getCounters(string baseScript)
 	return counters;
 }
 
-int PlotterGnuplot::getCounterPosition(string counter, string resultFile)
+int PlotterGnuplot::getCounterPosition(std::string counter, std::string resultFile)
 {
-	string linebuffer;
-	fstream stream_in(resultFile.c_str(), ios::in);
+	std::string linebuffer;
+	std::fstream stream_in(resultFile.c_str(), std::ios::in);
 	getline(stream_in, linebuffer);
 	int spot = linebuffer.find(counter);
 	int spaces = 0;
 	if(spot >= 0)
 	{
-		string tmpstring = linebuffer.substr(0,spot);
+		std::string tmpstring = linebuffer.substr(0,spot);
 		for(int i = 0; i < tmpstring.size(); i++)
 		{
 			spaces += ( tmpstring.at(i) == ' ' );

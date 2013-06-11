@@ -6,15 +6,8 @@
 #ifndef PDFCREATOR_H
 #define PDFCREATOR_H
 
-#include <string>
-#include <map>
-#include <vector>
-#include <iostream>
-#include <fstream>
-
 #include "AbstractBenchmark.h"
 
-using namespace std;
 
 class AbstractBenchmark;
 
@@ -33,13 +26,13 @@ private:
 
 public:
     FileWriter(AbstractBenchmark *benchmark);
-    void addDiagram(string ps_path, map<string, vector<int> > parameters);
+    void addDiagram(std::string ps_path, std::map<std::string, std::vector<int> > parameters);
     void save();
     void dumpResult(AbstractBenchmark *benchmark);
-    void psToPdf(string filename);
+    void psToPdf(std::string filename);
     void saveParameters(AbstractBenchmark *benchmark);
 
-    vector<string> getHeaders(AbstractBenchmark *benchmark);
+    std::vector<std::string> getHeaders(AbstractBenchmark *benchmark);
 };
 
 #endif

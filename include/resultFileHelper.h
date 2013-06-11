@@ -2,26 +2,19 @@
 #ifndef RESULTFILEHELPER_H
 #define RESULTFILEHELPER_H
 
-#include <stdlib.h>
-
-#include <iostream>
 #include <string>
-#include <fstream>
-#include <sstream>
 
-using namespace std;
+std::string findBenchName(std::string result_dir);
+std::string findBenchId(std::string bench_name, std::string result_dir);
 
-string findBenchName(string result_dir);
-string findBenchId(string bench_name, string result_dir);
+std::string getResultFile(std::string bench_name, std::string id, std::string result_dir);
+std::string getParameterFile(std::string bench_name, std::string id, std::string result_dir);
 
-string getResultFile(string bench_name, string id, string result_dir);
-string getParameterFile(string bench_name, string id, string result_dir);
+std::string convertInt(int number);
 
-string convertInt(int number);
+bool fileExists(std::string file_name);
 
-bool fileExists(string file_name);
-
-void pdfCropFile(string file_name);
+void pdfCropFile(std::string file_name);
 
 
 #endif //RESULTFILEHELPER_H
