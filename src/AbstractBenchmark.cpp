@@ -15,10 +15,10 @@ AbstractBenchmark::AbstractBenchmark() :
     _current_perf_counter(NULL),
     _fastMode(false),
     _silentMode(false),
-    _rawOutput(false)
+    _rawOutput(false),
+    _filewriter(new FileWriter(this))
 {
 
-    _filewriter = new FileWriter(this);
     cout.setf(ios::fixed, ios::floatfield);
     cout.setf(ios::showpoint);
 
