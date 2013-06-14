@@ -266,7 +266,10 @@ class AbstractBenchmark {
 		 * @brief Set maximum deviation.
 		 *
 		 * Use this function to specify a maximum deviation the results of each 
-		 * combination of your benchmarks should have.
+		 * combination of your benchmarks should have. If this value is specified the benchmarks tests
+		 * will be exetuted until the deviation of the runs is smaller than the specified max_deviation.
+		 * Therefore it exetures the benchmark max_runs times and doubles the runs every iteration until
+		 * the deviation decreases under its maximum value.
 		 *
 		 * @params max_deviation The maximum deviation.
 		 */
