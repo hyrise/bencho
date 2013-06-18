@@ -75,6 +75,10 @@ bool fileExists(std::string file_name)
 void pdfCropFile(std::string file_name)
 {
 	std::string cropCommand = "pdfcrop " + file_name + " " + file_name + " > /dev/null";
-	system(cropCommand.c_str());
+
+	if (int err = std::system(cropCommand.c_str()))
+    {
+        std::cerr << "Error during system call: " << err << std::endl;
+    }
 }
 

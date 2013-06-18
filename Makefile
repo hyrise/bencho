@@ -6,7 +6,7 @@ BENCHO_LIB_NAME = bencho
 BENCHO_LIB_FULL_NAME = lib$(BENCHO_LIB_NAME).a
 BENCHO_LIB_DIR = $(BUILD_DIR)/lib
 
-CC = clang++
+CC = g++
 LIB = ar cr
 
 DOXYFILE = ./Doxyfile

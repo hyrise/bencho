@@ -21,7 +21,11 @@ void PlotterGnuplot::callPlot(std::string resultDir, std::string plotterScript, 
 	std::cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << std::endl;
 
 	std::string command = "gnuplot " + finalPlotterScript;
-	system(command.c_str());
+	
+	if (int err = std::system(command.c_str()))
+	{
+		std::cerr << "Error during system call: " << err << std::endl;
+	}
 
 	// Clean up
 	if (fileExists(finalPlotterScript))
