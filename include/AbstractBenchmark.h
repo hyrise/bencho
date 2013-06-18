@@ -9,6 +9,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "Aggregator.h"
 
@@ -58,6 +59,8 @@ class AbstractBenchmark {
 
 		std::map<int, std::string> _test_series;
 		std::map<int, std::string> _graphs;
+
+		std::vector<std::unique_ptr<AbstractPlotter> > _plotters;
 
 		//results for output
     	std::map<std::string, std::map<int, std::vector<long long> > > _result_x; // result x -> sequence id or xdata
@@ -164,6 +167,8 @@ class AbstractBenchmark {
 		void addGraph(int id, std::string name);
     	void addAllTestSeriesAsGraphs();
     	void addTestSeriesAsGraph(int test_series_id);
+
+    	void addPlotter(std::unique_ptr<AbstractPlotter> plotter);
 
 		//output methods
 		FileWriter *getFileWriter();

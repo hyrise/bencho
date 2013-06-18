@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iomanip>
 #include <stdexcept>
+#include <memory>
 
 #include "PapiSingleton.h"      //class for performance counters
 #include "Parameter.h"          //class for Parameters
@@ -112,6 +113,11 @@ void AbstractBenchmark::addTestSeriesAsGraph(int test_series_id)
 void AbstractBenchmark::addGraph(int id, std::string name)
 {
     _graphs[id] = name;
+}
+
+void AbstractBenchmark::addPlotter(std::unique_ptr<AbstractPlotter> plotter)
+{
+    _plotters.push_back(std::move(plotter));
 }
 
 ////////////////////////////////////// Methods to prepare Benchmark //////////////////////////////////////
