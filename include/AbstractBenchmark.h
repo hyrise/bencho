@@ -6,29 +6,18 @@
 #ifndef ABSTRACTBENCHMARK_H
 #define ABSTRACTBENCHMARK_H
 
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
-#include <iostream>
-#include <iomanip>
 
-#include "PapiSingleton.h"		//class for performance counters
-#include "Parameter.h"    		//class for Parameters
-#include "Printer.h"			//class for printing final and intermediate results
-#include "Aggregator.h" 		//class for aggregator-functions
-#include "FileWriter.h"			//class to write result files
-#include "DirectoryManager.h"	//class to manage directories
-#include "AbstractPlotter.h"	//abstract plotter class
-#include "PlotterGnuplot.h"		//class for plotting results with gnuplot
-#include "PlotterPython.h"		//class for plotting results with python matplotlib
-#include "PlotterR.h"			//class for plotting results with R ggplot2
-
-
-using namespace std;
+#include "Aggregator.h"
 
 const int combination_incache = -1;
 
+class Parameter;
 class FileWriter;
+class DirectoryManager;
+class AbstractPlotter;
 
 /**
  * @brief Abstract class for to be subclassed by benchmarks. 
@@ -47,10 +36,10 @@ class AbstractBenchmark {
 		bool _is_initialized;
 		bool _do_incache_calibration;
 		double _max_deviation;
-		string _name;
-		string _sequence_id_parameter;
-		string _unit;
-		string _current_version;
+		std::string _name;
+		std::string _sequence_id_parameter;
+		std::string _unit;
+		std::string _current_version;
 		bool _do_papi_manual;
 		const char* _current_perf_counter;
 		long long _manual_papi_result;
@@ -58,29 +47,29 @@ class AbstractBenchmark {
 		AggregationType::Function _aggregatingFunction;
 
 		//parameters, input and other stuff for execution
-		map<string, vector<Parameter> > _parameters; //list of parameters for execution
-		map<string, int> _parameters_incache;
+		std::map<std::string, std::vector<Parameter> > _parameters; //list of parameters for execution
+		std::map<std::string, int> _parameters_incache;
 
-		vector<map<string, int> > _combinations; //combinations to calculate in calcCombinations()
+		std::vector<std::map<std::string, int> > _combinations; //combinations to calculate in calcCombinations()
 
-		vector<string> _arguments;
+		std::vector<std::string> _arguments;
 
-		vector<string> _performance_counters; //measured performance counters
+		std::vector<std::string> _performance_counters; //measured performance counters
 
-		map<int, string> _test_series;
-		map<int, string> _graphs;
+		std::map<int, std::string> _test_series;
+		std::map<int, std::string> _graphs;
 
 		//results for output
-    	map<string, map<int, vector<long long> > > _result_x; // result x -> sequence id or xdata
-    	map<string, map<int, vector<long long> > > _result_y;
-    	map<string, map<int, vector<vector<long long> > > > _result_y_raw; // unaggregated data eg. for boxplots
+    	std::map<std::string, std::map<int, std::vector<long long> > > _result_x; // result x -> sequence id or xdata
+    	std::map<std::string, std::map<int, std::vector<long long> > > _result_y;
+    	std::map<std::string, std::map<int, std::vector<std::vector<long long> > > > _result_y_raw; // unaggregated data eg. for boxplots
     	// std error
-    	map<string, map<int, vector<long long> > > _result_error;
+    	std::map<std::string, std::map<int, std::vector<long long> > > _result_error;
     	// calibration results
-    	map<string, long long> _result_calibration;
+    	std::map<std::string, long long> _result_calibration;
 
 		FileWriter *_filewriter;
-		DirectoryManager _directorymanager;
+		DirectoryManager *_directorymanager;
 
 		//modes for supressing output and running fastest possible configuration
   		bool _fastMode;
@@ -90,36 +79,36 @@ class AbstractBenchmark {
 
 		void init();
 
-		void setUnit(string unit); //happens automatically
+		void setUnit(std::string unit); //happens automatically
 
 		virtual void finalize() = 0;
     	virtual void initialize() = 0;
 
     	void calcCombinations();
-    	void executeCombination(map<string, int> parameters, int combination);
-        long long executeRun(map<string, int> parameters, int combination, int test_series_id, int run, string perf_ctr, bool incache = false);
+    	void executeCombination(std::map<std::string, int> parameters, int combination);
+        long long executeRun(std::map<std::string, int> parameters, int combination, int test_series_id, int run, std::string perf_ctr, bool incache = false);
 
 		// Methods to implement in specialized class
 	    
 	    /// This does the actual test run. execution time is measured. should be overwritten and implemented by specialized class.
-	    virtual void doTheTest(map<string, int> parameters, int combination, int test_series_id, int run) = 0;
+	    virtual void doTheTest(std::map<std::string, int> parameters, int combination, int test_series_id, int run) = 0;
 	    
-	    virtual int getSequenceId(map<string, int> parameters, int test_series_id) const;
+	    virtual int getSequenceId(std::map<std::string, int> parameters, int test_series_id) const;
 
 	    /// Prepare one run (executed before do_the_test)
-	    virtual void prepareRun(map<string, int> parameters, int combination, int test_series_id, int run);
+	    virtual void prepareRun(std::map<std::string, int> parameters, int combination, int test_series_id, int run);
 	    
 	    /// Prepare one run (executed before do_the_test, but after cache cleared)
-	    virtual void prepareRunAfterCacheCleared(map<string, int> parameters, int combination, int test_series_id, int run);
+	    virtual void prepareRunAfterCacheCleared(std::map<std::string, int> parameters, int combination, int test_series_id, int run);
 
 	    /// Prepare one combination (executed once before execute_combination)
-	    virtual void prepareCombination(map<string, int> parameters, int combination);
+	    virtual void prepareCombination(std::map<std::string, int> parameters, int combination);
 
 	    /// Finish one run (executed after do_the_test)
-	    virtual void finishRun(map<string, int> parameters, int combination, int test_series_id, int run);
+	    virtual void finishRun(std::map<std::string, int> parameters, int combination, int test_series_id, int run);
 	    
 	    /// Finish one combination (executed after execute_combination)
-	    virtual void finishCombination(map<string, int> parameters, int combination);
+	    virtual void finishCombination(std::map<std::string, int> parameters, int combination);
 	    
 	    /// Prepare start (executed once)
 	    virtual void prepareStart() { };
@@ -147,7 +136,7 @@ class AbstractBenchmark {
 		 * @param parameter A Pointer to a Parameter object.
 		 * @param version A String specifying the benchmark version this Parameter belongs to.
 		 */
-		void addParameter(Parameter *parameter, string version = "first");
+		void addParameter(Parameter *parameter, std::string version = "first");
 
 		/**
 		 * @brief Add counters for perfomance measurement. 
@@ -160,7 +149,7 @@ class AbstractBenchmark {
 		 *
 		 * @param event_name The name of a PAPI performance counter.
 		 */
-		void addPerformanceCounter(string event_name);
+		void addPerformanceCounter(std::string event_name);
 
 		/**
 		 * @brief Register the different Test Series.
@@ -171,8 +160,8 @@ class AbstractBenchmark {
 		 * @param id A unique id for your test series.
 		 * @param name The name of your test series.
 		 */
-		void addTestSeries(int id, string name);
-		void addGraph(int id, string name);
+		void addTestSeries(int id, std::string name);
+		void addGraph(int id, std::string name);
     	void addAllTestSeriesAsGraphs();
     	void addTestSeriesAsGraph(int test_series_id);
 
@@ -221,7 +210,7 @@ class AbstractBenchmark {
 		 * @param settingsPlotter The plotter that holds the settings.
 		 * @param fileEnding The ending with which the plotting script file ends, e.g. ".gp", ".py", ".r".
 		 */
-		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter, string fileEnding);
+		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter, std::string fileEnding);
 
 		/**
 		 * @brief Set the benchmark name.
@@ -231,7 +220,7 @@ class AbstractBenchmark {
 		 *
 		 * @params name Name of the specific benchmark.
 		 */
-		void setName(string name);
+		void setName(std::string name);
 
 		/**
 		 * @brief Set an input parameter to provide the values on the x-axis.
@@ -241,7 +230,7 @@ class AbstractBenchmark {
 		 *
 		 * @params id Name of a parameter.
 		 */
-		void setSequenceId(string id);
+		void setSequenceId(std::string id);
 
 		/**
 		 * @brief Set the number of warm up runs.
@@ -325,15 +314,15 @@ class AbstractBenchmark {
 		void setAggregatingFunction(AggregationType::Function function);
 
 		/// Returns the benchmarks name.
-		string getName();
-		string getUnit();
+		std::string getName();
+		std::string getUnit();
 
 		/// Returns the number of warm up runs.
 		size_t getWarmUpRuns();
 
 		/// Returns the maximum number of runs.
 		size_t getMaxRuns();
-		virtual long long getValue(size_t graph_id, string perf_ctr, size_t pos, map<string, int> parameters);
+		virtual long long getValue(size_t graph_id, std::string perf_ctr, size_t pos, std::map<std::string, int> parameters);
 		
 		/// Returns the fast mode flag.
 		bool getFastMode();
@@ -348,26 +337,26 @@ class AbstractBenchmark {
 		AggregationType::Function getAggregatingFunction();
 
 		/// Returns all combinations.
-    	vector<map<string, int> > &getCombinations();
+    	std::vector<std::map<std::string, int> > &getCombinations();
 
     	/// Returns the current version of your Parameters.
-		string getCurrentVersion();
+		std::string getCurrentVersion();
 
 		/// Returns the parameters.
-		vector<Parameter> *getParameters();
+		std::vector<Parameter> *getParameters();
 		size_t getRowCount();
 
 		/// Returns the current test series.
-		map<int, string> &getTestSeries();
+		std::map<int, std::string> &getTestSeries();
 
 		/// Returns all specified performance counters.
-		vector<string> &getPerformanceCounters();
+		std::vector<std::string> &getPerformanceCounters();
 
-		vector<long long> &getResult_x(size_t test_series, string performance_counter);
-    	vector<long long> &getResult_y(size_t test_series, string performance_counter);
-    	vector<vector<long long> > &getResult_y_raw(size_t test_series, string performance_counter);
-    	vector<long long> &getResult_error(size_t test_series, string performance_counter);
-    	long long getResult_incache(string test_series);
+		std::vector<long long> &getResult_x(size_t test_series, std::string performance_counter);
+    	std::vector<long long> &getResult_y(size_t test_series, std::string performance_counter);
+    	std::vector<std::vector<long long> > &getResult_y_raw(size_t test_series, std::string performance_counter);
+    	std::vector<long long> &getResult_error(size_t test_series, std::string performance_counter);
+    	long long getResult_incache(std::string test_series);
 
     	/// Executes the benchmark.
         void execute(int max_runs, double max_deviation);

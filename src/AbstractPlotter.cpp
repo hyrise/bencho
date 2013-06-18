@@ -1,5 +1,13 @@
 #include "AbstractPlotter.h"
 
+#include <cstdio>
+#include <string>
+#include <iostream>
+#include <dirent.h>
+#include <string.h>
+
+#include "resultFileHelper.h"
+
 
 AbstractPlotter::AbstractPlotter()
 {
@@ -22,12 +30,12 @@ AbstractPlotter::~AbstractPlotter()
 
 void AbstractPlotter::plot()
 {
-	string resultFile = getResultFile(getBenchName(), getBenchId(), getResultDir());
+	std::string resultFile = getResultFile(getBenchName(), getBenchId(), getResultDir());
 	if (fileExists(resultFile))
 	{
 		callPlot(getResultDir(), getPlotterScript(), getSystemScript(), getBenchName(), getBenchId());
 	} else {
-		cerr << "No result file of benchmark: " << getBenchName() << ", Id: " << getBenchId() << " available." << endl;
+		std::cerr << "No result file of benchmark: " << getBenchName() << ", Id: " << getBenchId() << " available." << std::endl;
 	}
 }
 
@@ -38,16 +46,16 @@ void AbstractPlotter::setUp(bool isDefault)
 
 	if(!isDefault)
 	{
-		string userinput;
-		cout << "Name of Benchmark?" << endl << "(default: " << getBenchName() << ")" << endl;
-		getline(cin, userinput);
+		std::string userinput;
+		std::cout << "Name of Benchmark?" << std::endl << "(default: " << getBenchName() << ")" << std::endl;
+		getline(std::cin, userinput);
 		if(!userinput.empty())
 		{
 			setBenchName(userinput);
 			setBenchId(findBenchId(getBenchName(), getResultDir()));
 		}
-		cout << "ID?" << endl << "(default: " << getBenchId() << ")" << endl;
-		getline(cin, userinput);
+		std::cout << "ID?" << std::endl << "(default: " << getBenchId() << ")" << std::endl;
+		getline(std::cin, userinput);
 		if(!userinput.empty())
 		{
 			setBenchId(userinput);
@@ -55,7 +63,7 @@ void AbstractPlotter::setUp(bool isDefault)
 	}
 }
 
-void AbstractPlotter::setUp(string resultDir, string plotterScriptDir, string systemScriptDir, string plotterScript, string systemScript, string benchName, string benchId)
+void AbstractPlotter::setUp(std::string resultDir, std::string plotterScriptDir, std::string systemScriptDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId)
 {
 	setResultDir(resultDir);
 	setPlotterScriptDir(plotterScriptDir);
@@ -68,14 +76,14 @@ void AbstractPlotter::setUp(string resultDir, string plotterScriptDir, string sy
 
 void AbstractPlotter::pdfcropResult()
 {
-	string resultDir = getResultDir();
-	string benchName = getBenchName();
-	string benchId = getBenchId();
+	std::string resultDir = getResultDir();
+	std::string benchName = getBenchName();
+	std::string benchId = getBenchId();
 
 	struct dirent *de=NULL;
   	DIR *d=NULL;
-	string benchmarksResultDir = resultDir + "/" + benchName;
-	string resultPrefix = benchName + "_" + benchId + "_";
+	std::string benchmarksResultDir = resultDir + "/" + benchName;
+	std::string resultPrefix = benchName + "_" + benchId + "_";
 	d = opendir(benchmarksResultDir.c_str());
 	if (d)
 	{
@@ -85,88 +93,88 @@ void AbstractPlotter::pdfcropResult()
 		}
     }
     closedir(d);
-	} else { perror(benchmarksResultDir.c_str()); }
+	} else { std::perror(benchmarksResultDir.c_str()); }
 }
 
 
-string AbstractPlotter::createFinalScript(string resultFile, string baseScript, string systemScript)
+std::string AbstractPlotter::createFinalScript(std::string resultFile, std::string baseScript, std::string systemScript)
 {
 	// overwrite this in actual plotter
 	return baseScript;
 }
 
-void AbstractPlotter::callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId)
+void AbstractPlotter::callPlot(std::string resultDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId)
 {
 	// overwrite this in actual plotter
 }
 
 
-string AbstractPlotter::getResultDir()
+std::string AbstractPlotter::getResultDir()
 {
 	return _resultDir;
 }
 
-string AbstractPlotter::getPlotterScriptDir()
+std::string AbstractPlotter::getPlotterScriptDir()
 {
 	return _plotterScriptDir;
 }
 
-string AbstractPlotter::getSystemScriptDir()
+std::string AbstractPlotter::getSystemScriptDir()
 {
 	return _systemScriptDir;
 }
 
-string AbstractPlotter::getPlotterScript()
+std::string AbstractPlotter::getPlotterScript()
 {
 	return _plotterScript;
 }
 
-string AbstractPlotter::getSystemScript()
+std::string AbstractPlotter::getSystemScript()
 {
 	return _systemScript;
 }
 
-string AbstractPlotter::getBenchName()
+std::string AbstractPlotter::getBenchName()
 {
 	return _benchName;
 }
 
-string AbstractPlotter::getBenchId()
+std::string AbstractPlotter::getBenchId()
 {
 	return _benchId;
 }
 
-void AbstractPlotter::setResultDir(string resultDir)
+void AbstractPlotter::setResultDir(std::string resultDir)
 {
 	_resultDir = resultDir;
 }
 
-void AbstractPlotter::setPlotterScriptDir(string plotterScriptDir)
+void AbstractPlotter::setPlotterScriptDir(std::string plotterScriptDir)
 {
 	_plotterScriptDir = plotterScriptDir;
 }
 
-void AbstractPlotter::setSystemScriptDir(string systemScriptDir)
+void AbstractPlotter::setSystemScriptDir(std::string systemScriptDir)
 {
 	_systemScriptDir = systemScriptDir;
 }
 
-void AbstractPlotter::setPlotterScript(string plotterScript)
+void AbstractPlotter::setPlotterScript(std::string plotterScript)
 {
 	_plotterScript = plotterScript;
 }
 
-void AbstractPlotter::setSystemScript(string systemScript)
+void AbstractPlotter::setSystemScript(std::string systemScript)
 {
 	_systemScript = systemScript;
 }
 
-void AbstractPlotter::setBenchName(string benchName)
+void AbstractPlotter::setBenchName(std::string benchName)
 {
 	_benchName = benchName;
 }
 
-void AbstractPlotter::setBenchId(string benchId)
+void AbstractPlotter::setBenchId(std::string benchId)
 {
 	_benchId = benchId;
 }

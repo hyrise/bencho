@@ -12,12 +12,9 @@
 #define TERMINAL "ps"
 #define PS2PDF true
 
-#include <stdio.h>
+#include "AbstractPlotter.h"
 
 #include <vector>
-#include <string>
-
-#include "AbstractPlotter.h"
 
 
 /**
@@ -29,7 +26,7 @@
 class PlotterGnuplot : public AbstractPlotter
 {
 private:
-	string _terminal;
+	std::string _terminal;
 
 
 	/**
@@ -42,7 +39,7 @@ private:
 	 * @param benchName Name of the benchmark that will be plotted.
 	 * @param benchId Id of the benchmark that will be plotted.
 	 */
-	void callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId);
+	void callPlot(std::string resultDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId);
 
 	/**
 	 * Magic function that creates a Gnuplot-readable .gp script from a generic @a baseScript
@@ -54,7 +51,7 @@ private:
 	 *
 	 * @return Exact (but relative) path to the final script that can be used for plotting.
 	 */
-	virtual string createFinalScript(string resultFile, string baseScript, string systemScript);
+	virtual std::string createFinalScript(std::string resultFile, std::string baseScript, std::string systemScript);
 
 
 	/**
@@ -64,7 +61,7 @@ private:
 	 * @param systemScript Relative path to the base system script for the plotter.
 	 * @param mergedScript Relative path to the script the above scripts will be merged into.
 	 */
-	void mergeSystemScript(string baseScript, string systemScript, string mergedScript);
+	void mergeSystemScript(std::string baseScript, std::string systemScript, std::string mergedScript);
 
 	/**
 	 * Replaces the placeholders in @a baseScript for the decision which terminal is used
@@ -73,7 +70,7 @@ private:
 	 * @param baseScript Relative path to the script which placeholders should be replaced.
 	 * @param resultFile Relative path to the result file of the benchmark run that will be plotted.
 	 */
-	void replaceTerminals(string baseScript, string resultFile);
+	void replaceTerminals(std::string baseScript, std::string resultFile);
 
 	/**
 	 * Replaces the placeholders in @a baseScript for the used performance counters.
@@ -82,7 +79,7 @@ private:
 	 * @param baseScript Relative path to the script which placeholders should be replaced.
 	 * @param resultFile Relative path to the result file of the benchmark run that will be plotted.
 	 */
-	void setPerfCounters(string baseScript, string resultFile);
+	void setPerfCounters(std::string baseScript, std::string resultFile);
 
 	/**
 	 * Determines which plot-commands in the given Gnuplot @a baseScript are actual used
@@ -90,7 +87,7 @@ private:
 	 *
 	 * @param baseScript Relative path to the script that should be modified.
 	 */
-	void setPlotCommands(string baseScript);
+	void setPlotCommands(std::string baseScript);
 
 
 	/**
@@ -100,7 +97,7 @@ private:
 	 * @param search String which should be replaced.
 	 * @param replace String which replaces @a search.
 	 */
-	void bufferSearchReplace(string replaceFile, string search, string replace);
+	void bufferSearchReplace(std::string replaceFile, std::string search, std::string replace);
 
 
 	/**
@@ -110,7 +107,7 @@ private:
 	 *
 	 * @return A vector which contains the potentially used performance counters as strings.
 	 */
-	vector<string> getCounters(string baseScript);
+	std::vector<std::string> getCounters(std::string baseScript);
 
 	/**
 	 * Determines the columns of a performance @a counter in a given @a resultFile.
@@ -120,7 +117,7 @@ private:
 	 *
 	 * @return The number in which column the performance @a counter appears in the @a resultFile.
 	 */
-	int getCounterPosition(string counter, string resultFile);
+	int getCounterPosition(std::string counter, std::string resultFile);
 };
 
 

@@ -1,6 +1,11 @@
 #include "Printer.h"
 
-Printer::Printer(vector<map<string, int> >* combinations, map<int, string>* graphs, vector<string>* performanceCounters, string* sequenceIdParameter, map<string, map<int, vector<long long> > >* resultX, map<string, map<int, vector<long long> > >* resultY, string* unit) {
+#include <string>
+#include <map>
+#include <vector>
+#include <iostream>
+
+Printer::Printer(std::vector<std::map<std::string, int> >* combinations, std::map<int, std::string>* graphs, std::vector<std::string>* performanceCounters, std::string* sequenceIdParameter, std::map<std::string, std::map<int, std::vector<long long> > >* resultX, std::map<std::string, std::map<int, std::vector<long long> > >* resultY, std::string* unit) {
 
     _combinations = combinations;
     _graphs = graphs;
@@ -14,7 +19,7 @@ Printer::Printer(vector<map<string, int> >* combinations, map<int, string>* grap
 
 }
 
-Printer::Printer(vector<map<string, int> >* combinations) {
+Printer::Printer(std::vector<std::map<std::string, int> >* combinations) {
 
     _combinations = combinations;
 
@@ -22,14 +27,14 @@ Printer::Printer(vector<map<string, int> >* combinations) {
 
 void Printer::printResults() {
 
-    cout << endl << "Results:" << endl << "#############" << endl;
+    std::cout << std::endl << "Results:" << std::endl << "#############" << std::endl;
 
     int graphId, positions;
-    map<int, string>::iterator it;
+    std::map<int, std::string>::iterator it;
 
-    map<string, map<int, vector<long long> > > resultX = *_resultX;
-    vector<string> performanceCounters = *_performanceCounters;
-    vector<map<string, int> > combinations = *_combinations;
+    std::map<std::string, std::map<int, std::vector<long long> > > resultX = *_resultX;
+    std::vector<std::string> performanceCounters = *_performanceCounters;
+    std::vector<std::map<std::string, int> > combinations = *_combinations;
 
 
     for (size_t i = 0; i < _performanceCounters->size(); ++i) {
@@ -37,21 +42,21 @@ void Printer::printResults() {
         for (it = _graphs->begin(); it != _graphs->end(); it++) {
 
             graphId = it->first;
-            vector<long long> graphData;
+            std::vector<long long> graphData;
             positions = resultX[performanceCounters[i]][graphId].size();
             
             for (int pos = 0; pos < positions; ++pos) {
 
-                cout << resultX[performanceCounters[i]][graphId][pos] << " " << *_sequenceIdParameter << " -> " << this->getValue(graphId, performanceCounters[i], pos, combinations[pos]) << " " << *_unit << endl;
+                std::cout << resultX[performanceCounters[i]][graphId][pos] << " " << *_sequenceIdParameter << " -> " << this->getValue(graphId, performanceCounters[i], pos, combinations[pos]) << " " << *_unit << std::endl;
             }
         }
     }
 
 }
 
-long long Printer::getValue(size_t graph_id, string perf_ctr, size_t pos, map<string, int> parameters) {
+long long Printer::getValue(size_t graph_id, std::string perf_ctr, size_t pos, std::map<std::string, int> parameters) {
 
-    map<string, map<int, vector<long long> > > resultY = *_resultY;
+    std::map<std::string, std::map<int, std::vector<long long> > > resultY = *_resultY;
     return resultY[perf_ctr][graph_id][pos];
 
 }
@@ -59,18 +64,18 @@ long long Printer::getValue(size_t graph_id, string perf_ctr, size_t pos, map<st
 
 void Printer::printCombinations() {
 
-    vector<map<string, int> > combinations = *_combinations;
+    std::vector<std::map<std::string, int> > combinations = *_combinations;
 
-    map<string, int>::iterator it;
+    std::map<std::string, int>::iterator it;
 
     for (size_t i = 0; i < combinations.size(); ++i) {
 
         for (it = combinations[i].begin(); it != combinations[i].end(); it++) {
 
-            cout << it->first << " - " << it->second << endl;
+            std::cout << it->first << " - " << it->second << std::endl;
         }
 
-        cout << "-------" << endl;
+        std::cout << "-------" << std::endl;
     }
 
 }

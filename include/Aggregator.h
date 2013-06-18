@@ -7,12 +7,6 @@
 #define AGGREGATOR_H
 
 #include <vector>
-#include <numeric>
-#include "math.h"
-#include <algorithm>
-#include <iostream>
-
-using namespace std;
 
 
 /// Struct to define the available aggregation functions.
@@ -39,11 +33,11 @@ struct AggregationType
 class Aggregator {
 
 	private:
-		vector<long long> _data; 
+		std::vector<long long> _data; 
 
 	public:
 		/// The Contructor that takes a data vector used for aggregation.
-		Aggregator(vector<long long> data);
+		Aggregator(std::vector<long long> data);
 		virtual ~Aggregator();
 
 		/**
@@ -51,7 +45,7 @@ class Aggregator {
 		 *
 		 * @param data A data vector used for aggragation.
 		 */
-		void setData(vector<long long> data);
+		void setData(std::vector<long long> data);
 
 		long long calculateAverage();
 		long long calculateMedian();

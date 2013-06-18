@@ -7,17 +7,8 @@
 #ifndef DIRECTORYMANAGER_H
 #define DIRECTORYMANAGER_H
 
-#include <sys/stat.h>
 #include <string>
-#include <sys/types.h>
-#include <dirent.h>
 #include <vector>
-#include <iostream>
-#include <stdexcept>
-#include <sstream>
-#include <fstream>
-
-using namespace std;
 
 /**
  * @brief Helper class for file/directory management
@@ -28,15 +19,15 @@ using namespace std;
 class DirectoryManager
 {
 private:
-    string _main_dir;
-    string _id;
+    std::string _main_dir;
+    std::string _id;
 
     /**
      * @param dir The directory which is to be read.
      *
      * @return A vector containing strings of files in the directory @a dir.
      */
-    vector<string> listDirectory(string dir);
+    std::vector<std::string> listDirectory(std::string dir);
 
 public:
     DirectoryManager();
@@ -48,7 +39,7 @@ public:
      *
      * @return The id of the benchmark @a bench_name as @c string.
      */
-    string getId(string bench_name);
+    std::string getId(std::string bench_name);
 
     /**
      * @param bench_name The name of the benchmark.
@@ -56,7 +47,7 @@ public:
      *
      * @return The relative path to the file.
      */
-    string getFilename(string bench_name, string filetype);
+    std::string getFilename(std::string bench_name, std::string filetype);
 
     /**
      * Removes the file @a filename.
@@ -65,7 +56,7 @@ public:
      *
      * @return Integer value whether the removal succeeded or not.
      */
-    int removeFile(string filename);
+    int removeFile(std::string filename);
 };
 
 #endif //DIRECTORYMANAGER_H

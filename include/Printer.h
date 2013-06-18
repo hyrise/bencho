@@ -9,9 +9,7 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <iostream>
 
-using namespace std;
 
 /**
  * @brief Class for printing final and intermediate results.
@@ -25,23 +23,23 @@ using namespace std;
 class Printer {
 	
 	private:
-		map<int, string>* _graphs;
-		vector<string>* _performanceCounters;
-		string* _sequenceIdParameter;
-		vector<map<string, int> >* _combinations;
+		std::map<int, std::string>* _graphs;
+		std::vector<std::string>* _performanceCounters;
+		std::string* _sequenceIdParameter;
+		std::vector<std::map<std::string, int> >* _combinations;
 
-		map<string, map<int, vector<long long> > >* _resultX;
-    	map<string, map<int, vector<long long> > >* _resultY; 
+		std::map<std::string, std::map<int, std::vector<long long> > >* _resultX;
+    	std::map<std::string, std::map<int, std::vector<long long> > >* _resultY; 
 
-    	string *_unit;
+    	std::string *_unit;
 
 	public:
-		Printer(vector<map<string, int> >* combinations, map<int, string>* graphs, vector<string>* performanceCounters, string* sequenceIdParameter, map<string, map<int, vector<long long> > >* resultX, map<string, map<int, vector<long long> > >* resultY, string* unit);
-		Printer(vector<map<string, int> >* combinations);
+		Printer(std::vector<std::map<std::string, int> >* combinations, std::map<int, std::string>* graphs, std::vector<std::string>* performanceCounters, std::string* sequenceIdParameter, std::map<std::string, std::map<int, std::vector<long long> > >* resultX, std::map<std::string, std::map<int, std::vector<long long> > >* resultY, std::string* unit);
+		Printer(std::vector<std::map<std::string, int> >* combinations);
 		void printResults();
 		void printCombinations();
 
-		long long getValue(size_t graph_id, string perf_ctr, size_t pos, map<string, int> parameters);
+		long long getValue(size_t graph_id, std::string perf_ctr, size_t pos, std::map<std::string, int> parameters);
 
 		virtual ~Printer();
 };

@@ -1,12 +1,16 @@
 #include "Parameter.h"
 
-Parameter::Parameter(string name, vector<long long> values) {
+#include <string>
+#include <vector>
+#include <stdexcept>
+
+Parameter::Parameter(std::string name, std::vector<long long> values) {
 
     _name = name;
     _values = values;
 }
 
-Parameter::Parameter(string name, long long start, long long stop, long long step, ParameterType::Operation operation) {
+Parameter::Parameter(std::string name, long long start, long long stop, long long step, ParameterType::Operation operation) {
     
     _name = name;
 
@@ -16,7 +20,7 @@ Parameter::Parameter(string name, long long start, long long stop, long long ste
             throw std::runtime_error("Start is greater or equal than stop.");
         }
 
-        vector<long long> v;
+        std::vector<long long> v;
 
         for (long long i = start; i < stop; i += step) {
             v.push_back(i);
@@ -34,7 +38,7 @@ Parameter::Parameter(string name, long long start, long long stop, long long ste
             throw std::runtime_error("Factor is not greater 1.");
         }
         
-        vector<long long> v;
+        std::vector<long long> v;
         double val = start;
         
         long long i = -1;
@@ -53,11 +57,11 @@ Parameter::Parameter(string name, long long start, long long stop, long long ste
 
 }
 
-Parameter::Parameter(string name, long long value) {
+Parameter::Parameter(std::string name, long long value) {
    
     _name = name;
 
-    vector<long long> v;
+    std::vector<long long> v;
     v.push_back(value);
 
     _values = v;
@@ -65,11 +69,11 @@ Parameter::Parameter(string name, long long value) {
 
 //Getters:
 
-string Parameter::getName() {
+std::string Parameter::getName() {
     return _name;
 }
 
-vector<long long> Parameter::getValues() {
+std::vector<long long> Parameter::getValues() {
     return _values;
 }
 

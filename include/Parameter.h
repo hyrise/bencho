@@ -8,10 +8,7 @@
 
 #include <string>
 #include <vector>
-#include <stdexcept>
 
-
-using namespace std;
 
 /// Struct to define the parameter type and thereby the operator used to calculate the steps.
 struct ParameterType{
@@ -36,8 +33,8 @@ struct ParameterType{
 class Parameter {
 	
 	private:
-		string _name;
-		vector<long long> _values;
+		std::string _name;
+		std::vector<long long> _values;
 
 	public:
 		/**
@@ -45,7 +42,7 @@ class Parameter {
 		 *
 		 * @param values A vector of integer values (long long).
 		 */
-		Parameter(string name, vector<long long> values);
+		Parameter(std::string name, std::vector<long long> values);
 
 		/**
 		 * @brief Constructor that takes a start, stop and step value to calculate the set of values.
@@ -55,18 +52,18 @@ class Parameter {
 		 * @param step The step between the values.
 		 * @param operation The operation used to calculate the next value.
 		 */
-		Parameter(string name, long long start, long long stop, long long step, ParameterType::Operation operation);
+		Parameter(std::string name, long long start, long long stop, long long step, ParameterType::Operation operation);
 
 		/**
 		 * @brief Constructor that takes a single value
 		 *
 		 * @param value The value of your Parameter 
 		 */
-		Parameter(string name, long long value);
+		Parameter(std::string name, long long value);
 		virtual ~Parameter();
 
-		string getName();
-		vector<long long> getValues();
+		std::string getName();
+		std::vector<long long> getValues();
 };
 
 #endif //PARAMETER_H

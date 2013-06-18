@@ -1,11 +1,17 @@
-
-
 #include "DirectoryManager.h"
 
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <iostream>
+#include <stdexcept>
+#include <sstream>
+#include <fstream>
 
-vector<string> DirectoryManager::listDirectory(string dir)
+
+std::vector<std::string> DirectoryManager::listDirectory(std::string dir)
 {
-    vector<string> files;
+    std::vector<std::string> files;
     DIR *dp;
     struct dirent *dirp;
 
@@ -16,7 +22,7 @@ vector<string> DirectoryManager::listDirectory(string dir)
 
     while ((dirp = readdir(dp)) != NULL)
     {
-        files.push_back(string(dirp->d_name));
+        files.push_back(std::string(dirp->d_name));
     }
 
     closedir(dp);
@@ -31,19 +37,19 @@ DirectoryManager::DirectoryManager()
     mkdir(_main_dir.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
 }
 
-string DirectoryManager::getId(string bench_name)
+std::string DirectoryManager::getId(std::string bench_name)
 {
     if (_id.size() == 0)
     {
         int new_id;
-        string line;
-        string bench_dir = _main_dir + bench_name + "/";
-        string id_filename = bench_dir + "id.txt";
+        std::string line;
+        std::string bench_dir = _main_dir + bench_name + "/";
+        std::string id_filename = bench_dir + "id.txt";
         mkdir(bench_dir.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
-        ofstream id_file;
-        vector<string> files = listDirectory(bench_dir);
+        std::ofstream id_file;
+        std::vector<std::string> files = listDirectory(bench_dir);
 
-        ifstream id_file_in;
+        std::ifstream id_file_in;
         id_file_in.open (id_filename.c_str());
 
         if (id_file_in)
@@ -57,7 +63,7 @@ string DirectoryManager::getId(string bench_name)
             new_id = 1;
         }
 
-        id_file.open (id_filename.c_str(), ios::trunc);
+        id_file.open (id_filename.c_str(), std::ios::trunc);
         id_file << new_id;
         id_file.close();
 
@@ -68,9 +74,9 @@ string DirectoryManager::getId(string bench_name)
     
 
         // Creates .txt - file to identifie last used Benchmark.
-        string last_used = _main_dir + "last.txt";
-        ofstream last_used_in;
-        last_used_in.open (last_used.c_str(), ios::trunc);
+        std::string last_used = _main_dir + "last.txt";
+        std::ofstream last_used_in;
+        last_used_in.open (last_used.c_str(), std::ios::trunc);
         last_used_in << bench_name;
         last_used_in.close();
         //
@@ -78,13 +84,13 @@ string DirectoryManager::getId(string bench_name)
     return _id;
 }
 
-string DirectoryManager::getFilename(string bench_name, string filetype)
+std::string DirectoryManager::getFilename(std::string bench_name, std::string filetype)
 {
-    string run = getId(bench_name);
+    std::string run = getId(bench_name);
     return _main_dir + bench_name + "/" + bench_name + "_" + run + filetype;
 }
 
-int DirectoryManager::removeFile(string filename)
+int DirectoryManager::removeFile(std::string filename)
 {
     return remove(filename.c_str());
 }

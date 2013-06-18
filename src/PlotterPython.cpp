@@ -1,12 +1,18 @@
 #include "PlotterPython.h"
 
+#include <cstdlib>
+#include <string>
+#include <iostream>
 
-void PlotterPython::callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId)
+#include "resultFileHelper.h"
+
+
+void PlotterPython::callPlot(std::string resultDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId)
 {
-	string resultFile = getResultFile(benchName, benchId, resultDir);
+	std::string resultFile = getResultFile(benchName, benchId, resultDir);
 
-	cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << endl;
+	std::cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << std::endl;
 
-    string command = "export PYTHONPATH=$PYTHONPATH:" + getSystemScriptDir() + " && python " + plotterScript + " -f " + resultFile + " -n " + benchName;
-    system(command.c_str());
+    std::string command = "export PYTHONPATH=$PYTHONPATH:" + getSystemScriptDir() + " && python " + plotterScript + " -f " + resultFile + " -n " + benchName;
+    std::system(command.c_str());
 }

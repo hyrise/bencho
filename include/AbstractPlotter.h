@@ -8,12 +8,6 @@
 #define ABSTRACTPLOTTER_H
 
 #include <string>
-#include <iostream>
-
-#include <dirent.h>
-#include <string.h>
-
-#include "resultFileHelper.h"
 
 
 /**
@@ -66,7 +60,7 @@ public:
 	 * @param benchName Name of the benchmark that will be plotted.
 	 * @param benchId Id of the benchmark that will be plotted.
 	 */
-	void setUp(string resultDir, string plotterScriptDir, string systemScriptDir, string plotterScript, string systemScript, string benchName, string benchId);
+	void setUp(std::string resultDir, std::string plotterScriptDir, std::string systemScriptDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId);
 
 
 	/**
@@ -74,30 +68,30 @@ public:
 	 */
 	void pdfcropResult();
 
-	string getResultDir();
-	string getPlotterScriptDir();
-	string getSystemScriptDir();
-	string getPlotterScript();
-	string getSystemScript();
-	string getBenchName();
-	string getBenchId();
+	std::string getResultDir();
+	std::string getPlotterScriptDir();
+	std::string getSystemScriptDir();
+	std::string getPlotterScript();
+	std::string getSystemScript();
+	std::string getBenchName();
+	std::string getBenchId();
 
-	void setResultDir(string resultDir);
-	void setPlotterScriptDir(string plotterScriptDir);
-	void setSystemScriptDir(string systemScriptDir);
-	void setPlotterScript(string plotterScript);
-	void setSystemScript(string systemScript);
-	void setBenchName(string benchName);
-	void setBenchId(string benchId);
+	void setResultDir(std::string resultDir);
+	void setPlotterScriptDir(std::string plotterScriptDir);
+	void setSystemScriptDir(std::string systemScriptDir);
+	void setPlotterScript(std::string plotterScript);
+	void setSystemScript(std::string systemScript);
+	void setBenchName(std::string benchName);
+	void setBenchId(std::string benchId);
 
 private:
-	string _resultDir;
-	string _plotterScriptDir;
-	string _systemScriptDir;
-	string _plotterScript;
-	string _systemScript;
-	string _benchName;
-	string _benchId;
+	std::string _resultDir;
+	std::string _plotterScriptDir;
+	std::string _systemScriptDir;
+	std::string _plotterScript;
+	std::string _systemScript;
+	std::string _benchName;
+	std::string _benchId;
 
 
 	/**
@@ -110,7 +104,7 @@ private:
 	 *
 	 * @return Exact (but relative) path to the final script that can be used for plotting.
 	 */
-	virtual string createFinalScript(string resultFile, string baseScript, string systemScript);
+	virtual std::string createFinalScript(std::string resultFile, std::string baseScript, std::string systemScript);
 
 	/**
 	 * Function that calls the individual plotter, has to be overwritten.
@@ -121,7 +115,7 @@ private:
 	 * @param benchName Name of the benchmark that will be plotted.
 	 * @param benchId Id of the benchmark that will be plotted.
 	 */
-	virtual void callPlot(string resultDir, string plotterScript, string systemScript, string benchName, string benchId);
+	virtual void callPlot(std::string resultDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId);
 };
 
 
