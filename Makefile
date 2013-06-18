@@ -12,7 +12,7 @@ LIB = ar cr
 DOXYFILE = ./Doxyfile
 
 
-BUILD_FLAGS = -I$(BENCHO_SOURCE_DIR) -Wno-deprecated
+BUILD_FLAGS = -I$(BENCHO_SOURCE_DIR) -std=c++0x -Wno-deprecated -Wall -Wextra -pedantic -Werror
 LINKER_FLAGS = -lpthread -ldl
 INCLUDE = -I$(BENCHO_INCLUDE_DIR) $(shell python-config --includes)
 VERSION=$(shell git describe --tags)

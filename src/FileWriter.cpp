@@ -25,7 +25,6 @@ FileWriter::FileWriter(AbstractBenchmark *benchmark)
 void FileWriter::psToPdf(string filename)
 {
     string command = ConfigFile::getExecutable("ps2pdf") + " " + filename + ".ps " + filename + ".pdf";
-    int ret = system(command.c_str());
     _benchmark->getDirectoryManager()->removeFile(filename + ".ps");
     std::cout << "Chart written to " << filename << ".pdf" << std::endl;
 }
@@ -167,7 +166,6 @@ void FileWriter::dumpResult(AbstractBenchmark *benchmark)
 std::vector<string> FileWriter::getHeaders(AbstractBenchmark *benchmark)
 {
     std::vector<string> headers;
-    size_t lines = benchmark->getRowCount();
 
     std::map<int, string>::iterator it;
     for (it = benchmark->getTestSeries().begin(); it != benchmark->getTestSeries().end(); it++)

@@ -97,13 +97,13 @@ void AbstractPlotter::pdfcropResult()
 }
 
 
-std::string AbstractPlotter::createFinalScript(std::string resultFile, std::string baseScript, std::string systemScript)
+std::string AbstractPlotter::createFinalScript(std::string /*resultFile*/, std::string baseScript, std::string /*systemScript*/)
 {
 	// overwrite this in actual plotter
 	return baseScript;
 }
 
-void AbstractPlotter::callPlot(std::string resultDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId)
+void AbstractPlotter::callPlot(std::string /*resultDir*/, std::string /*plotterScript*/, std::string /*systemScript*/, std::string /*benchName*/, std::string /*benchId*/)
 {
 	// overwrite this in actual plotter
 }

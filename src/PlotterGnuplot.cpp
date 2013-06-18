@@ -111,7 +111,7 @@ void PlotterGnuplot::setPerfCounters(std::string baseScript, std::string resultF
 	std::string buffer;
 
 	counters = getCounters(baseScript);
-	for (int i = 0; i < counters.size(); i++)
+	for (std::size_t i = 0; i < counters.size(); i++)
 	{
 		int pos = getCounterPosition(counters.at(i), resultFile);
 		if (pos != 0)
@@ -136,7 +136,7 @@ void PlotterGnuplot::setPerfCounters(std::string baseScript, std::string resultF
 			std::string buffer;
 			while(getline(stream_in, buffer))
 			{
-				if(buffer.find(search) != -1)
+				if(buffer.find(search) != std::string::npos)
 				{
 					buffer = "#" + buffer;
 				}
@@ -177,7 +177,7 @@ void PlotterGnuplot::setPlotCommands(std::string baseScript)
 		if(foundplot)
 		{
 			bool is_empty = true;
-			for(int i = 0; i < buffer.length(); i++)
+			for(std::size_t i = 0; i < buffer.length(); i++)
 			{
 				if(!isspace(buffer.at(i)))
 					is_empty = false;
@@ -199,7 +199,7 @@ void PlotterGnuplot::setPlotCommands(std::string baseScript)
 				} else {
 					needed_plots.push_back(true);
 				}
-				for(int i = 0; i < lines.size(); i++)
+				for(std::size_t i = 0; i < lines.size(); i++)
 				{
 					stream_out_tmp << lines.at(i) << std::endl;
 				}
@@ -238,14 +238,14 @@ void PlotterGnuplot::setPlotCommands(std::string baseScript)
 	while(getline(stream_in2, next))
 	{
 		bool is_empty = true;
-		for(int i = 0; i < next.length(); i++)
+		for(std::size_t i = 0; i < next.length(); i++)
 		{
 			if(!isspace(next.at(i)))
 				is_empty = false;
 		}
 		if(is_empty)
 		{
-			int spot = buffer.find(",\\");
+			unsigned long spot = buffer.find(",\\");
 			if(spot == buffer.length()-2)
 				buffer = buffer.substr(0,spot);
 		}
@@ -368,7 +368,7 @@ int PlotterGnuplot::getCounterPosition(std::string counter, std::string resultFi
 	if(spot >= 0)
 	{
 		std::string tmpstring = linebuffer.substr(0,spot);
-		for(int i = 0; i < tmpstring.size(); i++)
+		for(std::size_t i = 0; i < tmpstring.size(); i++)
 		{
 			spaces += ( tmpstring.at(i) == ' ' );
 		}

@@ -39,7 +39,7 @@ class Printer {
 		void printResults();
 		void printCombinations();
 
-		long long getValue(size_t graph_id, std::string perf_ctr, size_t pos, std::map<std::string, int> parameters);
+		long long getValue(size_t test_series_id, std::string perf_ctr, size_t pos);
 
 		virtual ~Printer();
 };

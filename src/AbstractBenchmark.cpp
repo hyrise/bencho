@@ -33,11 +33,11 @@ AbstractBenchmark::AbstractBenchmark() :
 ,   _name("default")
 ,   _do_papi_manual(false)
 ,   _current_perf_counter(NULL)
+,   _filewriter(new FileWriter(this))
+,   _directorymanager(new DirectoryManager())
 ,   _fastMode(false)
 ,   _silentMode(false)
 ,   _rawOutput(false)
-,   _filewriter(new FileWriter(this))
-,   _directorymanager(new DirectoryManager())
 {
 
     std::cout.setf(std::ios::fixed, std::ios::floatfield);
@@ -375,13 +375,12 @@ void AbstractBenchmark::displayHeader()
     stream_in.close();
 
     
-    int pos;
     if (!_fastMode) 
     {
         std::cout << std::endl << "Using PerformanceCounters:" << std::endl;
-        for (int i = 0; i < counters.size(); ++i)
+        for (std::size_t i = 0; i < counters.size(); ++i)
         {
-            for (int j = 0; j < headers.size(); ++j)
+            for (std::size_t j = 0; j < headers.size(); ++j)
             {
                 if (counters.at(i) == headers.at(j))
                     std::cout << "   " << counters.at(i) << std::endl;
@@ -394,10 +393,10 @@ void AbstractBenchmark::displayHeader()
     if (!_fastMode) 
     {
         std::cout << std::endl << std::endl << "Missing PerformanceCounters (Gnuplot):" << std::endl;
-        for (int i = 0; i < counters.size(); ++i)
+        for (std::size_t i = 0; i < counters.size(); ++i)
         {
             bool not_found = true;
-            for (int j = 0; j < headers.size(); ++j)
+            for (std::size_t j = 0; j < headers.size(); ++j)
             {
                 if (counters.at(i) == headers.at(j))
                     not_found = false;
@@ -765,7 +764,7 @@ size_t AbstractBenchmark::getWarmUpRuns() {
     return _warm_up_runs;
 }
 
-int AbstractBenchmark::getSequenceId(std::map<std::string, int> parameters, int test_series_id) const {
+int AbstractBenchmark::getSequenceId(std::map<std::string, int> parameters, int /*test_series_id*/) const {
    
     if (_sequence_id_parameter == "") {
         
@@ -850,7 +849,7 @@ long long AbstractBenchmark::getResult_incache(std::string test_series)
     return _result_calibration[test_series];
 }
 
-long long AbstractBenchmark::getValue(size_t graph_id, std::string perf_ctr, size_t pos, std::map<std::string, int> parameters)
+long long AbstractBenchmark::getValue(size_t graph_id, std::string perf_ctr, size_t pos, std::map<std::string, int> /*parameters*/)
 {
     return _result_y[perf_ctr][graph_id][pos];
 }
@@ -858,28 +857,27 @@ long long AbstractBenchmark::getValue(size_t graph_id, std::string perf_ctr, siz
 
 ////////////////////////////////////// Methods implememnted by actual benchmark //////////////////////////////////////
 
-void AbstractBenchmark::prepareRun(std::map<std::string, int> parameters, int combination, int test_series_id, int run) {
+void AbstractBenchmark::prepareRun(std::map<std::string, int> /*parameters*/, int /*combination*/, int /*test_series_id*/, int /*run*/) {
     // filled in actual benchmark
 }
 
-void AbstractBenchmark::prepareRunAfterCacheCleared(std::map<std::string, int> parameters, int combination, int run, int test_series_id)
+void AbstractBenchmark::prepareRunAfterCacheCleared(std::map<std::string, int> /*parameters*/, int /*combination*/, int /*run*/, int /*test_series_id*/)
 {
     // filled in actual benchmark
 }
 
-void AbstractBenchmark::prepareCombination(std::map<std::string, int> parameters, int combination) {
+void AbstractBenchmark::prepareCombination(std::map<std::string, int> /*parameters*/, int /*combination*/) {
     // filled in actual benchmark
 }
 
-void AbstractBenchmark::finishRun(std::map<std::string, int> parameters, int combination, int test_series_id, int run) {
+void AbstractBenchmark::finishRun(std::map<std::string, int> /*parameters*/, int /*combination*/, int /*test_series_id*/, int /*run*/) {
     // filled in actual benchmark
 }
 
-void AbstractBenchmark::finishCombination(std::map<std::string, int> parameters, int combination) {
+void AbstractBenchmark::finishCombination(std::map<std::string, int> /*parameters*/, int /*combination*/) {
     // filled in actual benchmark
 }
 
-void AbstractBenchmark::doTheTest(std::map<std::string, int> parameters, int combination, int test_series_id, int run) {
+void AbstractBenchmark::doTheTest(std::map<std::string, int> /*parameters*/, int /*combination*/, int /*test_series_id*/, int /*run*/) {
     // filled in actual benchmark
 }
-

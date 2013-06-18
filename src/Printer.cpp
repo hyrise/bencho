@@ -29,7 +29,7 @@ void Printer::printResults() {
 
     std::cout << std::endl << "Results:" << std::endl << "#############" << std::endl;
 
-    int graphId, positions;
+    std::size_t test_series_id, positions;
     std::map<int, std::string>::iterator it;
 
     std::map<std::string, std::map<int, std::vector<long long> > > resultX = *_resultX;
@@ -41,23 +41,23 @@ void Printer::printResults() {
 
         for (it = _graphs->begin(); it != _graphs->end(); it++) {
 
-            graphId = it->first;
+            test_series_id = it->first;
             std::vector<long long> graphData;
-            positions = resultX[performanceCounters[i]][graphId].size();
+            positions = resultX[performanceCounters[i]][test_series_id].size();
             
-            for (int pos = 0; pos < positions; ++pos) {
+            for (std::size_t pos = 0; pos < positions; ++pos) {
 
-                std::cout << resultX[performanceCounters[i]][graphId][pos] << " " << *_sequenceIdParameter << " -> " << this->getValue(graphId, performanceCounters[i], pos, combinations[pos]) << " " << *_unit << std::endl;
+                std::cout << resultX[performanceCounters[i]][test_series_id][pos] << " " << *_sequenceIdParameter << " -> " << this->getValue(test_series_id, performanceCounters[i], pos) << " " << *_unit << std::endl;
             }
         }
     }
 
 }
 
-long long Printer::getValue(size_t graph_id, std::string perf_ctr, size_t pos, std::map<std::string, int> parameters) {
+long long Printer::getValue(size_t test_series_id, std::string perf_ctr, size_t pos) {
 
     std::map<std::string, std::map<int, std::vector<long long> > > resultY = *_resultY;
-    return resultY[perf_ctr][graph_id][pos];
+    return resultY[perf_ctr][test_series_id][pos];
 
 }
 
@@ -68,7 +68,7 @@ void Printer::printCombinations() {
 
     std::map<std::string, int>::iterator it;
 
-    for (size_t i = 0; i < combinations.size(); ++i) {
+    for (std::size_t i = 0; i < combinations.size(); ++i) {
 
         for (it = combinations[i].begin(); it != combinations[i].end(); it++) {
 
