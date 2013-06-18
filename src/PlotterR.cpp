@@ -14,5 +14,9 @@ void PlotterR::callPlot(std::string resultDir, std::string plotterScript, std::s
 	std::cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << std::endl;
 
 	std::string command = "R CMD BATCH --no-save '--args " + resultFile + " " + plotterScript + "' " + systemScript + " /dev/null"; // redirect console output to /dev/null
-	std::system(command.c_str());
+
+    if (int err = std::system(command.c_str()))
+    {
+        std::cerr << "Error during system call: " << err << std::endl;
+    }
 }

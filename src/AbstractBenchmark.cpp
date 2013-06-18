@@ -158,7 +158,7 @@ void AbstractBenchmark::calcCombinations() {
 
 void AbstractBenchmark::clearCache() {
     
-    int sum;
+    int sum = 0;
     int cachesize_in_mb = 12;
     if (!_silentMode) std::cout << "Clearing cache. " << cachesize_in_mb << "MB. ";
     int * dummy_array = new int [1024*1024*cachesize_in_mb] ;

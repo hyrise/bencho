@@ -14,5 +14,9 @@ void PlotterPython::callPlot(std::string resultDir, std::string plotterScript, s
 	std::cout << "Benchmark: \"" + benchName + "\", ID: " + benchId << std::endl;
 
     std::string command = "export PYTHONPATH=$PYTHONPATH:" + getSystemScriptDir() + " && python " + plotterScript + " -f " + resultFile + " -n " + benchName;
-    std::system(command.c_str());
+    
+    if (int err = std::system(command.c_str()))
+    {
+        std::cerr << "Error during system call: " << err << std::endl;
+    }
 }
