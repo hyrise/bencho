@@ -188,7 +188,7 @@ public:
         _perfCounterName = std::string(papi);
         if (_perfCounterName != "walltime")
         {
-            std::cout << "No PAPI Counters to measure " << _perfCounterName << ". Measuring clock ticks instead. " << std::cout;
+            std::cout << "No PAPI Counters to measure " << _perfCounterName << ". Measuring clock ticks instead. " << std::endl;
         }
     }
 
