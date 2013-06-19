@@ -44,19 +44,11 @@ void AbstractPlotter::plot()
 
 void AbstractPlotter::setUp(bool isDefault)
 {
-	setBenchName(findBenchName(getResultDir()));
 	setBenchId(findBenchId(getBenchName(), getResultDir()));
 
 	if(!isDefault)
 	{
 		std::string userinput;
-		std::cout << "Name of Benchmark?" << std::endl << "(default: " << getBenchName() << ")" << std::endl;
-		getline(std::cin, userinput);
-		if(!userinput.empty())
-		{
-			setBenchName(userinput);
-			setBenchId(findBenchId(getBenchName(), getResultDir()));
-		}
 		std::cout << "ID?" << std::endl << "(default: " << getBenchId() << ")" << std::endl;
 		getline(std::cin, userinput);
 		if(!userinput.empty())

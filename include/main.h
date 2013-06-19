@@ -17,7 +17,7 @@
 								if (argument == "-silent") b.setSilentMode(true); \
 								if (argument == "-plotonly") \
 								{ \
-									b.plotResults(false); \
+									b.plotOnly(); \
 									return 0; \
 								} \
 							} \

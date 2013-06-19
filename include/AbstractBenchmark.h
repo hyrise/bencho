@@ -188,6 +188,8 @@ class AbstractBenchmark {
 		 * @params max_deviation The maximum deviation of teh results of each combination.
 		 */
 		int full(int max_runs = -1, double max_deviation = -1);
+		void plotOnly();
+		
 		void printResults();
 		void printCombinations();
 

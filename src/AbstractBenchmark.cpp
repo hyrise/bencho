@@ -625,6 +625,11 @@ int AbstractBenchmark::full(int max_runs, double max_deviation) {
     return 0;
 }
 
+void AbstractBenchmark::plotOnly() {
+    init();
+    plotResults(false);
+}
+
 
 ////////////////////////////////////// Methods for result output //////////////////////////////////////
 
@@ -655,6 +660,7 @@ void AbstractBenchmark::printCombinations() {
 
 void AbstractBenchmark::plotResults(bool isDefault) {
     AbstractPlotter *settingsPlotter = new AbstractPlotter();
+    settingsPlotter->setBenchName(_name);
     settingsPlotter->setUp(isDefault);
 
     callPlotterWithSettings(settingsPlotter);

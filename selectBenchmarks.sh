@@ -15,7 +15,7 @@ done
 if [ ${#var[*]} -eq 1 ]
 	then
 
-	echo 'Executing Benchmark:' ${var[1]} $ARGUMENTS
+	echo 'Chosen Benchmark:' ${var[1]} $ARGUMENTS
 
 	# execute selected Benchmark
 	$DIRECTORY/${var[1]} $ARGUMENTS
@@ -35,7 +35,7 @@ do
 	done
 
 	echo
-	echo 'Execute? (default = 1)'
+	echo 'Choose? (default = 1)'
 	echo '[ 0 to exit ]'
 	echo
 
@@ -66,7 +66,7 @@ do
 		if [ $SELECTION -eq $x ]
 			then
 
-			echo 'Executing Benchmark:' ${var[$x]} $ARGUMENTS
+			echo 'Chosen Benchmark:' ${var[$x]} $ARGUMENTS
 
 			# execute selected Benchmark
 			$DIRECTORY/${var[$x]} $ARGUMENTS
