@@ -168,6 +168,11 @@ class AbstractBenchmark {
     	void addAllTestSeriesAsGraphs();
     	void addTestSeriesAsGraph(int test_series_id);
 
+    	/**
+    	 * @brief Add a plotter to the benchmark.
+    	 *
+    	 * @param plotter A unique_ptr to an AbstractPlottrt
+    	 */
     	void addPlotter(std::unique_ptr<AbstractPlotter> plotter);
 
 		//output methods
