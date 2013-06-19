@@ -25,9 +25,11 @@
  */
 class PlotterGnuplot : public AbstractPlotter
 {
+public:
+	PlotterGnuplot();
+
 private:
 	std::string _terminal;
-
 
 	/**
 	 * Calls the command for executing the plotting with Gnuplot.

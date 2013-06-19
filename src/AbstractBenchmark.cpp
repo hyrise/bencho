@@ -665,6 +665,7 @@ void AbstractBenchmark::plotResults(bool isDefault) {
 
 void AbstractBenchmark::callPlotterWithSettings(AbstractPlotter *settingsPlotter)
 {
+    // This is outdated, it's only in here to provide downwards compatibility at the moment.
     #ifdef GNUPLOT
     std::cout << std::endl << "Plotting results with Gnuplot" << std::endl;
     AbstractPlotter *plotterGnuplot = new PlotterGnuplot();
@@ -684,6 +685,18 @@ void AbstractBenchmark::callPlotterWithSettings(AbstractPlotter *settingsPlotter
     AbstractPlotter *plotterR = new PlotterR();
     callSpecificPlotter(plotterR, settingsPlotter, ".r");
     delete plotterR;
+    #endif
+
+    // workaround, if the above disappears, the #if won'b be needed anymore
+    #if not(defined(GNUPLOT) || defined(PYPLOT) || defined(RPLOT))
+    for (std::vector<std::unique_ptr<AbstractPlotter> >::iterator it = _plotters.begin(); it != _plotters.end(); ++it)
+    {
+        std::string plotterName = (*it).get()->getPlotterName();
+        std::string plotterFileEnding = (*it).get()->getPlotterFileEnding();
+
+        std::cout << std::endl << "Plotting results with " << plotterName << std::endl;
+        callSpecificPlotter(std::move(*it), settingsPlotter, plotterFileEnding);
+    }
     #endif
 }
 
@@ -705,6 +718,28 @@ void AbstractBenchmark::callSpecificPlotter(AbstractPlotter *specificPlotter, Ab
 
     specificPlotter->setUp(settingsPlotter->getResultDir(), settingsPlotter->getPlotterScriptDir(), settingsPlotter->getSystemScriptDir(), plotterScript, systemScript, settingsPlotter->getBenchName(), settingsPlotter->getBenchId());
     specificPlotter->plot();
+}
+
+void AbstractBenchmark::callSpecificPlotter(std::unique_ptr<AbstractPlotter> specificPlotter, AbstractPlotter *settingsPlotter, std::string fileEnding)
+{
+    std::string systemScript = settingsPlotter->getSystemScriptDir() + "/system" + fileEnding;
+    std::string plotterScript = settingsPlotter->getPlotterScriptDir() + "/" + settingsPlotter->getBenchName() + fileEnding;
+
+    if (!fileExists(systemScript))
+    {
+        std::cerr << "No plotter base script found (in " << settingsPlotter->getSystemScriptDir() << "). Plotting cancelled!" << std::endl;
+        return;
+    }
+    if (!fileExists(plotterScript))
+    {
+        std::cerr << "No plotter script found (in " << settingsPlotter->getPlotterScriptDir() << "). Plotting cancelled!" << std::endl;
+        return;
+    }
+
+    specificPlotter->setUp(settingsPlotter->getResultDir(), settingsPlotter->getPlotterScriptDir(), settingsPlotter->getSystemScriptDir(), plotterScript, systemScript, settingsPlotter->getBenchName(), settingsPlotter->getBenchId());
+    specificPlotter->plot();
+
+    specificPlotter.reset();
 }
 
 

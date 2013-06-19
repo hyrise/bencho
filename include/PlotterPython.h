@@ -21,6 +21,9 @@
  */
 class PlotterPython : public AbstractPlotter
 {
+public:
+	PlotterPython();
+
 private:
 
 	/**

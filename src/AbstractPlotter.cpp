@@ -20,6 +20,9 @@ AbstractPlotter::AbstractPlotter()
 
 	_benchName = "";
 	_benchId = "";
+
+	_plotterName = "";
+	_plotterFileEnding = "";
 }
 
 AbstractPlotter::~AbstractPlotter()
@@ -143,6 +146,17 @@ std::string AbstractPlotter::getBenchId()
 {
 	return _benchId;
 }
+
+std::string AbstractPlotter::getPlotterName()
+{
+	return _plotterName;
+}
+
+std::string AbstractPlotter::getPlotterFileEnding()
+{
+	return _plotterFileEnding;
+}
+
 
 void AbstractPlotter::setResultDir(std::string resultDir)
 {

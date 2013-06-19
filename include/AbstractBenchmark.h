@@ -216,6 +216,7 @@ class AbstractBenchmark {
 		 * @param fileEnding The ending with which the plotting script file ends, e.g. ".gp", ".py", ".r".
 		 */
 		void callSpecificPlotter(AbstractPlotter *specificPlotter, AbstractPlotter *settingsPlotter, std::string fileEnding);
+		void callSpecificPlotter(std::unique_ptr<AbstractPlotter> specificPlotter, AbstractPlotter *settingsPlotter, std::string fileEnding);
 
 		/**
 		 * @brief Set the benchmark name.

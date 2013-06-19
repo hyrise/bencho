@@ -21,6 +21,9 @@
  */
 class PlotterR : public AbstractPlotter
 {
+public:
+	PlotterR();
+	
 private:
 
 	/**

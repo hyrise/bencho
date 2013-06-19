@@ -11,6 +11,12 @@
 #include "resultFileHelper.h"
 
 
+PlotterGnuplot::PlotterGnuplot()
+{
+	_plotterName = "Gnuplot";
+	_plotterFileEnding = ".gp";
+}
+
 void PlotterGnuplot::callPlot(std::string resultDir, std::string plotterScript, std::string systemScript, std::string benchName, std::string benchId)
 {
 	_terminal = TERMINAL;

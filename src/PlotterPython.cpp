@@ -7,6 +7,12 @@
 #include "resultFileHelper.h"
 
 
+PlotterPython::PlotterPython()
+{
+    _plotterName = "python matplotlib";
+    _plotterFileEnding = ".py";
+}
+
 void PlotterPython::callPlot(std::string resultDir, std::string plotterScript, std::string /*systemScript*/, std::string benchName, std::string benchId)
 {
 	std::string resultFile = getResultFile(benchName, benchId, resultDir);

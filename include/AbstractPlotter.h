@@ -76,6 +76,9 @@ public:
 	std::string getBenchName();
 	std::string getBenchId();
 
+	std::string getPlotterName();
+	std::string getPlotterFileEnding();
+
 	void setResultDir(std::string resultDir);
 	void setPlotterScriptDir(std::string plotterScriptDir);
 	void setSystemScriptDir(std::string systemScriptDir);
@@ -84,7 +87,7 @@ public:
 	void setBenchName(std::string benchName);
 	void setBenchId(std::string benchId);
 
-private:
+protected:
 	std::string _resultDir;
 	std::string _plotterScriptDir;
 	std::string _systemScriptDir;
@@ -92,6 +95,9 @@ private:
 	std::string _systemScript;
 	std::string _benchName;
 	std::string _benchId;
+
+	std::string _plotterName;
+	std::string _plotterFileEnding;
 
 
 	/**
