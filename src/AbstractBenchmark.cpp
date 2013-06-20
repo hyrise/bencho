@@ -75,7 +75,7 @@ std::vector<std::map<std::string, int> > &AbstractBenchmark::getCombinations() {
 }
 
 
-void AbstractBenchmark::addParameter(unique_ptr<Parameter> parameter, string version) {
+void AbstractBenchmark::addParameter(std::unique_ptr<Parameter> parameter, std::string version) {
     _parameters[version].push_back(*parameter);
     parameter.reset();
 }
@@ -198,7 +198,6 @@ void AbstractBenchmark::calibrateInCache() {
     std::vector<Parameter> ::iterator it_parameters;
     std::string perfctr = "PAPI_TOT_CYC";
     std::vector<Parameter> *parameters = &(_parameters[_current_version]);
-    string perfctr = "PAPI_TOT_CYC";
     
     if (_test_series.size() < 1) {
         throw std::runtime_error("No test series.");
@@ -258,7 +257,7 @@ void AbstractBenchmark::execute(int max_runs, double max_deviation) {
         std::cout << "Multiple versions of benchmark available:" << std::endl;
         size_t i = 1;
         std::vector<std::string> choice;
-        for (it_par = _parameters.begin(); it_par != _parameters.end(); it_parameters++)
+        for (it_parameters = _parameters.begin(); it_parameters != _parameters.end(); it_parameters++)
         {
             std::cout << "\t" << i++ << ": " << it_parameters->first << std::endl; //print out versions and save options in vector
             choice.push_back(it_parameters->first);

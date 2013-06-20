@@ -139,7 +139,7 @@ class AbstractBenchmark {
 		 * @param parameter A Pointer to a Parameter object.
 		 * @param version A String specifying the benchmark version this Parameter belongs to.
 		 */
-		void addParameter(unique_ptr<Parameter> parameter, string version = "first");
+		void addParameter(std::unique_ptr<Parameter> parameter, std::string version = "first");
 
 		/**
 		 * @brief Add counters for perfomance measurement. 
@@ -166,10 +166,6 @@ class AbstractBenchmark {
 		void addTestSeries(int id, std::string name);
 		void addGraph(int id, std::string name);
 		
-
-		void addPerformanceCounter(string event_name);
-		void addTestSeries(int id, string name);
-		void addGraph(int id, string name);
     	void addAllTestSeriesAsGraphs();
     	void addTestSeriesAsGraph(int test_series_id);
 
