@@ -271,8 +271,9 @@ class AbstractBenchmark {
 		 * Use this function to specify a maximum deviation the results of each 
 		 * combination of your benchmarks should have. If this value is specified the benchmarks tests
 		 * will be exetuted until the deviation of the runs is smaller than the specified max_deviation.
-		 * Therefore it exetures the benchmark max_runs times and doubles the runs every iteration until
-		 * the deviation decreases under its maximum value.
+		 * Therefore it exetures the benchmark 10 times and doubles the runs every iteration until
+		 * the deviation decreases under its maximum value. To specify the number of iterations you can set max_runs
+		 * (default is 1). If max_runs is set to 0 it will run as many iterations as it takes.
 		 *
 		 * @params max_deviation The maximum deviation.
 		 */

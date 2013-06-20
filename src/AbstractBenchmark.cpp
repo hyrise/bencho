@@ -456,7 +456,7 @@ void AbstractBenchmark::executeCombination(std::map<std::string, int> parameters
             std::cout << std::endl;
         }
 
-        for (size_t perf_ctr = 0; perf_ctr < _performance_counters.size(); ++perf_ctr) {
+        for (std::size_t perf_ctr = 0; perf_ctr < _performance_counters.size(); ++perf_ctr) {
 
             std::string perf = _performance_counters[perf_ctr];
             
@@ -475,7 +475,7 @@ void AbstractBenchmark::executeCombination(std::map<std::string, int> parameters
             if (!_silentMode) std::cout << "Warm up (" << _warm_up_runs << "): " << std::flush;
 
             // do the warum up
-            for (size_t run = 0; run < _warm_up_runs; ++run) {
+            for (std::size_t run = 0; run < _warm_up_runs; ++run) {
 
                 executeRun(parameters, combination, test_series_id, -1, _performance_counters[0]);
                 if (!_silentMode) std::cout << run + 1 << "." << std::flush;
@@ -488,7 +488,7 @@ void AbstractBenchmark::executeCombination(std::map<std::string, int> parameters
 
             if (!_silentMode) std::cout << std::endl;
 
-            size_t max_runs = _max_runs;
+            std::size_t max_runs = _max_runs;
 
             if (_fastMode) max_runs = 1;
 
@@ -499,9 +499,14 @@ void AbstractBenchmark::executeCombination(std::map<std::string, int> parameters
 
                 std::cout << "Run: " << std::flush;
 
-                while (current_deviation >= _max_deviation) {
+                std::size_t run_count = 10;
 
-                    for (size_t run = 0; (run < max_runs) && (current_deviation >= _max_deviation); ++run) {
+                int tries_left;
+                (max_runs == 0) ? tries_left = -1 : tries_left = max_runs;
+
+                while (current_deviation >= _max_deviation && (tries_left > 0 || tries_left <= -1)) {
+
+                    for (std::size_t run = 0; (run < run_count); ++run) {
 
                         result = executeRun(parameters, combination, test_series_id, run, perf);
                         results.push_back(result);
@@ -515,10 +520,17 @@ void AbstractBenchmark::executeCombination(std::map<std::string, int> parameters
 
                     if (current_deviation >= _max_deviation) {
 
-                        max_runs = max_runs * 2;
-                        std::cout << "Incrementing max runs to " << max_runs << std::endl;
-                        results.clear();
-                        std::cout << "Cleared results, starting over..." << std::endl;
+                        run_count = run_count * 2;
+                        tries_left -= 1;
+                        if (tries_left > 0 || tries_left <= -1) {
+
+                            std::cout << "Incrementing max runs to " << run_count << std::endl;
+                            results.clear();
+                            std::cout << "Cleared results, starting over..." << std::endl;
+                        } else {
+
+                             std::cout << "Number of tries exceeded. Deviation is " << current_deviation * 100 << "%. Continue." << std::endl;
+                        }
                     
                     } else {
 
