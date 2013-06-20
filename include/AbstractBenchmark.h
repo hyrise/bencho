@@ -130,17 +130,16 @@ class AbstractBenchmark {
 		 */
     	virtual ~AbstractBenchmark();
  
-<<<<<<< HEAD
 		/**
 		 * @brief Add parameters to the benchmark. 
 		 *
-		 * Please note, that this function expects a Parameter object of
+		 * Please note, that this function expects a unique pointer to a Parameter object of
 		 * Bencho's Parameter class. @see Parameter
 		 *
 		 * @param parameter A Pointer to a Parameter object.
 		 * @param version A String specifying the benchmark version this Parameter belongs to.
 		 */
-		void addParameter(Parameter *parameter, std::string version = "first");
+		void addParameter(unique_ptr<Parameter> parameter, string version = "first");
 
 		/**
 		 * @brief Add counters for perfomance measurement. 
@@ -166,14 +165,11 @@ class AbstractBenchmark {
 		 */
 		void addTestSeries(int id, std::string name);
 		void addGraph(int id, std::string name);
-=======
-		//add a parameter for execution
-		void addParameter(unique_ptr<Parameter> parameter, string version = "first");
+		
 
 		void addPerformanceCounter(string event_name);
 		void addTestSeries(int id, string name);
 		void addGraph(int id, string name);
->>>>>>> Parameters with unique pointers
     	void addAllTestSeriesAsGraphs();
     	void addTestSeriesAsGraph(int test_series_id);
 
