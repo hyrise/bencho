@@ -4,12 +4,14 @@ set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR})
- 
+
+set(CMAKE_BUILD_TYPE Release)
+
 project(bencho C CXX)
  
 find_library(PAPI NAMES papi)
  
-if ((NOT ${PAPI}) AND (${CMAKE_BUILD_TYPE} MATCHES "RELEASE.*"))
+if ((PAPI-NOTFOUND) AND (${CMAKE_BUILD_TYPE} MATCHES "RELEASE.*"))
 MESSAGE(FATAL_ERROR "cannot set up release build without PAPI!")
 endif ()
  
@@ -54,10 +56,8 @@ src/resultFileHelper.cpp)
  
 set(bencho_CXX_FLAGS "-std=c++0x")
 
-if (${PAPI})
-set(bencho_CXX_FLAGS "${bencho_CXX_FLAGS} -D USE_PAPI_TRACE" CACHE_STRING "bencho
-compile flags")
-add_definitions(USE_PAPI_TRACE)
+if (NOT PAPI-NOTFOUND)
+add_definitions(-DUSE_PAPI_TRACE)
 target_link_libraries(bencho ${PAPI})
 endif()
 
