@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Bencho by schwald</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Bencho</h1>
+        <p>A C++ benchmarking framework.</p>
+
+        <p class="view"><a href="https://github.com/schwald/bencho">View the Project on GitHub <small>schwald/bencho</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/schwald/bencho/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/schwald/bencho/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/schwald/bencho">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="bencho" class="anchor" href="#bencho"><span class="octicon octicon-link"></span></a>Bencho</h1>
+
+<p>Bencho is a C++ benchmarking framework that will help you create and run your own benchmarks.</p>
+
+<h2>
+<a name="current-status" class="anchor" href="#current-status"><span class="octicon octicon-link"></span></a>Current Status</h2>
+
+<p>The Bencho Framework can be used already, but it is still in development. Features can change or will be added and even some basic functionality could change in the next versions. </p>
+
+<p>The following features are currently implemented:</p>
+
+<ul>
+<li>Create benchmarks by using the AbstractBenchmark as template</li>
+<li>Add Parameters easily</li>
+<li>Measure different performance counters at the same time</li>
+<li>Register different test series</li>
+<li>Supports warm-up runs, calibration runs, chache clearing, parameter versions</li>
+<li>All common aggregating functions included in an Aggregator</li>
+<li>Save results in CSV formated files</li>
+<li>Plot results directly via Gnuplot, Python matplotlib or R ggplot2</li>
+</ul><h2>
+<a name="building" class="anchor" href="#building"><span class="octicon octicon-link"></span></a>Building</h2>
+
+<p>Supported operating systems are Linux and Mac OS X, however the PAPI library wont work on the Apple operating systems.</p>
+
+<p>To build the Bencho framework you will only need to execute </p>
+
+<pre><code>make
+</code></pre>
+
+<p>If not specified already, it will automatically ask you for your prefered Configuration of the options production mode, papi use and verbose build. If you want to change these settings later just execute</p>
+
+<pre><code>make config
+</code></pre>
+
+<p>The Bencho framework is now ready to use. On how to include this framework in your project best, please take a look at the <a href="https://github.com/schwald/benchosample">Bencho Sample</a> or at the documentation.</p>
+
+<h2>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p>The Bencho project provides a doxygen documentation of all classes that you find in the doxygen folder.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Bencho is licensed as open source after the OpenSource "Licence of the Hasso-Plattner Institute" declared in the LICENSE file of this project. </p>
+
+<p>Question: Why does Bencho not use MIT or BSD or XX license. The reason for our
+approach comes with the German copyright law. Common BSD and MIT licenses are
+not necessarily compatible and thus can potentially lead to problems. To
+overcome this problem this project uses an specifically designed open source
+license to be compatible with German law. The most prominent difference is the
+exclusion of all liabilities which is not possible in Germany.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/schwald">schwald</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
