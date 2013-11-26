@@ -17,7 +17,7 @@ void clear()
 {
 	int *dummy_array = new int [1024*1024*CACHESIZE_IN_MB ];
 	int *dummy_array2 = new int [1024*1024*CACHESIZE_IN_MB ] ;
-	int sum;
+	int sum =0;
 	
 	for ( int address = 0; address < 1024*1024*CACHESIZE_IN_MB; address++)
 	{
