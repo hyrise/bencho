@@ -92,6 +92,18 @@ class PapiSingleton {
                 papi_handle_error(retval);
                 exit(1);
             }
+            retval = PAPI_cleanup_eventset(_eventSet);
+            if (retval != PAPI_OK) {
+                fprintf(stderr, "Error: PAPI_cleanup_eventset failed. ");
+                papi_handle_error(retval);
+                exit(1);
+            }
+            retval = PAPI_destroy_eventset(&_eventSet);
+            if (retval != PAPI_OK) {
+                fprintf(stderr, "Error: PAPI_destroy_eventset failed. ");
+                papi_handle_error(retval);
+                exit(1);
+            }
             return papiResult;
         }
     }
