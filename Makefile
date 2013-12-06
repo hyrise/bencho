@@ -25,7 +25,7 @@ ifeq ($(PROD), 1)
 	BUILD_FLAGS += -O3 -finline-functions -DNDEBUG -D USE_TRACE -g -pipe
 	BUILD_DIR = $(BENCHO_BUILD_BASE_DIR)/prod
 else
-	BUILD_FLAGS += -O0 -g2 -pipe
+	BUILD_FLAGS += -O1 -g2 -pipe #-O1 workaround for c++11 bug on OSX
 	CXX_DEBUG += -Wno-long-long #-Wall -pedantic
 	BUILD_DIR = $(BENCHO_BUILD_BASE_DIR)/debug
 endif
