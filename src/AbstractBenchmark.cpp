@@ -86,6 +86,12 @@ void AbstractBenchmark::addPerformanceCounter(std::string event_name) {
 
 void AbstractBenchmark::addTestSeries(int id, std::string name)
 {
+    if (name.find(" ", 0) != std::string::npos)
+    {
+        std::cerr << "Error: Testserie " << "'" << name << "'" << " contains a whitespace!" << std::endl;
+        exit(1);
+    }
+
     _test_series[id] = name;
 
     for (size_t i = 0; i < _performance_counters.size(); ++i)
