@@ -21,54 +21,56 @@ class PapiSingleton {
     void init(const char *papi) {
         _perfCounterName = std::string(papi);
 
-        // init papi
-        int retval;
-        char errstring[PAPI_MAX_STR_LEN];
+        if (not is_initialized){
+            // init papi
+            int retval;
+            char errstring[PAPI_MAX_STR_LEN];
 
-        if ((retval = PAPI_library_init(PAPI_VER_CURRENT)) != PAPI_VER_CURRENT) {
-            fprintf(stderr, "Error: %d %s\n", retval, errstring);
-            exit(1);
+            if ((retval = PAPI_library_init(PAPI_VER_CURRENT)) != PAPI_VER_CURRENT) {
+                fprintf(stderr, "Error: %d %s\n", retval, errstring);
+                exit(1);
+            }
+
+            if (_perfCounterName != "walltime") {
+                // init for threads
+                retval = PAPI_thread_init(pthread_self);
+                if (retval != PAPI_OK) {
+                    fprintf(stderr, "Error: PAPI thread initialization ailed. ");
+                    papi_handle_error(retval);
+                    exit(1);
+                }
+
+                _perfEvents = 0;
+
+                retval = PAPI_event_name_to_code((char *) papi, &_perfEvents);
+                if (retval != PAPI_OK) {
+                    fprintf(stderr, "Error: PAPI PAPI_event_name_to_code failed. ");
+                    papi_handle_error(retval);
+                    exit(1);
+                }
+
+                _eventSet = PAPI_NULL;
+
+                retval = PAPI_create_eventset(&_eventSet);
+                if (retval != PAPI_OK) {
+                    fprintf(stderr, "Error: PAPI_create_eventset failed. ");
+                    papi_handle_error(retval);
+                    exit(1);
+                }
+                retval = PAPI_add_event(_eventSet, _perfEvents);
+                if (retval != PAPI_OK) {
+                    fprintf(stderr, "Error: PAPI_add_event failed. ");
+                    papi_handle_error(retval);
+                    exit(1);
+                }
+            }
         }
+        is_initialized = true;
 
-        if (_perfCounterName != "walltime") {
-            // init for threads
-            retval = PAPI_thread_init(pthread_self);
-            if (retval != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI thread initialization failed. ");
-                papi_handle_error(retval);
-                exit(1);
-            }
-
-            _perfEvents = 0;
-
-            retval = PAPI_event_name_to_code((char *) papi, &_perfEvents);
-            if (retval != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI PAPI_event_name_to_code failed. ");
-                papi_handle_error(retval);
-                exit(1);
-            }
-
-            _eventSet = PAPI_NULL;
-
-            retval = PAPI_create_eventset(&_eventSet);
-            if (retval != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI_create_eventset failed. ");
-                papi_handle_error(retval);
-                exit(1);
-            }
-            retval = PAPI_add_event(_eventSet, _perfEvents);
-            if (retval != PAPI_OK) {
-                fprintf(stderr, "Error: PAPI_add_event failed. ");
-                papi_handle_error(retval);
-                exit(1);
-            }
-        }
     }
 
     inline void start() {
-        if (_perfCounterName == "walltime") {
-            _t1 = PAPI_get_real_usec();
-        } else {
+        if (!measure_walltime) {
             int retval;
             retval = PAPI_start(_eventSet);
             if (retval != PAPI_OK) {
@@ -76,14 +78,13 @@ class PapiSingleton {
                 papi_handle_error(retval);
                 exit(1);
             }
+        } else {
+            _t1 = PAPI_get_real_usec();
         }
     }
 
     inline long long stop() {
-        if (_perfCounterName == "walltime") {
-            _t2 = PAPI_get_real_usec();
-            return (_t2 - _t1);  // in milliseconds
-        } else {
+        if (!measure_walltime) {
             long long papiResult = 0;
             int retval;
             retval = PAPI_stop(_eventSet, &papiResult);
@@ -93,6 +94,10 @@ class PapiSingleton {
                 exit(1);
             }
             return papiResult;
+        } else {
+            _t2 = PAPI_get_real_usec();
+            return (_t2 - _t1);  // in milliseconds
+
         }
     }
 
@@ -100,7 +105,8 @@ class PapiSingleton {
     int _perfEvents;
     int _eventSet;
     unsigned long _t1, _t2;
-
+    bool is_initialized = false;
+    bool measure_walltime = false;
     void papi_handle_error(int errcode)
     {
         switch (errcode)
@@ -186,6 +192,7 @@ class PapiSingleton {
 public:
     void init(const char *papi) {
         _perfCounterName = std::string(papi);
+        measure_walltime = true;
         if (_perfCounterName != "walltime")
         {
             std::cout << "No PAPI Counters to measure " << _perfCounterName << ". Measuring clock ticks instead. " << std::endl;
